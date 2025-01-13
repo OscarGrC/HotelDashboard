@@ -1,10 +1,34 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Layout } from './common/Layout'
+import { Dashboard } from './dashboard/pages/dashboard'
 import './index.css'
-import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+  <>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="" element={<Dashboard />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </>
 )
+
+/*
+  <Routes>
+          <Route element={<Layout />}>
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="bookings" element={<Bookings />} />
+            <Route path="rooms" element={<Rooms />}>
+              <Route path="create" element={<CreateRoom />} />
+              <Route path="edit/:id" element={<EditRoom />} />
+              <Route path="delete/:id" element={<DeleteRoom />} />
+            </Route>
+            <Route path="users" element={<Users />} />
+            <Route path="contact" element={<Contact />} />
+          </Route>
+        </Routes>
+
+*/
