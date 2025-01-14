@@ -12,7 +12,8 @@ const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
     const pageTitles = {
         '/': 'Dashboard',
         '/bookings': 'Bookings',
-        '/Rooms': 'Room List',
+        '/Rooms/': 'Room List',
+        '/Rooms/create': 'Room Create',
         '/users': 'Users',
         '/contact': 'Contact',
     };

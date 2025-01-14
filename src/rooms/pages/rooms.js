@@ -38,7 +38,7 @@ export const Table = styled.table`
   th, td {
     padding: 0.8rem;
     border: 1px solid #ddd;
-    text-align: center; /* Esto centra el contenido dentro de las celdas */
+    text-align: center; 
     font-size: 0.9rem;
   }
 
@@ -114,7 +114,7 @@ export const Pagination = styled.div`
 `;
 
 export const ButtonStyled = styled.button`
-    background-color: ${props => props.type === true ? "#00cc00" : "#FF0000"};
+    background-color: ${props => props.type === "true" ? "#00cc00" : "#FF0000"};
     color: black;
     padding: 10px 28px;
     border-radius: 5px;

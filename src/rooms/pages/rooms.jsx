@@ -4,6 +4,8 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import roomData from '../data/rooms.json';
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { useNavigate, useLocation } from 'react-router-dom';
+
 
 export const Rooms = () => {
     const [rooms, setRooms] = useState([]);
@@ -11,6 +13,7 @@ export const Rooms = () => {
     const [sortKey, setSortKey] = useState(null);
     const [sortOrder, setSortOrder] = useState('asc');
     const roomsPerPage = 10;
+    const navigate = useNavigate();
     useEffect(() => {
         setRooms(roomData);
     }, []);
@@ -71,7 +74,7 @@ export const Rooms = () => {
     return (
         <Wrapper>
             <Header>
-                <button>+ New Room</button>
+                <button onClick={() => navigate("/Rooms/create")}>+ New Room</button>
             </Header>
 
             <DragDropContext onDragEnd={handleDragEnd}>
@@ -103,7 +106,7 @@ export const Rooms = () => {
                                                 <td style={{ maxWidth: '7rem' }}>{getAmenities(room.amenities)}</td>
                                                 <td>${room.price}</td>
                                                 <td>${calculateDiscountedPrice(room.price, room.offert_price)}</td>
-                                                <td><ButtonStyled type={room.status}>{room.status ? 'Available' : 'Unavailable'}</ButtonStyled></td>
+                                                <td><ButtonStyled type={room.status.toString()}>{room.status ? 'Available' : 'Unavailable'}</ButtonStyled></td>
                                                 <td className="actions">
                                                     <button className="edit"><FaRegEdit /></button>
                                                     <button className="delete"><MdDelete /></button>

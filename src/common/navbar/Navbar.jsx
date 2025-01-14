@@ -37,7 +37,7 @@ const Navbar = () => {
                     <FaBed />
                     Bookings
                 </NavItem>
-                <NavItem onClick={() => navigate("/Rooms")} className={activePath === "/Rooms" ? "navActive" : ""}>
+                <NavItem onClick={() => navigate("/Rooms/")} className={activePath.startsWith('/Rooms/') ? "navActive" : ""}>
                     <FaBed />
                     Rooms
                 </NavItem>

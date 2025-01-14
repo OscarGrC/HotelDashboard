@@ -3,6 +3,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './common/Layout';
 import { Dashboard } from './dashboard/pages/dashboard.jsx';
 import { Rooms } from './rooms/pages/rooms.jsx';
+import { RoomCreate } from './rooms/pages/roomsCreate.jsx';
+import { RoomDetails } from './rooms/pages/roomsDetails.jsx';
+import { RoomEdit } from './rooms/pages/roomsEdit.jsx';
+import { Root } from './common/Root.jsx';
 import { Login } from './login/login.jsx';
 import './index.css';
 import PrivateRoute from './common/PrivatesRoute';
@@ -14,7 +18,12 @@ createRoot(document.getElementById('root')).render(
 
       <Route element={<Layout />}>
         <Route path="/" element={<PrivateRoute element={<Dashboard />} />} />
-        <Route path="/Rooms" element={<PrivateRoute element={<Rooms />} />} />
+        <Route path="/Rooms" element={<PrivateRoute element={<Root />} />}>
+          <Route path="" element={<PrivateRoute element={<Rooms />} />} />
+          <Route path="details/:id" element={<PrivateRoute element={<RoomDetails />} />} />
+          <Route path="create" element={<PrivateRoute element={<RoomCreate />} />} />
+          <Route path="edit/:id" element={<PrivateRoute element={<RoomEdit />} />} />
+        </Route>
       </Route>
     </Routes>
   </BrowserRouter>
