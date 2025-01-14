@@ -1,20 +1,24 @@
-import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Layout } from './common/Layout'
-import { Dashboard } from './dashboard/pages/dashboard'
-import './index.css'
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Layout } from './common/Layout';
+import { Dashboard } from './dashboard/pages/dashboard';
+import { Rooms } from './rooms/pages/rooms';
+import { Login } from './login/login.jsx';
+import './index.css';
+import PrivateRoute from './common/PrivatesRoute';
 
 createRoot(document.getElementById('root')).render(
-  <>
-    <BrowserRouter>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="" element={<Dashboard />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  </>
-)
+  <BrowserRouter>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+
+      <Route element={<Layout />}>
+        <Route path="/" element={<PrivateRoute element={<Dashboard />} />} />
+        <Route path="/Rooms" element={<PrivateRoute element={<Rooms />} />} />
+      </Route>
+    </Routes>
+  </BrowserRouter>
+);
 
 /*
   <Routes>

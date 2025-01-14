@@ -13,6 +13,7 @@ export const HamburgerIcon = styled.button`
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
+    display:inline;
 outline: none;
     &:hover {
         opacity: 0.8;
@@ -21,10 +22,11 @@ outline: none;
 
 export const PageTitle = styled.h1`
     font-size: 1.75rem;  
-    font-weight: 600;    
+    font-weight: 600;
+    display:inline;    
     color: #222222;
     font-family: 'Poppins', sans-serif;
-    padding-right:10rem;
+   
 `;
 
 
@@ -101,7 +103,7 @@ export const NotificationBadge = styled.div`
     bottom: 55%;
     width: 1.2rem;
     height: 1.2rem;
-    background-color: ${props => props.bgColor === "red" ? "red" : "black"};
+    background-color: ${props => props.bgcolor === "red" ? "red" : "black"};
     color: white;
     font-size: 0.75rem;
     font-weight: bold;

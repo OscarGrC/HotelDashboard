@@ -1,49 +1,53 @@
-import React from 'react';
-import {
-    SidebarWrapper,
-    Header,
-    LogoIcon,
-    Title,
-    Subtitle,
-    Nav,
-    NavItem,
-    UserProfile,
-    ContactSection,
-    Footer
-} from './Navbar';
-import { FaHome, FaBed, FaUsers, FaCalendarAlt, FaEnvelope, FaHeart } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+import { SidebarWrapper, Header, LogoIcon, Title, Subtitle, Nav, NavItem, UserProfile, ContactButton, TitleContainer, Footer } from './Navbar';
+import { FaHome, FaBed, FaUsers, FaCalendarAlt, FaHeart } from 'react-icons/fa';
 import userAvatar from '../../assets/morty.png';
+import logoImage from '../../assets/hotel.png';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [activePath, setActivePath] = useState(location.pathname);
+
+    useEffect(() => {
+        setActivePath(location.pathname);
+    }, [location.pathname]);
+
     return (
         <SidebarWrapper>
 
             <Header>
-                <LogoIcon>🏨</LogoIcon>
-                <Title>Travl</Title>
-                <Subtitle>Hotel Admin Dashboard</Subtitle>
+                <LogoIcon>
+                    <img src={logoImage} alt="Hotel Logo" />
+                </LogoIcon>
+                <TitleContainer>
+                    <Title>Travl</Title>
+                    <Subtitle>Hotel Admin Dashboard</Subtitle>
+                </TitleContainer>
             </Header>
 
+
             <Nav>
-                <NavItem>
+                <NavItem onClick={() => navigate("/")} className={activePath === "/" ? "navActive" : ""}>
                     <FaHome />
-                    Home
+                    Dashboard
                 </NavItem>
                 <NavItem>
+                    <FaBed />
+                    Bookings
+                </NavItem>
+                <NavItem onClick={() => navigate("/Rooms")} className={activePath === "/Rooms" ? "navActive" : ""}>
                     <FaBed />
                     Rooms
                 </NavItem>
                 <NavItem>
                     <FaUsers />
-                    Users
+                    Contact
                 </NavItem>
                 <NavItem>
                     <FaCalendarAlt />
-                    Bookings
-                </NavItem>
-                <NavItem>
-                    <FaEnvelope />
-                    Messages
+                    Users
                 </NavItem>
             </Nav>
 
@@ -53,16 +57,12 @@ const Navbar = () => {
                 <p>oscar.gracia@example.com</p>
             </UserProfile>
 
-            <ContactSection>
-                <h4>Contact Us</h4>
-            </ContactSection>
+            <ContactButton>Editar</ContactButton>
 
             <Footer>
-                <p>Travl Hotel Admin Dashboard</p>
+                <h4>Travl Hotel Admin Dashboard</h4>
                 <p>© 2025 All Rights Reserved</p>
-                <p>
-                    Made with <FaHeart /> by Oscar Gracia
-                </p>
+                <h3> Made with <FaHeart /> by Oscar Grace</h3>
             </Footer>
         </SidebarWrapper>
     );

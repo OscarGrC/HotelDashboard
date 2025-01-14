@@ -1,69 +1,51 @@
-// Header.js
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import {
-    HeaderWrapper,
-    HamburgerIcon,
-    PageTitle,
-    SearchBar,
-    SearchInput,
-    SearchButton,
-    IconsWrapper,
-    UserAvatar,
-    LanguageSelector, NotificationBadge
-} from './Header.js';
-import { FaSearch, FaRegHeart, FaRegBell, FaBars, FaArrowLeft } from 'react-icons/fa';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { HeaderWrapper, HamburgerIcon, PageTitle, IconsWrapper, NotificationBadge } from './Header.js';
+import { FaRegBell, FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import { MdOutlineEmail } from "react-icons/md";
-import { MdOutlineChat } from "react-icons/md";
+import { FiLogIn } from "react-icons/fi";
 
-import mortyImage from '../../assets/morty.png';
 
 const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
     const location = useLocation();
-
+    const navigate = useNavigate();
     const pageTitles = {
         '/': 'Dashboard',
         '/bookings': 'Bookings',
-        '/rooms': 'Rooms',
+        '/Rooms': 'Rooms',
         '/users': 'Users',
         '/contact': 'Contact',
     };
 
     const currentTitle = pageTitles[location.pathname] || 'Page Not Found';
 
+    const handleLogout = () => {
+        localStorage.removeItem('isAuthenticated');
+        navigate('/login');
+    };
+
     return (
         <HeaderWrapper>
-            <HamburgerIcon onClick={onToggleSidebar}>
-                {isSidebarVisible ? <FaArrowLeft /> : <FaBars />}
-            </HamburgerIcon>
-            <PageTitle>{currentTitle}</PageTitle>
-            <SearchBar>
-                <SearchInput placeholder="Search..." />
-                <SearchButton>
-                    <FaSearch />
-                </SearchButton>
-            </SearchBar>
+            <div>
+                <HamburgerIcon onClick={onToggleSidebar}>
+                    {isSidebarVisible ? <FaArrowLeft /> : <FaArrowRight />}
+                </HamburgerIcon>
+                <PageTitle>{currentTitle}</PageTitle>
+            </div>
+
             <IconsWrapper>
-                <FaRegHeart />
                 <div style={{ position: 'relative' }}>
                     <MdOutlineEmail />
-                    <NotificationBadge bgColor="red">2</NotificationBadge>
+                    <NotificationBadge bgcolor="red">2</NotificationBadge>
                 </div>
                 <div style={{ position: 'relative' }}>
                     <FaRegBell />
-                    <NotificationBadge bgColor="red">87</NotificationBadge>
+                    <NotificationBadge bgcolor="red">87</NotificationBadge>
                 </div>
-                <div style={{ position: 'relative' }}>
-                    <MdOutlineChat />
-                    <NotificationBadge bgColor="black">!</NotificationBadge>
-                </div>
+                <FiLogIn onClick={handleLogout} style={{ marginBottom: '0.4rem' }} />
+
             </IconsWrapper>
-            <UserAvatar src={mortyImage} alt="User Avatar" />
-            <LanguageSelector defaultValue="en">
-                <option value="en">EN</option>
-                <option value="es">ES</option>
-                <option value="fr">FR</option>
-            </LanguageSelector>
+
         </HeaderWrapper>
     );
 };

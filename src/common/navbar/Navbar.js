@@ -13,16 +13,26 @@ export const SidebarWrapper = styled.div`
 
 export const Header = styled.div`
     display: flex;
-    flex-direction: column;
     align-items: center;
-    text-align: center;
+    text-align: left;
     margin-bottom: 2rem;
 `;
 
 export const LogoIcon = styled.div`
-    font-size: 2rem;
-    color: #007bff;
-    margin-bottom: 0.5rem;
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    margin-left:1rem;
+
+    img {
+        width: 2rem;
+        height: 2rem;
+    }
+`;
+
+export const TitleContainer = styled.div`
+    display: flex;
+    flex-direction: column;
 `;
 
 export const Title = styled.h1`
@@ -30,14 +40,18 @@ export const Title = styled.h1`
     font-weight: 400;
     font-family: 'Poppins', sans-serif;
     color: #222;
+    margin: 0;
+  
 `;
 
 export const Subtitle = styled.h2`
-    font-size: 0.75rem;
+    font-size: 0.5rem;
     font-weight: 300;
     font-family: 'Poppins', sans-serif;
     color: #555;
+    margin: 0;
 `;
+
 
 export const Nav = styled.nav`
     display: flex;
@@ -45,6 +59,7 @@ export const Nav = styled.nav`
     gap: 1rem;
     margin-bottom: 2rem;
 `;
+
 
 export const NavItem = styled.div`
     display: flex;
@@ -55,21 +70,25 @@ export const NavItem = styled.div`
     cursor: pointer;
     padding: 0.5rem 1rem;
     border-radius: 4px;
-    transition: background-color 0.3s;
-
-    &:hover {
-        background-color: #e9ecef;
-    }
+    color: #7992b3;
 
     svg {
         font-size: 1.2rem;
-        color: #007bff;
+        color: #c5c5c5;
+    }
+
+    &.navActive {
+        color: #FF0000;
+
+        svg {
+            color: #FF0000;
+        }
     }
 `;
 
 export const UserProfile = styled.div`
     text-align: center;
-    margin-top: 2rem;
+  
 
     img {
         width: 3rem;
@@ -79,7 +98,7 @@ export const UserProfile = styled.div`
     }
 
     h3 {
-        font-size: 1rem;
+        font-size: 0.9rem;
         font-weight: 600;
         font-family: 'Poppins', sans-serif;
         margin: 0.3rem 0;
@@ -87,34 +106,50 @@ export const UserProfile = styled.div`
     }
 
     p {
-        font-size: 0.75rem;
+        font-size: 0.5rem;
         font-family: 'Poppins', sans-serif;
         color: #555;
     }
 `;
 
-export const ContactSection = styled.div`
+export const ContactButton = styled.button`
+    display: inline-block;
+    margin-top: 0.5rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    color: #135846;
+    background-color: #c5c5c5;
+    border-radius: 4px;
+    cursor: pointer;
     text-align: center;
-    margin-top: 2rem;
 
-    h4 {
-        font-size: 0.85rem;
-        font-weight: 500;
-        font-family: 'Poppins', sans-serif;
-        margin-bottom: 0.5rem;
-        color: #222;
+    &:focus {
+        outline: none;
     }
 `;
 
+
 export const Footer = styled.footer`
     text-align: center;
-    font-size: 0.75rem;
+    font-size: 0.66rem;
     font-family: 'Poppins', sans-serif;
     color: #777;
     margin-top: 2rem;
 
     p {
         margin: 0.3rem 0;
+    }
+         h4 {
+       color:#222222;
+        margin: 0.3rem 0;
+    }
+              h3 {
+     margin-top:2rem;
+     font-size: 0.66rem;
     }
 
     svg {
