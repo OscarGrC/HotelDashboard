@@ -1,8 +1,8 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './common/Layout';
-import { Dashboard } from './dashboard/pages/dashboard';
-import { Rooms } from './rooms/pages/rooms';
+import { Dashboard } from './dashboard/pages/dashboard.jsx';
+import { Rooms } from './rooms/pages/rooms.jsx';
 import { Login } from './login/login.jsx';
 import './index.css';
 import PrivateRoute from './common/PrivatesRoute';
