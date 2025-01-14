@@ -95,9 +95,9 @@ export const Rooms = () => {
                             </thead>
                             <tbody>
                                 {currentRooms.map((room, index) => (
-                                    <Draggable key={room.id} draggableId={room.id.toString()} index={index}>
+                                    <Draggable key={room.id} draggableId={room.id.toString()} index={index} >
                                         {(provided) => (
-                                            <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                            <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} onClick={() => navigate(`/Rooms/details/${room.id}`)}>
                                                 <td>
                                                     <img src={room.photos[0]} style={{ width: '9.375rem', height: '9.375rem' }} alt={`Room ${room.room_number}`} />
                                                 </td>
@@ -108,7 +108,10 @@ export const Rooms = () => {
                                                 <td>${calculateDiscountedPrice(room.price, room.offert_price)}</td>
                                                 <td><ButtonStyled type={room.status.toString()}>{room.status ? 'Available' : 'Unavailable'}</ButtonStyled></td>
                                                 <td className="actions">
-                                                    <button className="edit"><FaRegEdit /></button>
+                                                    <button className="edit" onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        navigate(`/Rooms/edit/${room.id}`);
+                                                    }}><FaRegEdit /></button>
                                                     <button className="delete"><MdDelete /></button>
                                                 </td>
                                             </tr>
