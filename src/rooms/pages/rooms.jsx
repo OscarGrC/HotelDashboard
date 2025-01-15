@@ -16,7 +16,7 @@ export const Rooms = () => {
     const navigate = useNavigate();
     useEffect(() => {
         setRooms(roomData);
-    }, []);
+    }, [roomData]);
 
     const indexOfLastRoom = currentPage * roomsPerPage;
     const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
@@ -47,6 +47,10 @@ export const Rooms = () => {
         reorderedRooms.splice(result.destination.index, 0, removed);
 
         setRooms(reorderedRooms);
+    };
+    const handleDelete = (id) => {
+        const updatedRooms = rooms.filter((room) => room.id !== id);
+        setRooms(updatedRooms);
     };
     const calculateDiscountedPrice = (price, discountPercent) => {
         const discountedPrice = price - (price * discountPercent / 100);
@@ -112,7 +116,10 @@ export const Rooms = () => {
                                                         e.stopPropagation();
                                                         navigate(`/Rooms/edit/${room.id}`);
                                                     }}><FaRegEdit /></button>
-                                                    <button className="delete"><MdDelete /></button>
+                                                    <button className="delete" onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleDelete(room.id);
+                                                    }}><MdDelete /></button>
                                                 </td>
                                             </tr>
                                         )}

@@ -14,11 +14,20 @@ const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
         '/bookings': 'Bookings',
         '/Rooms/': 'Room List',
         '/Rooms/create': 'Room Create',
+        '/Rooms/edit': 'Room edit',
+        '/Rooms/detail': 'Room detail',
         '/users': 'Users',
         '/contact': 'Contact',
     };
 
-    const currentTitle = pageTitles[location.pathname] || 'Page Not Found';
+    let currentTitle = 'Page Not Found';
+    if (location.pathname.includes('/Rooms/edit')) {
+        currentTitle = 'Room edit';
+    } else if (location.pathname.includes('/Rooms/detail')) {
+        currentTitle = 'Room detail';
+    } else {
+        currentTitle = pageTitles[location.pathname] || currentTitle;
+    }
 
     const handleLogout = () => {
         localStorage.removeItem('isAuthenticated');
