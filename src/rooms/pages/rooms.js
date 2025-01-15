@@ -34,24 +34,31 @@ export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1rem;
-
+  border: none;
   th, td {
     padding: 0.8rem;
-    border: 1px solid #ddd;
     text-align: center; 
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 0px;
+    color:#212121;
+    border-bottom: 1px solid #f5f5f5;
+    border-left: none;
+    border-right: none;
   }
 
   th {
-    background-color: #f4f6f9;
+    background-color: #ffffff;
     cursor: pointer;
+     font-size: 1.125rem;
   }
 
   td {
+    font-weight: 400; 
     img {
-      width: 50px;
-      height: 50px;
-      border-radius: 4px;
+      width: 9.68rem;
+      height: 4.8rem;
+      border-radius: 8px;
     }
 
     .actions {
@@ -64,24 +71,6 @@ export const Table = styled.table`
         border: none;
         border-radius: 4px;
         cursor: pointer;
-      }
-
-      .edit {
-        background-color: #28a745;
-        color: white;
-
-        &:hover {
-          background-color: #218838;
-        }
-      }
-
-      .delete {
-        background-color: #dc3545;
-        color: white;
-
-        &:hover {
-          background-color: #c82333;
-        }
       }
     }
   }
@@ -114,8 +103,12 @@ export const Pagination = styled.div`
 `;
 
 export const ButtonStyled = styled.button`
-    background-color: ${props => props.type === "true" ? "#00cc00" : "#FF0000"};
-    color: black;
+    background-color: ${props => props.type === "true" ? "#5Ad07A" : "#E23428"};
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500; 
     padding: 10px 28px;
-    border-radius: 5px;
+    border-radius: 12px;
+    width:8rem;
 `
+

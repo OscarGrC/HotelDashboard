@@ -99,14 +99,14 @@ export const Rooms = () => {
                                         {(provided) => (
                                             <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} onClick={() => navigate(`/Rooms/details/${room.id}`)}>
                                                 <td>
-                                                    <img src={room.photos[0]} style={{ width: '9.375rem', height: '9.375rem' }} alt={`Room ${room.room_number}`} />
+                                                    <img src={room.photos[0]} alt={`Room ${room.room_number}`} />
                                                 </td>
                                                 <td>{room.room_number}</td>
                                                 <td>{room.room_type}</td>
                                                 <td style={{ maxWidth: '7rem' }}>{getAmenities(room.amenities)}</td>
                                                 <td>${room.price}</td>
                                                 <td>${calculateDiscountedPrice(room.price, room.offert_price)}</td>
-                                                <td><ButtonStyled type={room.status.toString()}>{room.status ? 'Available' : 'Unavailable'}</ButtonStyled></td>
+                                                <td><ButtonStyled type={room.status.toString()}>{room.status ? 'Available' : 'Booked'}</ButtonStyled></td>
                                                 <td className="actions">
                                                     <button className="edit" onClick={(e) => {
                                                         e.stopPropagation();

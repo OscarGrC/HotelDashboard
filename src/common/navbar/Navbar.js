@@ -6,7 +6,7 @@ export const SidebarWrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100vh;
+    
     padding: 1rem;
     box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
 `;
