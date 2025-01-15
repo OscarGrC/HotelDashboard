@@ -8,6 +8,7 @@ import { RoomDetails } from './rooms/pages/roomsDetails.jsx';
 import { RoomEdit } from './rooms/pages/roomsEdit.jsx';
 import { Root } from './common/Root.jsx';
 import { Login } from './login/login.jsx';
+import { Bookings } from './booking/pages/booking.jsx'
 import './index.css';
 import PrivateRoute from './common/PrivatesRoute';
 
@@ -23,6 +24,9 @@ createRoot(document.getElementById('root')).render(
           <Route path="details/:id" element={<PrivateRoute element={<RoomDetails />} />} />
           <Route path="create" element={<PrivateRoute element={<RoomCreate />} />} />
           <Route path="edit/:id" element={<PrivateRoute element={<RoomEdit />} />} />
+        </Route>
+        <Route path="/Bookings" element={<PrivateRoute element={<Root />} />}>
+          <Route path="" element={<PrivateRoute element={<Bookings />} />} />
         </Route>
       </Route>
     </Routes>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SidebarWrapper, Header, LogoIcon, Title, Subtitle, Nav, NavItem, UserProfile, ContactButton, TitleContainer, Footer } from './Navbar';
-import { FaHome, FaBed, FaUsers, FaCalendarAlt, FaHeart } from 'react-icons/fa';
+import { FaHome, FaBed, FaUsers, FaCalendarAlt, FaHeart, FaBook } from 'react-icons/fa';
 import userAvatar from '../../assets/morty.png';
 import logoImage from '../../assets/hotel.png';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -33,8 +33,8 @@ const Navbar = () => {
                     <FaHome />
                     Dashboard
                 </NavItem>
-                <NavItem>
-                    <FaBed />
+                <NavItem onClick={() => navigate("/Bookings/")} className={activePath.startsWith('/Bookings/') ? "navActive" : ""}>
+                    <FaBook />
                     Bookings
                 </NavItem>
                 <NavItem onClick={() => navigate("/Rooms/")} className={activePath.startsWith('/Rooms/') ? "navActive" : ""}>

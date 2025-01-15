@@ -18,6 +18,7 @@ const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
         '/Rooms/detail': 'Room detail',
         '/users': 'Users',
         '/contact': 'Contact',
+        '/Bookings/': 'Bookings'
     };
 
     let currentTitle = 'Page Not Found';

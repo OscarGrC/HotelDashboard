@@ -111,4 +111,25 @@ export const ButtonStyled = styled.button`
     border-radius: 12px;
     width:8rem;
 `
+export const ButtonBooking = styled.button`
+    background-color: ${({ status }) => {
+    switch (status) {
+      case "Check In":
+        return "#5Ad07A";
+      case "Check Out":
+        return "#E23428";
+      case "In Progress":
+        return "#F5C623";
+      default:
+        return "#D3D3D3";
+    }
+  }};
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500; 
+    padding: 10px 28px;
+    border-radius: 12px;
+    width: 10rem;
+`;
+
 
