@@ -80,16 +80,20 @@ export const Bookings = () => {
                     <Tab selected={filter === 'checking_in'} onClick={() => setFilter('checking_in')}>Checking In</Tab>
                     <Tab selected={filter === 'checking_out'} onClick={() => setFilter('checking_out')}>Checking Out</Tab>
                     <Tab selected={filter === 'in_progress'} onClick={() => setFilter('in_progress')}>In Progress</Tab>
+                    <div className="search">
+                        <ShearchBo
+                            type="text"
+                            placeholder="Search by guest name"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
                 </TabContainer>
 
-                <div className="search">
-                    <ShearchBo
-                        type="text"
-                        placeholder="Search by guest name"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </div>
+
+
+                <button onClick={() => navigate("/Bookings/create")}>+ New Booking</button>
+
             </Header>
 
             <DragDropContext>
@@ -112,7 +116,7 @@ export const Bookings = () => {
                                 {currentBookings.map((booking, index) => (
                                     <Draggable key={booking.guest.id} draggableId={booking.guest.id.toString()} index={index}>
                                         {(provided) => (
-                                            <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                            <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} onClick={() => navigate(`/Bookings/details/${booking.guest.id}`)}>
                                                 <td>
                                                     {booking.guest.name} {booking.guest.last_name} <br />
                                                     ID: {booking.guest.id}
@@ -121,7 +125,7 @@ export const Bookings = () => {
                                                 <td>{booking.check_in}</td>
                                                 <td>{booking.check_out}</td>
                                                 <td>
-                                                    <button onClick={() => handleSpecialRequest(booking.special_request)}>
+                                                    <button onClick={(e) => { e.stopPropagation(); handleSpecialRequest(booking.special_request) }}>
                                                         View Notes
                                                     </button>
                                                 </td>
@@ -132,7 +136,7 @@ export const Bookings = () => {
                                                     </ButtonBooking>
                                                 </td>
                                                 <td className="actions">
-                                                    <button className="edit" onClick={() => navigate(`/Rooms/edit/${booking.guest.id}`)}><FaRegEdit /></button>
+                                                    <button className="edit" onClick={() => navigate(`/Bookings/edit/${booking.guest.id}`)}><FaRegEdit /></button>
                                                     <button
                                                         className="delete"
                                                         onClick={() => {

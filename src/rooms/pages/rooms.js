@@ -15,13 +15,13 @@ export const Header = styled.div`
   }
 
   button {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    font-weight: bold;
+    background-color: #135846;
     color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500; 
+    padding: 10px 28px;
+    border-radius: 12px;
+    
     cursor: pointer;
 
     &:hover {
@@ -29,6 +29,7 @@ export const Header = styled.div`
     }
   }
 `;
+
 
 export const Table = styled.table`
   width: 100%;
@@ -55,6 +56,7 @@ export const Table = styled.table`
 
   td {
     font-weight: 400; 
+    max-width: 328px;
     img {
       width: 9.68rem;
       height: 4.8rem;

@@ -45,7 +45,7 @@ const Navbar = () => {
                     <FaUsers />
                     Contact
                 </NavItem>
-                <NavItem>
+                <NavItem onClick={() => navigate("/users/")} className={activePath.startsWith('/users/') ? "navActive" : ""}>
                     <FaCalendarAlt />
                     Users
                 </NavItem>

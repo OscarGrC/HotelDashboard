@@ -9,8 +9,15 @@ import { RoomEdit } from './rooms/pages/roomsEdit.jsx';
 import { Root } from './common/Root.jsx';
 import { Login } from './login/login.jsx';
 import { Bookings } from './booking/pages/booking.jsx'
+import { BookingEdit } from './booking/pages/bookingEdit.jsx';
+import { BookingCreate } from './booking/pages/bookingCreate.jsx';
+import { BookingDetails } from './booking/pages/bookingDetail.jsx';
+import { Users } from './users/pages/users.jsx'
 import './index.css';
 import PrivateRoute from './common/PrivatesRoute';
+import { UserDetail } from './users/pages/usersDetail.jsx';
+import { UserCreate } from './users/pages/usersCreate.jsx';
+import { UserEdit } from './users/pages/usersEdit.jsx';
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -27,6 +34,15 @@ createRoot(document.getElementById('root')).render(
         </Route>
         <Route path="/Bookings" element={<PrivateRoute element={<Root />} />}>
           <Route path="" element={<PrivateRoute element={<Bookings />} />} />
+          <Route path="details/:id" element={<PrivateRoute element={<BookingDetails />} />} />
+          <Route path="create" element={<PrivateRoute element={<BookingCreate />} />} />
+          <Route path="edit/:id" element={<PrivateRoute element={<BookingEdit />} />} />
+        </Route>
+        <Route path="/users" element={<PrivateRoute element={<Root />} />}>
+          <Route path="" element={<PrivateRoute element={<Users />} />} />
+          <Route path="details/:id" element={<PrivateRoute element={<UserDetail />} />} />
+          <Route path="create" element={<PrivateRoute element={<UserCreate />} />} />
+          <Route path="edit/:id" element={<PrivateRoute element={<UserEdit />} />} />
         </Route>
       </Route>
     </Routes>

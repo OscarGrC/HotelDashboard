@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 export const ShearchBo = styled.input`
-   
    padding:0.5rem;
+   padding-right: 5rem;
    border-radius:10px;
 `;
 
@@ -20,7 +20,6 @@ export const Tab = styled.p`
   margin-right:2rem;
   position: relative;
   
-  /* Subrayado */
   &:after {
     content: '';
     position: absolute;

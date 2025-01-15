@@ -16,19 +16,42 @@ const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
         '/Rooms/create': 'Room Create',
         '/Rooms/edit': 'Room edit',
         '/Rooms/detail': 'Room detail',
-        '/users': 'Users',
+        '/users/': 'Users',
         '/contact': 'Contact',
-        '/Bookings/': 'Bookings'
+        '/Bookings/': 'Bookings',
+        '/Bookings/edit': 'Booking edit',
+        '/Bookings/create': 'Booking create'
     };
 
     let currentTitle = 'Page Not Found';
-    if (location.pathname.includes('/Rooms/edit')) {
-        currentTitle = 'Room edit';
-    } else if (location.pathname.includes('/Rooms/detail')) {
-        currentTitle = 'Room detail';
-    } else {
-        currentTitle = pageTitles[location.pathname] || currentTitle;
+
+    switch (true) {
+        case location.pathname.includes('/Rooms/edit'):
+            currentTitle = 'Room edit';
+            break;
+        case location.pathname.includes('/Rooms/detail'):
+            currentTitle = 'Room detail';
+            break;
+        case location.pathname.includes('/Bookings/edit'):
+            currentTitle = 'Booking edit';
+            break;
+        case location.pathname.includes('/Bookings/create'):
+            currentTitle = 'Booking create';
+            break;
+        case location.pathname.includes('/users/edit'):
+            currentTitle = 'Users edit';
+            break;
+        case location.pathname.includes('/users/create'):
+            currentTitle = 'Users create';
+            break;
+        case location.pathname.includes('/users/details'):
+            currentTitle = 'Users details';
+            break;
+        default:
+            currentTitle = pageTitles[location.pathname] || currentTitle;
+            break;
     }
+
 
     const handleLogout = () => {
         localStorage.removeItem('isAuthenticated');
