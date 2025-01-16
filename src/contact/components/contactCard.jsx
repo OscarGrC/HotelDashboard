@@ -2,9 +2,12 @@ import React from 'react';
 import { CardContainer, CommentText, Footer, CustomerInfo } from './contactCard.js';
 import { MdBlock } from "react-icons/md";
 export const ContactCard = ({ item }) => {
+
+
     if (!item) {
         return <div>No data available</div>;
     }
+
     const truncatedComment = item.comment.length > 100 ? `${item.comment.substring(0, 100)}...` : item.comment;
 
     const calculateTimeSince = (dateString) => {
@@ -29,9 +32,8 @@ export const ContactCard = ({ item }) => {
     };
 
 
-
     return (
-        <CardContainer>
+        <CardContainer style={{ cursor: 'pointer' }}>
             <CommentText>{truncatedComment}</CommentText>
             <Footer>
                 <CustomerInfo>
@@ -40,8 +42,7 @@ export const ContactCard = ({ item }) => {
                 </CustomerInfo>
                 <MdBlock style={{ color: 'red', fontSize: '24px', marginTop: '10px' }} />
             </Footer>
+
         </CardContainer>
     );
 };
-
-export default ContactCard;
