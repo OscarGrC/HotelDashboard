@@ -12,6 +12,18 @@ export const Card = styled.div`
     width:70%;
     margin-left:14%;
 `;
+export const Card2 = styled.div`
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr auto; 
+    grid-template-rows: auto; 
+    margin-top: 0;
+    width:50%;
+    margin-left:24%;
+`;
 
 export const Error = styled.p`
     color: red;

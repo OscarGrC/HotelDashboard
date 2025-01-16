@@ -56,7 +56,7 @@ export const Table = styled.table`
 
   td {
     font-weight: 400; 
-    max-width: 328px;
+    max-width: 280px;
     img {
       width: 9.68rem;
       height: 4.8rem;
