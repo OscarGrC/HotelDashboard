@@ -37,7 +37,7 @@ export const Table = styled.table`
   margin-bottom: 1rem;
   border: none;
   th, td {
-    padding: 0.8rem;
+    padding: 0.69rem;
     text-align: center; 
     font-size: 1rem;
     font-family: 'Poppins', sans-serif;
