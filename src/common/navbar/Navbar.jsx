@@ -41,7 +41,7 @@ const Navbar = () => {
                     <FaBed />
                     Rooms
                 </NavItem>
-                <NavItem>
+                <NavItem onClick={() => navigate("/contact/")} className={activePath.startsWith('/contact/') ? "navActive" : ""}>
                     <FaUsers />
                     Contact
                 </NavItem>

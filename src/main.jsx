@@ -18,6 +18,7 @@ import PrivateRoute from './common/PrivatesRoute';
 import { UserDetail } from './users/pages/usersDetail.jsx';
 import { UserCreate } from './users/pages/usersCreate.jsx';
 import { UserEdit } from './users/pages/usersEdit.jsx';
+import { Contact } from './contact/pages/contact.jsx';
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -43,6 +44,10 @@ createRoot(document.getElementById('root')).render(
           <Route path="details/:id" element={<PrivateRoute element={<UserDetail />} />} />
           <Route path="create" element={<PrivateRoute element={<UserCreate />} />} />
           <Route path="edit/:id" element={<PrivateRoute element={<UserEdit />} />} />
+        </Route>
+        <Route path="/contact" element={<PrivateRoute element={<Root />} />}>
+          <Route path="" element={<PrivateRoute element={<Contact />} />} />
+
         </Route>
       </Route>
     </Routes>

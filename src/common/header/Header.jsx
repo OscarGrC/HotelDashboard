@@ -17,7 +17,7 @@ const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
         '/Rooms/edit': 'Room edit',
         '/Rooms/detail': 'Room detail',
         '/users/': 'Users',
-        '/contact': 'Contact',
+        '/contact/': 'Contact',
         '/Bookings/': 'Bookings',
         '/Bookings/edit': 'Booking edit',
         '/Bookings/create': 'Booking create'

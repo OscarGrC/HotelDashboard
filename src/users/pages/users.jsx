@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Wrapper, Header, Table, Pagination, ButtonStyled } from '../../rooms/pages/rooms.js';
-import { ShearchBo, TabContainer, Tab } from '../../booking/pages/booking.js';
+import { TabContainer, Tab } from '../../booking/pages/booking.js';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import usersData from '../../users/data/users.json';
 import { FaRegEdit } from "react-icons/fa";
