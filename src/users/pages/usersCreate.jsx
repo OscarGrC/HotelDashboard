@@ -14,7 +14,7 @@ export const UserCreate = () => {
         startDate: '',
         description: '',
         puesto: '',
-        estado: false,
+        stade: false,
         password: ''
     });
 
@@ -101,7 +101,7 @@ export const UserCreate = () => {
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="2.8rem">Estado:</Label>
-                        <input type='checkbox' value={formData.estado} name="estado" onChange={handleInputChange} />
+                        <input type='checkbox' value={formData.stade} name="stade" onChange={handleInputChange} />
 
                     </InputWrapper>
 

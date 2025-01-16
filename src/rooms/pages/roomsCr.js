@@ -21,8 +21,8 @@ export const Card2 = styled.div`
     grid-template-columns: 1fr auto; 
     grid-template-rows: auto; 
     margin-top: 0;
-    width:50%;
-    margin-left:24%;
+    width:60%;
+    margin-left:18%;
 `;
 
 export const Error = styled.p`

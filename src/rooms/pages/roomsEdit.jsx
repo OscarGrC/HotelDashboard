@@ -55,9 +55,6 @@ export const RoomEdit = () => {
                 floor: floor || '',
                 amenities: room.amenities || [],
             });
-            console.log(room)
-        } else {
-            console.error("Room not found");
         }
     }, [id]);
     const parseRoomNumber = (roomNumber) => {
