@@ -3,7 +3,7 @@ import { Wrapper, Header, Table, Pagination, ButtonStyled } from '../../rooms/pa
 import { TabContainer, Tab } from '../../booking/pages/booking.js';
 import contactData from '../data/contact.json';
 import contactArchivedData from '../data/contactArchived.json';
-import { ContactCard } from '../components/contactCard.jsx';
+import { ContactCarousel } from '../components/contactCarousel.jsx';
 
 export const Contact = () => {
     const [messages, setMessages] = useState([]);
@@ -37,7 +37,7 @@ export const Contact = () => {
 
     return (
         <Wrapper>
-            <ContactCard item={messages[0]}></ContactCard>
+            <ContactCarousel messages={messages}></ContactCarousel>
             <Header>
                 <TabContainer>
                     <Tab selected={currentTab === 'all'} onClick={() => setCurrentTab('all')}>All</Tab>
