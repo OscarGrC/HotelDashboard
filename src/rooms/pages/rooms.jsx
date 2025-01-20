@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { Wrapper, Header, Table, Pagination, ButtonStyled } from './rooms.js';
+import { Wrapper, Header, Table, Pagination, ButtonStyled, ButtonItem } from './rooms.js';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import roomData from '../data/rooms.json';
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { useNavigate, useLocation } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteRoom, setSelectedRoom } from '../features/roomSlice.js';
+import { fetchRoomsListThunk } from "../features/roomThunks.js"
 
 export const Rooms = () => {
-    const [rooms, setRooms] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [sortKey, setSortKey] = useState(null);
-    const [sortOrder, setSortOrder] = useState('asc');
-    const roomsPerPage = 10;
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const rooms = useSelector((state) => state.rooms.roomsData);
+    const status = useSelector((state) => state.rooms.status);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const roomsPerPage = 10;
+
     useEffect(() => {
-        setRooms(roomData);
-    }, [roomData]);
+        if (status === 'idle') {
+            dispatch(fetchRoomsListThunk());
+        }
+    }, [status]);
 
     const indexOfLastRoom = currentPage * roomsPerPage;
     const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
@@ -25,37 +30,25 @@ export const Rooms = () => {
     const nextPage = () => setCurrentPage((prev) => prev + 1);
     const prevPage = () => setCurrentPage((prev) => prev - 1);
 
-    const sortRooms = (key) => {
-        const order = sortKey === key && sortOrder === 'asc' ? 'desc' : 'asc';
-        setSortKey(key);
-        setSortOrder(order);
-
-        const sortedRooms = [...rooms].sort((a, b) => {
-            if (a[key] < b[key]) return order === 'asc' ? -1 : 1;
-            if (a[key] > b[key]) return order === 'asc' ? 1 : -1;
-            return 0;
-        });
-
-        setRooms(sortedRooms);
-    };
-
-    const handleDragEnd = (result) => {
-        if (!result.destination) return;
-
-        const reorderedRooms = Array.from(rooms);
-        const [removed] = reorderedRooms.splice(result.source.index, 1);
-        reorderedRooms.splice(result.destination.index, 0, removed);
-
-        setRooms(reorderedRooms);
-    };
     const handleDelete = (id) => {
-        const updatedRooms = rooms.filter((room) => room.id !== id);
-        setRooms(updatedRooms);
+        dispatch(deleteRoom(id));
     };
+
+    const handleEdit = (room) => {
+        dispatch(setSelectedRoom(room));
+        navigate(`/rooms/edit/${room.id}`);
+    };
+
+    const handleViewDetails = (room) => {
+        dispatch(setSelectedRoom(room));
+        navigate(`/rooms/details/${room.id}`);
+    };
+
     const calculateDiscountedPrice = (price, discountPercent) => {
         const discountedPrice = price - (price * discountPercent / 100);
         return parseFloat(discountedPrice.toFixed(2));
     };
+
     const amenitiesMap = {
         1: "Wi-Fi",
         2: "A/C",
@@ -68,6 +61,7 @@ export const Rooms = () => {
         9: "Bañera",
         10: "Terraza privada",
     };
+
     const getAmenities = (amenities) => {
         return amenities
             .map((number) => amenitiesMap[number])
@@ -81,45 +75,60 @@ export const Rooms = () => {
                 <button onClick={() => navigate("/Rooms/create")}>+ New Room</button>
             </Header>
 
-            <DragDropContext onDragEnd={handleDragEnd}>
+            <DragDropContext onDragEnd={(result) => { }}>
                 <Droppable droppableId="roomsTable">
                     {(provided) => (
                         <Table ref={provided.innerRef} {...provided.droppableProps}>
                             <thead>
                                 <tr>
                                     <th>Photo</th>
-                                    <th onClick={() => sortRooms('room_number')}>Room Number</th>
-                                    <th onClick={() => sortRooms('room_type')}>Room Type</th>
+                                    <th>Room Number</th>
+                                    <th>Room Type</th>
                                     <th>Amenities</th>
-                                    <th onClick={() => sortRooms('price')}>Price</th>
-                                    <th onClick={() => sortRooms('offert_price')}>Offert Price</th>
-                                    <th onClick={() => sortRooms('status')}>Status</th>
+                                    <th>Price</th>
+                                    <th>Offert Price</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {currentRooms.map((room, index) => (
-                                    <Draggable key={room.id} draggableId={room.id.toString()} index={index} >
+                                    <Draggable key={room.id} draggableId={room.id.toString()} index={index}>
                                         {(provided) => (
-                                            <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} onClick={() => navigate(`/Rooms/details/${room.id}`)}>
+                                            <tr
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                onClick={() => handleViewDetails(room)}
+                                            >
                                                 <td>
                                                     <img src={room.photos[0]} alt={`Room ${room.room_number}`} />
                                                 </td>
                                                 <td>{room.room_number}</td>
                                                 <td>{room.room_type}</td>
-                                                <td style={{ maxWidth: '7rem' }}>{getAmenities(room.amenities)}</td>
+                                                <td>{getAmenities(room.amenities)}</td>
                                                 <td>${room.price}</td>
                                                 <td>${calculateDiscountedPrice(room.price, room.offert_price)}</td>
                                                 <td><ButtonStyled type={room.status.toString()}>{room.status ? 'Available' : 'Booked'}</ButtonStyled></td>
                                                 <td className="actions">
-                                                    <button className="edit" onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        navigate(`/Rooms/edit/${room.id}`);
-                                                    }}><FaRegEdit /></button>
-                                                    <button className="delete" onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleDelete(room.id);
-                                                    }}><MdDelete /></button>
+                                                    <ButtonItem
+                                                        className="edit"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleEdit(room);
+                                                        }}
+                                                    >
+                                                        <FaRegEdit />
+                                                    </ButtonItem>
+                                                    <ButtonItem
+                                                        className="delete"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleDelete(room.id);
+                                                        }}
+                                                    >
+                                                        <MdDelete />
+                                                    </ButtonItem>
                                                 </td>
                                             </tr>
                                         )}
@@ -142,4 +151,4 @@ export const Rooms = () => {
             </Pagination>
         </Wrapper>
     );
-}
+};

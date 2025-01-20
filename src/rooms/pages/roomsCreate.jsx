@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addRoom } from '../features/roomSlice';
 import { Card, Error, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, AmenitiesWrapper, Title, Label, TextArea, ButtonForm } from './roomsCr.js';
 import { MdDelete } from "react-icons/md";
+
 const amenitiesMap = {
     1: "Wi-Fi",
     2: "A/C",
@@ -15,9 +18,10 @@ const amenitiesMap = {
     10: "Terraza privada",
 };
 
-
 export const RoomCreate = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const roomsData = useSelector((state) => state.rooms.roomsData);
 
     const [formData, setFormData] = useState({
         photos: [],
@@ -88,9 +92,9 @@ export const RoomCreate = () => {
             newErrors.discount = "El descuento debe estar entre 0 y 100.";
         }
         if (!formData.cancellation) newErrors.cancellation = "La política de cancelación es obligatoria.";
-        if (formData.photos.length < 3 || formData.photos.length > 5) {
-            newErrors.photos = "Debe haber entre 3 y 5 fotos.";
-        }
+        /*   if (formData.photos.length < 3 || formData.photos.length > 5) {
+               newErrors.photos = "Debe haber entre 3 y 5 fotos.";
+           }*/
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -98,11 +102,33 @@ export const RoomCreate = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            console.log("Form Data Submitted:", formData);
-            navigate("/Rooms");
+            const originalFormat = format(formData);
+            dispatch(addRoom(originalFormat));
+            navigate("/rooms");
         }
     };
 
+    const format = (formData) => {
+        const room_number = `R${formData.floor}${formData.roomNumber}`;
+        const newId = roomsData.length > 0 ? Math.max(...roomsData.map(room => room.id)) + 1 : 1;
+        return {
+            id: newId,
+            room_number,
+            room_type: formData.roomType,
+            amenities: formData.amenities,
+            price: formData.price,
+            offert_price: formData.discount,
+            status: formData.offer,
+            cancelation: formData.cancellation,
+            description: formData.description,
+            /*  photos: formData.photos,*/
+            photos: [
+                "/assets/img/room1a.jpg",
+                "/assets/img/room1b.jpg",
+                "/assets/img/room1c.jpg"
+            ],
+        };
+    };
     return (
         <>
             <Title>Create Room</Title>
@@ -197,7 +223,7 @@ export const RoomCreate = () => {
                 </div>
 
                 <SubmitButtonWrapper>
-                    <ButtonForm type="submit">Add Room</ButtonForm>
+                    <ButtonForm type="submit" onClick={handleSubmit}>Add Room</ButtonForm>
                 </SubmitButtonWrapper>
             </Card>
         </>

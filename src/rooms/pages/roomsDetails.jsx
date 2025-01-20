@@ -1,9 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import roomData from '../data/rooms.json';
+import { useSelector } from 'react-redux';
 import { Card, PhotosWrapper, AmenitiesWrapper, Title } from './roomsCr.js';
-import { MdDelete } from "react-icons/md";
 
 const amenitiesMap = {
     1: "Wi-Fi",
@@ -19,7 +17,7 @@ const amenitiesMap = {
 };
 
 export const RoomDetails = () => {
-    const { id } = useParams();
+    const room = useSelector((state) => state.rooms.selectedRoom);
     const [formData, setFormData] = useState({
         photos: [],
         roomType: '',
@@ -35,7 +33,6 @@ export const RoomDetails = () => {
 
 
     useEffect(() => {
-        const room = roomData.find((room) => room.id === parseInt(id));
         if (room) {
             const { floor, number } = parseRoomNumber(room.room_number);
             setFormData({
@@ -53,7 +50,7 @@ export const RoomDetails = () => {
         } else {
             console.error("Room not found");
         }
-    }, [id]);
+    }, [room]);
 
     const parseRoomNumber = (roomNumber) => {
         const match = roomNumber.match(/^R(\d)(\d{2})$/);

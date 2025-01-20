@@ -112,6 +112,7 @@ export const ButtonStyled = styled.button`
     padding: 10px 28px;
     border-radius: 12px;
     width:8rem;
+    border:none;
 `
 export const ButtonBooking = styled.button`
     background-color: ${({ status }) => {
@@ -133,5 +134,15 @@ export const ButtonBooking = styled.button`
     border-radius: 12px;
     width: 10rem;
 `;
+
+export const ButtonItem = styled.button`
+    background-color: transparent;
+    border:none;
+   
+`
+export const ButtonNew = styled.button`
+    background-color: transparent;
+    border:none;
+`
 
 

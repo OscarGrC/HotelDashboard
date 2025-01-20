@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { editRoom } from '../features/roomSlice';
 import { Card, Error, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, AmenitiesWrapper, Title, Label, TextArea, ButtonForm } from './roomsCr.js';
 import { MdDelete } from "react-icons/md";
-import roomData from '../data/rooms.json';
 
 const amenitiesMap = {
     1: "Wi-Fi",
@@ -17,12 +18,11 @@ const amenitiesMap = {
     10: "Terraza privada",
 };
 
-
 export const RoomEdit = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [rooms, setRooms] = useState([]);
-
+    const dispatch = useDispatch();
+    const selectedRoom = useSelector((state) => state.rooms.selectedRoom);
     const [formData, setFormData] = useState({
         photos: [],
         roomType: '',
@@ -34,29 +34,30 @@ export const RoomEdit = () => {
         cancellation: '',
         floor: '',
         amenities: [],
+        id: '',
     });
 
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        setRooms(roomData);
-        const room = roomData.find((room) => room.id === parseInt(id));
-        if (room) {
-            const { floor, number } = parseRoomNumber(room.room_number);
+        if (selectedRoom) {
+            const { floor, number } = parseRoomNumber(selectedRoom.room_number);
             setFormData({
-                photos: room.photos || [],
-                roomType: room.room_type || '',
+                photos: selectedRoom.photos || [],
+                roomType: selectedRoom.room_type || '',
                 roomNumber: number || '',
-                description: room.description || '',
-                offer: room.offer || false,
-                price: room.price || '',
-                discount: room.offert_price || '',
-                cancellation: room.cancelation || '',
+                description: selectedRoom.description || '',
+                offer: selectedRoom.offer || false,
+                price: selectedRoom.price || '',
+                discount: selectedRoom.offert_price || '',
+                cancellation: selectedRoom.cancelation || '',
                 floor: floor || '',
-                amenities: room.amenities || [],
+                amenities: selectedRoom.amenities || [],
+                id: selectedRoom.id,
             });
         }
-    }, [id]);
+    }, [selectedRoom]);
+
     const parseRoomNumber = (roomNumber) => {
         const match = roomNumber.match(/^R(\d)(\d{2})$/);
         if (!match) {
@@ -122,9 +123,9 @@ export const RoomEdit = () => {
             newErrors.discount = "El descuento debe estar entre 0 y 100.";
         }
         if (!formData.cancellation) newErrors.cancellation = "La política de cancelación es obligatoria.";
-        if (formData.photos.length < 3 || formData.photos.length > 5) {
-            newErrors.photos = "Debe haber entre 3 y 5 fotos.";
-        }
+        /*   if (formData.photos.length < 3 || formData.photos.length > 5) {
+               newErrors.photos = "Debe haber entre 3 y 5 fotos.";
+           }*/
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -132,10 +133,30 @@ export const RoomEdit = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            console.log("Form Data Submitted:", formData);
-            navigate("/Rooms");
+            const originalFormat = format(formData);
+            dispatch(editRoom(originalFormat));
+            console.log("wololo hand")
+            navigate("/rooms");
         }
     };
+
+    const format = (formData) => {
+        const room_number = `R${formData.floor}${formData.roomNumber}`;
+
+        return {
+            id: formData.id,
+            room_number,
+            room_type: formData.roomType,
+            amenities: formData.amenities,
+            price: formData.price,
+            offert_price: formData.discount,
+            status: formData.offer,
+            cancelation: formData.cancellation,
+            description: formData.description,
+            photos: formData.photos,
+        };
+    };
+
 
     return (
         <>
@@ -231,7 +252,7 @@ export const RoomEdit = () => {
                 </div>
 
                 <SubmitButtonWrapper>
-                    <ButtonForm type="submit">Edit</ButtonForm>
+                    <ButtonForm type="submit" onClick={handleSubmit}>Edit</ButtonForm>
                 </SubmitButtonWrapper>
             </Card>
         </>
