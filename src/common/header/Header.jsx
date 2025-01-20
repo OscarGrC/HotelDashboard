@@ -17,30 +17,30 @@ const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
     const pageTitles = {
         '/': 'Dashboard',
         '/bookings': 'Bookings',
-        '/Rooms/': 'Room List',
-        '/Rooms/create': 'Room Create',
-        '/Rooms/edit': 'Room edit',
-        '/Rooms/detail': 'Room detail',
+        '/rooms/': 'Room List',
+        '/rooms/create': 'Room Create',
+        '/rooms/edit': 'Room edit',
+        '/rooms/detail': 'Room detail',
         '/users/': 'Users',
         '/contact/': 'Contact',
-        '/Bookings/': 'Bookings',
-        '/Bookings/edit': 'Booking edit',
-        '/Bookings/create': 'Booking create'
+        '/bookings/': 'Bookings',
+        '/bookings/edit': 'Booking edit',
+        '/bookings/create': 'Booking create'
     };
 
     let currentTitle = 'Page Not Found';
 
     switch (true) {
-        case location.pathname.includes('/Rooms/edit'):
+        case location.pathname.includes('/rooms/edit'):
             currentTitle = 'Room edit';
             break;
-        case location.pathname.includes('/Rooms/detail'):
+        case location.pathname.includes('/rooms/detail'):
             currentTitle = 'Room detail';
             break;
-        case location.pathname.includes('/Bookings/edit'):
+        case location.pathname.includes('/bookings/edit'):
             currentTitle = 'Booking edit';
             break;
-        case location.pathname.includes('/Bookings/create'):
+        case location.pathname.includes('/bookings/create'):
             currentTitle = 'Booking create';
             break;
         case location.pathname.includes('/users/edit'):

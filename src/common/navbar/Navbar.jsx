@@ -33,11 +33,11 @@ const Navbar = () => {
                     <FaHome />
                     Dashboard
                 </NavItem>
-                <NavItem onClick={() => navigate("/bookings/")} className={activePath.startsWith('/Bookings/') ? "navActive" : ""}>
+                <NavItem onClick={() => navigate("/bookings/")} className={activePath.startsWith('/bookings/') ? "navActive" : ""}>
                     <FaBook />
                     Bookings
                 </NavItem>
-                <NavItem onClick={() => navigate("/rooms/")} className={activePath.startsWith('/Rooms/') ? "navActive" : ""}>
+                <NavItem onClick={() => navigate("/rooms/")} className={activePath.startsWith('/rooms/') ? "navActive" : ""}>
                     <FaBed />
                     Rooms
                 </NavItem>

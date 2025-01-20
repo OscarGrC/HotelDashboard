@@ -18,8 +18,9 @@ import { UserDetail } from './users/pages/usersDetail.jsx';
 import { UserCreate } from './users/pages/usersCreate.jsx';
 import { UserEdit } from './users/pages/usersEdit.jsx';
 import { Contact } from './contact/pages/contact.jsx';
-import { Provider } from 'react-redux'
-import { store } from './app/store'
+import { Provider } from 'react-redux';
+import { store } from './app/store';
+import './index.css';
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>

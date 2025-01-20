@@ -1,23 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Wrapper, Header, Table, Pagination, ButtonStyled } from '../../rooms/pages/rooms.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { Wrapper, Header, Table, Pagination, ButtonStyled, ButtonItem } from '../../rooms/pages/rooms.js';
 import { TabContainer, Tab } from '../../booking/pages/booking.js';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import usersData from '../../users/data/users.json';
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
-
+import { setSelectedUser, deleteUser } from '../../users/features/userSlice';
+import { fetchUsersListThunk } from "../../users/features/userThunks.js"
 export const Users = () => {
-    const [users, setUsers] = useState([]);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const users = useSelector((state) => state.users.usersData);
+    const status = useSelector((state) => state.users.status);
+
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const UsersPerPage = 10;
     const [filter, setFilter] = useState("all");
-    const navigate = useNavigate();
 
     useEffect(() => {
-        setUsers(usersData);
-    }, []);
+        if (status === 'idle') {
+            dispatch(fetchUsersListThunk());
+        }
+    }, [status]);
 
     useEffect(() => {
         let filteredData = [...users];
@@ -37,6 +43,20 @@ export const Users = () => {
 
     const nextPage = () => setCurrentPage((prev) => prev + 1);
     const prevPage = () => setCurrentPage((prev) => prev - 1);
+
+    const handleDelete = (id) => {
+        dispatch(deleteUser(id));
+    };
+
+    const handleEdit = (user) => {
+        dispatch(setSelectedUser(user));
+        navigate(`/users/edit/${user.id}`);
+    };
+
+    const handleViewDetails = (user) => {
+        dispatch(setSelectedUser(user));
+        navigate(`/users/details/${user.id}`);
+    };
 
     return (
         <Wrapper>
@@ -69,10 +89,9 @@ export const Users = () => {
                                 {currentUsers.map((user, index) => (
                                     <Draggable key={user.email} draggableId={user.email} index={index}>
                                         {(provided) => (
-                                            <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} onClick={() => navigate(`details/${user.id}`)}>
+                                            <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} onClick={() => handleViewDetails(user)}>
                                                 <td>
-                                                    <img src={user.photo} alt="User" style={{ width: "4.8rem", height: "4.8rem" }}
-                                                    />
+                                                    <img src={user.photo} alt="User" style={{ width: "4.8rem", height: "4.8rem" }} />
                                                 </td>
                                                 <td>{user.fullName}</td>
                                                 <td>{user.email}</td>
@@ -84,20 +103,19 @@ export const Users = () => {
                                                     </ButtonStyled>
                                                 </td>
                                                 <td className="actions">
-                                                    <button className="edit" onClick={(e) => {
+                                                    <ButtonItem className="edit" onClick={(e) => {
                                                         e.stopPropagation();
-                                                        navigate(`/users/edit/${user.id}`)
-                                                    }}><FaRegEdit /></button>
-                                                    <button
+                                                        handleEdit(user);
+                                                    }}><FaRegEdit /></ButtonItem>
+                                                    <ButtonItem
                                                         className="delete"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            const updatedUsers = users.filter((u) => u.id !== user.id);
-                                                            setUsers(updatedUsers);
+                                                            handleDelete(user.id);
                                                         }}
                                                     >
                                                         <MdDelete />
-                                                    </button>
+                                                    </ButtonItem>
                                                 </td>
                                             </tr>
                                         )}

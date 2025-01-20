@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Wrapper, Header, Table, Pagination, ButtonBooking } from '../../rooms/pages/rooms.js';
+import { Wrapper, Header, Table, Pagination, ButtonBooking, ButtonItem } from '../../rooms/pages/rooms.js';
 import { ShearchBo, TabContainer, Tab } from './booking.js'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import bookingData from '../data/booking.json';
@@ -136,8 +136,8 @@ export const Bookings = () => {
                                                     </ButtonBooking>
                                                 </td>
                                                 <td className="actions">
-                                                    <button className="edit" onClick={() => navigate(`/Bookings/edit/${booking.guest.id}`)}><FaRegEdit /></button>
-                                                    <button
+                                                    <ButtonItem className="edit" onClick={() => navigate(`/Bookings/edit/${booking.guest.id}`)}><FaRegEdit /></ButtonItem>
+                                                    <ButtonItem
                                                         className="delete"
                                                         onClick={() => {
                                                             const updatedBookings = bookings.filter((b) => b.guest.id !== booking.guest.id);
@@ -145,7 +145,7 @@ export const Bookings = () => {
                                                         }}
                                                     >
                                                         <MdDelete />
-                                                    </button>
+                                                    </ButtonItem>
                                                 </td>
                                             </tr>
                                         )}
