@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { editUser } from '../features/userSlice.js';
 import { Card2, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, Title, Label, TextArea, ButtonForm } from '../../rooms/pages/roomsCr.js';
 import { MdDelete } from "react-icons/md";
 import employes from '../../users/data/users.json';
 
 export const UserEdit = () => {
-    const { id } = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const selectedUser = useSelector((state) => state.users.selectedUser);
     const [employe, setEmploye] = useState([]);
     const [formData, setFormData] = useState({
-        photos: [],
+        photo: [],
         fullName: '',
         id: '',
         email: '',
@@ -23,25 +26,25 @@ export const UserEdit = () => {
         const [day, month, year] = dateString.split('/')
         return `${year}-${month}-${day}`;
     };
+    const parseDateBack = (dateString) => {
+        const [year, month, day] = dateString.split('-')
+        return `${day}/${month}/${year}`;
+    };
     useEffect(() => {
-        setEmploye(employes);
-
-
-        const emp = employes.find((emp) => emp.id === parseInt(id));
-        if (emp) {
+        if (selectedUser) {
             setFormData({
-                photos: [],
-                fullName: emp.fullName || '',
-                id: emp.id || '',
-                email: emp.email || '',
-                startDate: parseDate(emp.startDate) || '',
-                description: emp.description || '',
-                puesto: emp.puesto || '',
-                stade: emp.stade || false,
-                password: emp.password || ''
+                photo: selectedUser.photo,
+                fullName: selectedUser.fullName || '',
+                id: selectedUser.id || '',
+                email: selectedUser.email || '',
+                startDate: parseDate(selectedUser.startDate) || '',
+                description: selectedUser.description || '',
+                puesto: selectedUser.puesto || '',
+                stade: selectedUser.stade || false,
+                password: selectedUser.password || ''
             });
         }
-    }, [id]);
+    }, [selectedUser]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -57,23 +60,22 @@ export const UserEdit = () => {
             stade: e.target.checked
         });
     };
-
     const handlePhotoUpload = (e) => {
-        const files = Array.from(e.target.files);
-        setFormData({
-            ...formData,
-            photos: [...formData.photos, ...files],
-        });
+        const file = e.target.files[0];
+        if (file) {
+            setFormData({
+                ...formData,
+                photo: file,
+            });
+        }
     };
 
-    const handlePhotoDelete = (index) => {
-        const newPhotos = formData.photos.filter((_, i) => i !== index);
+    const handlePhotoDelete = () => {
         setFormData({
             ...formData,
-            photos: newPhotos,
+            photo: '',
         });
     };
-
     const validate = () => {
         if (!formData.fullName || !formData.email || !formData.id || !formData.puesto) {
             alert("Por favor, completa todos los campos requeridos.");
@@ -86,8 +88,23 @@ export const UserEdit = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
+            const originalFormat = format(formData);
+            dispatch(editUser(originalFormat));
             navigate("/users");
         }
+    };
+    const format = (formData) => {
+        return {
+            photo: formData.photo,
+            fullName: formData.fullName,
+            id: formData.id,
+            email: formData.email,
+            startDate: parseDateBack(formData.startDate),
+            description: formData.description,
+            puesto: formData.puesto,
+            stade: formData.stade,
+            password: formData.password
+        };
     };
 
     return (
@@ -142,24 +159,22 @@ export const UserEdit = () => {
                 </FormColumn>
 
                 <PhotosWrapper>
-                    <h2>Fotos</h2>
-                    <input type="file" multiple onChange={handlePhotoUpload} />
-                    {formData.photos.length > 0 && (
+                    <h2>Foto</h2>
+                    <input type="file" onChange={handlePhotoUpload} />
+                    {formData.photo && (
                         <div>
                             <ul style={{ listStyleType: "none" }}>
-                                {formData.photos.map((photo, index) => (
-                                    <li key={index}>
-                                        <img src={URL.createObjectURL(photo)} alt="Uploaded" width="100" />
-                                        <MdDelete type="button" onClick={() => handlePhotoDelete(index)} />
-                                    </li>
-                                ))}
+                                <li>
+                                    <img src={formData.photo} alt="Uploaded" width="100" />
+                                    <MdDelete type="button" onClick={handlePhotoDelete} />
+                                </li>
                             </ul>
                         </div>
                     )}
                 </PhotosWrapper>
 
                 <SubmitButtonWrapper>
-                    <ButtonForm type="submit">Update Employee</ButtonForm>
+                    <ButtonForm type="submit" onClick={handleSubmit}>Update Employee</ButtonForm>
                 </SubmitButtonWrapper>
             </Card2>
         </>

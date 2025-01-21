@@ -23,6 +23,7 @@ export const Users = () => {
         if (status === 'idle') {
             dispatch(fetchUsersListThunk());
         }
+        console.log(users)
     }, [status]);
 
     useEffect(() => {

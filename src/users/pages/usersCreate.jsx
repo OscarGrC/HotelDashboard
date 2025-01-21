@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addUser } from '../features/userSlice.js';
 import { Card2, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, AmenitiesWrapper, Title, Label, TextArea, ButtonForm } from '../../rooms/pages/roomsCr.js';
 import { MdDelete } from "react-icons/md";
 
 export const UserCreate = () => {
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
+    const usersData = useSelector((state) => state.users.usersData);
     const [formData, setFormData] = useState({
         photos: [],
         fullName: '',
@@ -53,9 +56,33 @@ export const UserCreate = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (validate()) {
-            console.log("Form Data Submitted:", formData);
-            navigate("/Rooms");
+        const originalFormat = format(formData);
+        dispatch(addUser(originalFormat));
+        console.log("Form Data Submitted:", originalFormat);
+        navigate("/users");
+
+    };
+    const formatDate = (date) => {
+        if (!date) return '';
+        const [year, month, day] = date.split('-');
+        return `${day}/${month}/${year}`;
+    };
+
+    const format = (formData) => {
+        const newId = usersData.length > 0 ? Math.max(...usersData.map(user => user.id)) + 1 : 1;
+        console.log(formData)
+        return {
+            id: newId,
+            startDate: formatDate(formData.startDate),
+            stade: formData.stade,
+            puesto: formData.puesto,
+            phone: formData.phone,
+            password: formData.password,
+            fullName: formData.fullName,
+            email: formData.email,
+            description: formData.description,
+            /*  photos: formData.photos,*/
+            photo: "/assets/img/employ1.jpg",
         }
     };
 
@@ -87,10 +114,14 @@ export const UserCreate = () => {
                         <Label mr="0.5rem" ml="3.6rem">Email:</Label>
                         <input value={formData.email} name="email" onChange={handleInputChange}></input>
                     </InputWrapper>
+                    <InputWrapper>
+                        <Label mr="0.5rem" ml="3.6rem">Phone:</Label>
+                        <input value={formData.phone} name="phone" onChange={handleInputChange}></input>
+                    </InputWrapper>
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="0.8rem">Start Date:</Label>
-                        <input type="calendar" name="startDate" checked={formData.startDate} onChange={handleOfferChange} />
+                        <input type="date" name="startDate" value={formData.startDate} onChange={handleInputChange} />
                     </InputWrapper>
 
                     <InputWrapper>
@@ -133,7 +164,7 @@ export const UserCreate = () => {
                 </div>
 
                 <SubmitButtonWrapper>
-                    <ButtonForm type="submit">Add Employe</ButtonForm>
+                    <ButtonForm type="submit" onClick={handleSubmit}>Add Employe</ButtonForm>
                 </SubmitButtonWrapper>
             </Card2>
         </>

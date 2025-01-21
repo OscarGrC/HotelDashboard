@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card2, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, Title, Label, TextArea, ButtonForm } from '../../rooms/pages/roomsCr.js';
-import { MdDelete } from "react-icons/md";
+import { useSelector } from 'react-redux';
 import employes from '../../users/data/users.json';
 
 export const UserDetail = () => {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const [employe, setEmploye] = useState([]);
+    const emp = useSelector((state) => state.users.selectedUser);
     const [formData, setFormData] = useState({
         photos: [],
         fullName: '',
@@ -24,10 +22,6 @@ export const UserDetail = () => {
         return `${year}-${month}-${day}`;
     };
     useEffect(() => {
-        setEmploye(employes);
-
-
-        const emp = employes.find((emp) => emp.id === parseInt(id));
         if (emp) {
             setFormData({
                 photo: emp.photo,
@@ -41,7 +35,7 @@ export const UserDetail = () => {
                 password: emp.password || ''
             });
         }
-    }, [id]);
+    }, [emp]);
 
 
     const validate = () => {

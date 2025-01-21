@@ -19,7 +19,6 @@ const amenitiesMap = {
 };
 
 export const RoomEdit = () => {
-    const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const selectedRoom = useSelector((state) => state.rooms.selectedRoom);
@@ -135,7 +134,6 @@ export const RoomEdit = () => {
         if (validate()) {
             const originalFormat = format(formData);
             dispatch(editRoom(originalFormat));
-            console.log("wololo hand")
             navigate("/rooms");
         }
     };
