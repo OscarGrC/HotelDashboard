@@ -1,22 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { SidebarWrapper, Header, LogoIcon, Title, Subtitle, Nav, NavItem, UserProfile, ContactButton, TitleContainer, Footer } from './Navbar';
 import { FaHome, FaBed, FaUsers, FaCalendarAlt, FaHeart, FaBook } from 'react-icons/fa';
 import userAvatar from '../../assets/morty.png';
 import logoImage from '../../assets/hotel.png';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { AuthContext } from '../../login/features/AuthContext';
+import { Button, Input, Label, Form, ModalContent, ModalOverlay } from './modalStyle.js'
 
 const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { state, dispatch } = useContext(AuthContext);
     const [activePath, setActivePath] = useState(location.pathname);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    useEffect(() => {
-        setActivePath(location.pathname);
-    }, [location.pathname]);
+    const [name, setName] = useState(state.user.name);
+    const [email, setEmail] = useState(state.user.email);
+
+    const handleEditClick = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleSave = () => {
+        dispatch({
+            type: 'updateUser',
+            payload: { name, email },
+        });
+        setIsModalOpen(false);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <SidebarWrapper>
-
             <Header>
                 <LogoIcon>
                     <img src={logoImage} alt="Hotel Logo" />
@@ -26,7 +44,6 @@ const Navbar = () => {
                     <Subtitle>Hotel Admin Dashboard</Subtitle>
                 </TitleContainer>
             </Header>
-
 
             <Nav>
                 <NavItem onClick={() => navigate("/")} className={activePath === "/" ? "navActive" : ""}>
@@ -53,11 +70,36 @@ const Navbar = () => {
 
             <UserProfile>
                 <img src={userAvatar} alt="User Avatar" />
-                <h3>Oscar Gracia</h3>
-                <p>oscar.gracia@example.com</p>
+                <h3>{state.user.name}</h3>
+                <p>{state.user.email}</p>
             </UserProfile>
 
-            <ContactButton>Editar</ContactButton>
+            <ContactButton onClick={handleEditClick}>Editar</ContactButton>
+
+
+            {isModalOpen ? (
+                <ModalOverlay>
+                    <ModalContent>
+                        <h2>Editar Perfil</h2>
+                        <Form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+                            <Label>Nombre</Label>
+                            <Input
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                            <Label>Correo Electrónico</Label>
+                            <Input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                            <Button type="save">Guardar Cambios</Button>
+                            <Button type="exit" className="close" onClick={handleCloseModal}>Cerrar</Button>
+                        </Form>
+                    </ModalContent>
+                </ModalOverlay>
+            ) : <></>}
 
             <Footer>
                 <h4>Travl Hotel Admin Dashboard</h4>

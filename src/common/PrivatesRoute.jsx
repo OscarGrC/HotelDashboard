@@ -1,10 +1,11 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useContext } from "react";
+import { Navigate } from "react-router-dom";
+import { AuthContext } from "../login/features/AuthContext.jsx";
 
 const PrivateRoute = ({ element }) => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    const { state } = useContext(AuthContext);
 
-    if (!isAuthenticated) {
+    if (!state.isAuthenticated) {
         return <Navigate to="/login" />;
     }
 
@@ -12,3 +13,4 @@ const PrivateRoute = ({ element }) => {
 };
 
 export default PrivateRoute;
+

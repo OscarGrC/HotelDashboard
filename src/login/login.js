@@ -6,6 +6,10 @@ export const LoginWrapper = styled.div`
   align-items: center;
   height: 100vh;
   background-color: #f4f6f9;
+  background-image: url('/assets/img/Atlantis.png');
+  background-size: cover; 
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 export const LoginBox = styled.div`

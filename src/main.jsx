@@ -21,40 +21,43 @@ import { Contact } from './contact/pages/contact.jsx';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import './index.css';
+import { AuthProvider } from './login/features/AuthContext.jsx';
 
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <Routes>
-        <Route path="/login" element={<Login />} />
+  <AuthProvider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
 
-        <Route element={<Layout />}>
-          <Route path="/" element={<PrivateRoute element={<Dashboard />} />} />
-          <Route path="/rooms" element={<PrivateRoute element={<Root />} />}>
-            <Route path="" element={<PrivateRoute element={<Rooms />} />} />
-            <Route path="details/:id" element={<PrivateRoute element={<RoomDetails />} />} />
-            <Route path="create" element={<PrivateRoute element={<RoomCreate />} />} />
-            <Route path="edit/:id" element={<PrivateRoute element={<RoomEdit />} />} />
-          </Route>
-          <Route path="/bookings" element={<PrivateRoute element={<Root />} />}>
-            <Route path="" element={<PrivateRoute element={<Bookings />} />} />
-            <Route path="details/:id" element={<PrivateRoute element={<BookingDetails />} />} />
-            <Route path="create" element={<PrivateRoute element={<BookingCreate />} />} />
-            <Route path="edit/:id" element={<PrivateRoute element={<BookingEdit />} />} />
-          </Route>
-          <Route path="/users" element={<PrivateRoute element={<Root />} />}>
-            <Route path="" element={<PrivateRoute element={<Users />} />} />
-            <Route path="details/:id" element={<PrivateRoute element={<UserDetail />} />} />
-            <Route path="create" element={<PrivateRoute element={<UserCreate />} />} />
-            <Route path="edit/:id" element={<PrivateRoute element={<UserEdit />} />} />
-          </Route>
-          <Route path="/contact" element={<PrivateRoute element={<Root />} />}>
-            <Route path="" element={<PrivateRoute element={<Contact />} />} />
+          <Route element={<Layout />}>
+            <Route path="/" element={<PrivateRoute element={<Dashboard />} />} />
+            <Route path="/rooms" element={<PrivateRoute element={<Root />} />}>
+              <Route path="" element={<PrivateRoute element={<Rooms />} />} />
+              <Route path="details/:id" element={<PrivateRoute element={<RoomDetails />} />} />
+              <Route path="create" element={<PrivateRoute element={<RoomCreate />} />} />
+              <Route path="edit/:id" element={<PrivateRoute element={<RoomEdit />} />} />
+            </Route>
+            <Route path="/bookings" element={<PrivateRoute element={<Root />} />}>
+              <Route path="" element={<PrivateRoute element={<Bookings />} />} />
+              <Route path="details/:id" element={<PrivateRoute element={<BookingDetails />} />} />
+              <Route path="create" element={<PrivateRoute element={<BookingCreate />} />} />
+              <Route path="edit/:id" element={<PrivateRoute element={<BookingEdit />} />} />
+            </Route>
+            <Route path="/users" element={<PrivateRoute element={<Root />} />}>
+              <Route path="" element={<PrivateRoute element={<Users />} />} />
+              <Route path="details/:id" element={<PrivateRoute element={<UserDetail />} />} />
+              <Route path="create" element={<PrivateRoute element={<UserCreate />} />} />
+              <Route path="edit/:id" element={<PrivateRoute element={<UserEdit />} />} />
+            </Route>
+            <Route path="/contact" element={<PrivateRoute element={<Root />} />}>
+              <Route path="" element={<PrivateRoute element={<Contact />} />} />
 
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </Provider>
-  </BrowserRouter>
+        </Routes>
+      </Provider>
+    </BrowserRouter>
+  </AuthProvider>
 );
 
