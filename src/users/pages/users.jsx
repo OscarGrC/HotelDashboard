@@ -13,7 +13,6 @@ export const Users = () => {
     const navigate = useNavigate();
     const users = useSelector((state) => state.users.usersData);
     const status = useSelector((state) => state.users.status);
-
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const UsersPerPage = 10;
@@ -23,7 +22,6 @@ export const Users = () => {
         if (status === 'idle') {
             dispatch(fetchUsersListThunk());
         }
-        console.log(users)
     }, [status]);
 
     useEffect(() => {

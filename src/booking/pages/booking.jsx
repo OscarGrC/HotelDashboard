@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Wrapper, Header, Table, Pagination, ButtonBooking, ButtonItem } from '../../rooms/pages/rooms.js';
 import { ShearchBo, TabContainer, Tab } from './booking.js'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import bookingData from '../data/booking.json';
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
-
+import { setSelectedBooking, deleteBooking } from '../../booking/features/bookingSlice.js';
+import { fetchBookingListThunk } from "../../booking/features/bookingThunks.js"
 export const Bookings = () => {
-    const [bookings, setBookings] = useState([]);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const bookings = useSelector((state) => state.bookings.bookingData);
+    const status = useSelector((state) => state.bookings.status);
+
     const [filteredBookings, setFilteredBookings] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const BookingPerPage = 10;
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState("all");
-    const navigate = useNavigate();
 
     useEffect(() => {
-        setBookings(bookingData);
-    }, [bookingData]);
+        if (status === 'idle') {
+            dispatch(fetchBookingListThunk());
+        }
+    }, [status]);
 
 
     const parseDate = (dateString) => {
@@ -26,7 +32,7 @@ export const Bookings = () => {
         return new Date(year, month - 1, day);
     };
     useEffect(() => {
-        let filteredData = [...bookingData];
+        let filteredData = [...bookings];
 
         if (filter === "checking_in") {
             filteredData = filteredData.sort((a, b) => parseDate(b.check_in) - parseDate(a.check_in));
@@ -47,7 +53,7 @@ export const Bookings = () => {
 
         setFilteredBookings(filteredData);
 
-    }, [bookingData, filter, searchTerm]);
+    }, [bookings, filter, searchTerm]);
 
 
     const indexOfLastBooking = currentPage * BookingPerPage;
@@ -70,6 +76,18 @@ export const Bookings = () => {
         if (today >= checkIn && today <= checkOut) return 'In Progress';
         if (today > checkOut) return 'Check Out';
     };
+    const handleDelete = (booking) => {
+        dispatch(deleteBooking(booking.guest.id));
+    };
+    const handleEdit = (booking) => {
+        dispatch(setSelectedBooking(booking));
+        navigate(`/bookings/edit/${booking.guest.id}`);
+    };
+    const handleViewDetails = (booking) => {
+        dispatch(setSelectedBooking(booking));
+        navigate(`/bookings/details/${booking.guest.id}`);
+    };
+
 
     return (
         <Wrapper>
@@ -92,7 +110,7 @@ export const Bookings = () => {
 
 
 
-                <button onClick={() => navigate("/Bookings/create")}>+ New Booking</button>
+                <button onClick={() => navigate("/bookings/create")}>+ New Booking</button>
 
             </Header>
 
@@ -116,7 +134,7 @@ export const Bookings = () => {
                                 {currentBookings.map((booking, index) => (
                                     <Draggable key={booking.guest.id} draggableId={booking.guest.id.toString()} index={index}>
                                         {(provided) => (
-                                            <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} onClick={() => navigate(`/Bookings/details/${booking.guest.id}`)}>
+                                            <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} onClick={() => handleViewDetails(booking)}>
                                                 <td>
                                                     {booking.guest.name} {booking.guest.last_name} <br />
                                                     ID: {booking.guest.id}
@@ -136,12 +154,15 @@ export const Bookings = () => {
                                                     </ButtonBooking>
                                                 </td>
                                                 <td className="actions">
-                                                    <ButtonItem className="edit" onClick={() => navigate(`/Bookings/edit/${booking.guest.id}`)}><FaRegEdit /></ButtonItem>
+                                                    <ButtonItem className="edit" onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleEdit(booking);
+                                                    }}><FaRegEdit /></ButtonItem>
                                                     <ButtonItem
                                                         className="delete"
-                                                        onClick={() => {
-                                                            const updatedBookings = bookings.filter((b) => b.guest.id !== booking.guest.id);
-                                                            setBookings(updatedBookings);
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleDelete(booking);
                                                         }}
                                                     >
                                                         <MdDelete />

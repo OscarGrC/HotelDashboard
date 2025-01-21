@@ -1,8 +1,11 @@
 import React from 'react';
 import { CardContainer, CommentText, Footer, CustomerInfo } from './contactCard.js';
 import { MdBlock } from "react-icons/md";
-export const ContactCard = ({ item }) => {
+import { archived } from '../../contact/features/contactSlice.js';
+import { useDispatch } from 'react-redux';
 
+export const ContactCard = ({ item }) => {
+    const dispatch = useDispatch();
 
     if (!item) {
         return <div>No data available</div>;
@@ -31,6 +34,9 @@ export const ContactCard = ({ item }) => {
         }
     };
 
+    const archiveMessage = (msg) => {
+        dispatch(archived(msg));
+    };
 
     return (
         <CardContainer style={{ cursor: 'pointer' }}>
@@ -40,9 +46,15 @@ export const ContactCard = ({ item }) => {
                     <div className="name">{`${item.customer.name} ${item.customer.last_name}`}</div>
                     <div className="time">{calculateTimeSince(item.date)}</div>
                 </CustomerInfo>
-                <MdBlock style={{ color: 'red', fontSize: '24px', marginTop: '10px' }} />
-            </Footer>
 
+                <MdBlock
+                    style={{ color: 'red', fontSize: '24px', marginTop: '10px' }}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        archiveMessage(item);
+                    }}
+                />
+            </Footer>
         </CardContainer>
     );
 };

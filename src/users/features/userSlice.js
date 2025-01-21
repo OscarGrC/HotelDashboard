@@ -57,7 +57,3 @@ export const getUsersData = (state) => state.users.roomsData;
 export const getUserStatus = (state) => state.users.status;
 export const getUserError = (state) => state.users.error;
 export const getSelectedUser = (state) => state.users.selectedUser;
-
-
-
-

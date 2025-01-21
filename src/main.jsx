@@ -36,7 +36,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="create" element={<PrivateRoute element={<RoomCreate />} />} />
             <Route path="edit/:id" element={<PrivateRoute element={<RoomEdit />} />} />
           </Route>
-          <Route path="/Bookings" element={<PrivateRoute element={<Root />} />}>
+          <Route path="/bookings" element={<PrivateRoute element={<Root />} />}>
             <Route path="" element={<PrivateRoute element={<Bookings />} />} />
             <Route path="details/:id" element={<PrivateRoute element={<BookingDetails />} />} />
             <Route path="create" element={<PrivateRoute element={<BookingCreate />} />} />

@@ -1,32 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { Wrapper, Header, Table, Pagination, ButtonStyled } from '../../rooms/pages/rooms.js';
 import { TabContainer, Tab } from '../../booking/pages/booking.js';
-import contactData from '../data/contact.json';
-import contactArchivedData from '../data/contactArchived.json';
 import { ContactCarousel } from '../components/contactCarousel.jsx';
+import { archived } from '../../contact/features/contactSlice.js';
+import { fetchContactListThunk } from "../../contact/features/contactThunks.js";
+import { fetchContactArchivedListThunk } from "../../contact/features/contactArchivedThunks.js";
+import { useDispatch, useSelector } from 'react-redux';
 
 export const Contact = () => {
-    const [messages, setMessages] = useState([]);
-    const [archivedMessages, setArchivedMessages] = useState([]);
     const [currentTab, setCurrentTab] = useState('all');
     const [currentPage, setCurrentPage] = useState(1);
     const MessagesPerPage = 10;
-
+    const dispatch = useDispatch();
+    const contacts = useSelector((state) => state.contacts.contactData);
+    const status = useSelector((state) => state.contacts.status);
+    const contactsArchived = useSelector((state) => state.contacts.contactArchivedData);
+    const statusArchived = useSelector((state) => state.contacts.statusArchived);
 
     useEffect(() => {
-        setMessages(contactData);
-        setArchivedMessages(contactArchivedData);
-    }, []);
-
-    const archiveMessage = (id) => {
-        const messageToArchive = messages.find((msg) => msg.id === id);
-        if (messageToArchive) {
-            setMessages(messages.filter((msg) => msg.id !== id));
-            setArchivedMessages([...archivedMessages, messageToArchive]);
+        if (status === 'idle') {
+            dispatch(fetchContactListThunk());
         }
+        if (statusArchived === 'idle') {
+            dispatch(fetchContactArchivedListThunk());
+        }
+    }, [dispatch, status, statusArchived]);
+
+    const archiveMessage = (msg) => {
+        dispatch(archived(msg));
     };
 
-    const currentData = currentTab === 'all' ? messages : archivedMessages;
+    const currentData = currentTab === 'all' ? contacts : contactsArchived;
     const sortedData = [...currentData].sort((a, b) => new Date(b.date) - new Date(a.date));
     const indexOfLastMessage = currentPage * MessagesPerPage;
     const indexOfFirstMessage = indexOfLastMessage - MessagesPerPage;
@@ -37,7 +41,7 @@ export const Contact = () => {
 
     return (
         <Wrapper>
-            <ContactCarousel messages={messages}></ContactCarousel>
+            <ContactCarousel messages={contacts}></ContactCarousel>
             <Header>
                 <TabContainer>
                     <Tab selected={currentTab === 'all'} onClick={() => setCurrentTab('all')}>All</Tab>
@@ -71,7 +75,7 @@ export const Contact = () => {
                             <td>{msg.comment}</td>
                             {currentTab === 'all' && (
                                 <td>
-                                    <ButtonStyled onClick={() => archiveMessage(msg.id)}>Archived</ButtonStyled>
+                                    <ButtonStyled onClick={() => archiveMessage(msg)}>Archived</ButtonStyled>
                                 </td>
                             )}
                         </tr>
@@ -87,7 +91,6 @@ export const Contact = () => {
                     Next
                 </button>
             </Pagination>
-
         </Wrapper>
     );
 };

@@ -4,15 +4,19 @@ import { HeaderWrapper, HamburgerIcon, PageTitle, IconsWrapper, NotificationBadg
 import { FaRegBell, FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import { MdOutlineEmail } from "react-icons/md";
 import { FiLogIn } from "react-icons/fi";
-import contactData from '../../contact/data/contact.json';
+import { fetchContactListThunk } from "../../contact/features/contactThunks.js";
+import { useDispatch, useSelector } from 'react-redux';
 
 const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [messages, setMessages] = useState([]);
+    const dispatch = useDispatch();
+    const contacts = useSelector((state) => state.contacts.contactData);
+    const status = useSelector((state) => state.contacts.status);
     useEffect(() => {
-        const totalMessages = contactData.length;
-        setMessages(totalMessages);
+        if (status === 'idle') {
+            dispatch(fetchContactListThunk());
+        }
     }, []);
     const pageTitles = {
         '/': 'Dashboard',
@@ -40,8 +44,8 @@ const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
         case location.pathname.includes('/bookings/edit'):
             currentTitle = 'Booking edit';
             break;
-        case location.pathname.includes('/bookings/create'):
-            currentTitle = 'Booking create';
+        case location.pathname.includes('/bookings/details'):
+            currentTitle = 'Booking details';
             break;
         case location.pathname.includes('/users/edit'):
             currentTitle = 'Users edit';
@@ -75,7 +79,7 @@ const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
             <IconsWrapper>
                 <div style={{ position: 'relative' }}>
                     <MdOutlineEmail />
-                    <NotificationBadge bgcolor="red">{messages}</NotificationBadge>
+                    <NotificationBadge bgcolor="red">{contacts.length}</NotificationBadge>
                 </div>
                 <div style={{ position: 'relative' }}>
                     <FaRegBell />
