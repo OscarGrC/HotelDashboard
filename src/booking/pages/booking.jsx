@@ -6,13 +6,13 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
-import { setSelectedBooking, deleteBooking } from '../../booking/features/bookingSlice.js';
-import { fetchBookingListThunk } from "../../booking/features/bookingThunks.js"
+import { setSelectedBooking } from '../../booking/features/bookingSlice.js';
+import { fetchBookingListThunk, deleteBookingThunk } from "../../booking/features/bookingThunks.js"
 export const Bookings = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const bookings = useSelector((state) => state.bookings.bookingData);
-    const status = useSelector((state) => state.bookings.status);
+    const status = useSelector((state) => state.bookings.fetchStatus);
 
     const [filteredBookings, setFilteredBookings] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -77,7 +77,7 @@ export const Bookings = () => {
         if (today > checkOut) return 'Check Out';
     };
     const handleDelete = (booking) => {
-        dispatch(deleteBooking(booking.guest.id));
+        dispatch(deleteBookingThunk(booking));
     };
     const handleEdit = (booking) => {
         dispatch(setSelectedBooking(booking));

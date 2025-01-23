@@ -1,7 +1,7 @@
 import React from 'react';
 import { CardContainer, CommentText, Footer, CustomerInfo } from './contactCard.js';
 import { MdBlock } from "react-icons/md";
-import { archived } from '../../contact/features/contactSlice.js';
+import { archiveContactThunk } from "../../contact/features/contactThunks.js";
 import { useDispatch } from 'react-redux';
 
 export const ContactCard = ({ item }) => {
@@ -35,7 +35,7 @@ export const ContactCard = ({ item }) => {
     };
 
     const archiveMessage = (msg) => {
-        dispatch(archived(msg));
+        dispatch(archiveContactThunk(msg));
     };
 
     return (

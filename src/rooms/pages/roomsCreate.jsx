@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addRoom } from '../features/roomSlice';
+import { addRoomThunk } from '../features/roomThunks.js';
 import { Card, Error, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, AmenitiesWrapper, Title, Label, TextArea, ButtonForm } from './roomsCr.js';
 import { MdDelete } from "react-icons/md";
 
@@ -103,7 +103,7 @@ export const RoomCreate = () => {
         e.preventDefault();
         if (validate()) {
             const originalFormat = format(formData);
-            dispatch(addRoom(originalFormat));
+            dispatch(addRoomThunk(originalFormat));
             navigate("/rooms");
         }
     };

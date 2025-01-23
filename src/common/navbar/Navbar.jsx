@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { SidebarWrapper, Header, LogoIcon, Title, Subtitle, Nav, NavItem, UserProfile, ContactButton, TitleContainer, Footer } from './Navbar';
 import { FaHome, FaBed, FaUsers, FaCalendarAlt, FaHeart, FaBook } from 'react-icons/fa';
 import userAvatar from '../../assets/morty.png';
 import logoImage from '../../assets/hotel.png';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { AuthContext } from '../../login/features/AuthContext';
+import { AuthContext } from '../../login/AuthContext';
 import { Button, Input, Label, Form, ModalContent, ModalOverlay } from './modalStyle.js'
 
 const Navbar = () => {
@@ -16,6 +16,11 @@ const Navbar = () => {
 
     const [name, setName] = useState(state.user.name);
     const [email, setEmail] = useState(state.user.email);
+
+    useEffect(() => {
+        setActivePath(location.pathname)
+    }, [location])
+
 
     const handleEditClick = () => {
         setIsModalOpen(true);

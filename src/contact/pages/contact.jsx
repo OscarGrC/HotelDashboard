@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Wrapper, Header, Table, Pagination, ButtonStyled } from '../../rooms/pages/rooms.js';
 import { TabContainer, Tab } from '../../booking/pages/booking.js';
 import { ContactCarousel } from '../components/contactCarousel.jsx';
-import { archived } from '../../contact/features/contactSlice.js';
-import { fetchContactListThunk } from "../../contact/features/contactThunks.js";
-import { fetchContactArchivedListThunk } from "../../contact/features/contactArchivedThunks.js";
+import { fetchContactListThunk, fetchContactArchivedListThunk, archiveContactThunk } from "../../contact/features/contactThunks.js";
 import { useDispatch, useSelector } from 'react-redux';
 
 export const Contact = () => {
@@ -27,7 +25,7 @@ export const Contact = () => {
     }, [dispatch, status, statusArchived]);
 
     const archiveMessage = (msg) => {
-        dispatch(archived(msg));
+        dispatch(archiveContactThunk(msg));
     };
 
     const currentData = currentTab === 'all' ? contacts : contactsArchived;

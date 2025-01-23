@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addUser } from '../features/userSlice.js';
+import { addUserThunk } from '../features/userThunks.js';
 import { Card2, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, AmenitiesWrapper, Title, Label, TextArea, ButtonForm } from '../../rooms/pages/roomsCr.js';
 import { MdDelete } from "react-icons/md";
 
@@ -57,7 +57,7 @@ export const UserCreate = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const originalFormat = format(formData);
-        dispatch(addUser(originalFormat));
+        dispatch(addUserThunk(originalFormat));
         console.log("Form Data Submitted:", originalFormat);
         navigate("/users");
 

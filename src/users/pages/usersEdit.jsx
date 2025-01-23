@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { editUser } from '../features/userSlice.js';
+import { editUserThunk } from '../features/userThunks.js';
 import { Card2, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, Title, Label, TextArea, ButtonForm } from '../../rooms/pages/roomsCr.js';
 import { MdDelete } from "react-icons/md";
-import employes from '../../users/data/users.json';
 
 export const UserEdit = () => {
     const navigate = useNavigate();
@@ -89,7 +88,7 @@ export const UserEdit = () => {
         e.preventDefault();
         if (validate()) {
             const originalFormat = format(formData);
-            dispatch(editUser(originalFormat));
+            dispatch(editUserThunk(originalFormat));
             navigate("/users");
         }
     };

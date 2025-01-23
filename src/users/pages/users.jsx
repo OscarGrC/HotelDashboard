@@ -6,13 +6,13 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
-import { setSelectedUser, deleteUser } from '../../users/features/userSlice';
-import { fetchUsersListThunk } from "../../users/features/userThunks.js"
+import { setSelectedUser } from '../../users/features/userSlice';
+import { fetchUsersListThunk, deleteUserThunk } from "../../users/features/userThunks.js"
 export const Users = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const users = useSelector((state) => state.users.usersData);
-    const status = useSelector((state) => state.users.status);
+    const status = useSelector((state) => state.users.fetchStatus);
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const UsersPerPage = 10;
@@ -43,8 +43,8 @@ export const Users = () => {
     const nextPage = () => setCurrentPage((prev) => prev + 1);
     const prevPage = () => setCurrentPage((prev) => prev - 1);
 
-    const handleDelete = (id) => {
-        dispatch(deleteUser(id));
+    const handleDelete = (user) => {
+        dispatch(deleteUserThunk(user));
     };
 
     const handleEdit = (user) => {
@@ -110,7 +110,7 @@ export const Users = () => {
                                                         className="delete"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleDelete(user.id);
+                                                            handleDelete(user);
                                                         }}
                                                     >
                                                         <MdDelete />

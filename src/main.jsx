@@ -21,7 +21,7 @@ import { Contact } from './contact/pages/contact.jsx';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import './index.css';
-import { AuthProvider } from './login/features/AuthContext.jsx';
+import { AuthProvider } from './login/AuthContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <AuthProvider>

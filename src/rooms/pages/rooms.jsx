@@ -5,14 +5,14 @@ import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteRoom, setSelectedRoom } from '../features/roomSlice.js';
-import { fetchRoomsListThunk } from "../features/roomThunks.js"
+import { setSelectedRoom } from '../features/roomSlice.js';
+import { fetchRoomsListThunk, deleteRoomThunk } from "../features/roomThunks.js"
 
 export const Rooms = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const rooms = useSelector((state) => state.rooms.roomsData);
-    const status = useSelector((state) => state.rooms.status);
+    const status = useSelector((state) => state.rooms.fetchStatus);
 
     const [currentPage, setCurrentPage] = useState(1);
     const roomsPerPage = 10;
@@ -30,8 +30,8 @@ export const Rooms = () => {
     const nextPage = () => setCurrentPage((prev) => prev + 1);
     const prevPage = () => setCurrentPage((prev) => prev - 1);
 
-    const handleDelete = (id) => {
-        dispatch(deleteRoom(id));
+    const handleDelete = (room) => {
+        dispatch(deleteRoomThunk(room));
     };
 
     const handleEdit = (room) => {
@@ -124,7 +124,7 @@ export const Rooms = () => {
                                                         className="delete"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleDelete(room.id);
+                                                            handleDelete(room);
                                                         }}
                                                     >
                                                         <MdDelete />

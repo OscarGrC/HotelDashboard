@@ -24,7 +24,7 @@ export const ContactCarousel = ({ messages }) => {
     };
 
     return (
-        <div style={{ padding: '20px', width: '100%' }}>
+        <div style={{ padding: '0px 20px', }}>
             <Swiper
                 spaceBetween={20}
                 slidesPerView={4}

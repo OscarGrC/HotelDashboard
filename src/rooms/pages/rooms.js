@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 export const Wrapper = styled.div`
-  padding: 2rem;
+  padding: 0rem;
 `;
 
 export const Header = styled.div`
@@ -138,6 +138,7 @@ export const ButtonBooking = styled.button`
 export const ButtonItem = styled.button`
     background-color: transparent;
     border:none;
+    cursor: pointer;
    
 `
 export const ButtonNew = styled.button`

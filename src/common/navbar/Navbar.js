@@ -6,7 +6,7 @@ export const SidebarWrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    
+    overflow:hidden;
     padding: 1rem;
     box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
 `;
@@ -58,6 +58,7 @@ export const Nav = styled.nav`
     flex-direction: column;
     gap: 1rem;
     margin-bottom: 2rem;
+    
 `;
 
 

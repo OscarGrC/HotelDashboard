@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from "../login/features/AuthContext.jsx";
+import { AuthContext } from "../login/AuthContext.jsx";
 import { LoginWrapper, LoginBox, Title, FormGroup, ErrorMessage, SubmitButton } from './login';
 
 export const Login = () => {
