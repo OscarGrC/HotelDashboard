@@ -84,12 +84,4 @@ export const TextArea = styled.textarea`
     font-family: 'Poppins', sans-serif;
     resize: none; 
 `;
-export const ButtonForm = styled.button`
-    background-color: #5Ad07A;
-    color: white;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500; 
-    padding: 10px 38px;
-    border-radius: 12px;
-    
-`
+
