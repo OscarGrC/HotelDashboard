@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addBookingThunk } from '../features/bookingThunks';
-import { Title, Card2, InputWrapper, FormColumn, Label, SubmitButtonWrapper, ButtonForm, TextArea } from '../../rooms/pages/roomsCr';
+import { Title, Card2, InputWrapper, FormColumn, Label, SubmitButtonWrapper, ButtonForm, TextArea } from '../../common/style/FormStyles';
 import { useNavigate } from 'react-router-dom';
 
 export const BookingCreate = () => {

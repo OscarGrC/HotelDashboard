@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 export const Wrapper = styled.div`
   padding: 0rem;
 `;
@@ -13,23 +14,7 @@ export const Header = styled.div`
     font-size: 1.5rem;
     color: #333;
   }
-
-  button {
-    background-color: #135846;
-    color: white;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500; 
-    padding: 10px 28px;
-    border-radius: 12px;
-    
-    cursor: pointer;
-
-    &:hover {
-      background-color: #0056b3;
-    }
-  }
 `;
-
 
 export const Table = styled.table`
   width: 100%;
@@ -103,47 +88,3 @@ export const Pagination = styled.div`
     }
   }
 `;
-
-export const ButtonStyled = styled.button`
-    background-color: ${props => props.type === "true" ? "#5Ad07A" : "#E23428"};
-    color: white;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500; 
-    padding: 10px 28px;
-    border-radius: 12px;
-    width:8rem;
-    border:none;
-`
-export const ButtonBooking = styled.button`
-    background-color: ${({ status }) => {
-    switch (status) {
-      case "Check In":
-        return "#5Ad07A";
-      case "Check Out":
-        return "#E23428";
-      case "In Progress":
-        return "#F5C623";
-      default:
-        return "#D3D3D3";
-    }
-  }};
-    color: white;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500; 
-    padding: 10px 28px;
-    border-radius: 12px;
-    width: 10rem;
-`;
-
-export const ButtonItem = styled.button`
-    background-color: transparent;
-    border:none;
-    cursor: pointer;
-   
-`
-export const ButtonNew = styled.button`
-    background-color: transparent;
-    border:none;
-`
-
-

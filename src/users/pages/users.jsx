@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Wrapper, Header, Table, Pagination, ButtonStyled, ButtonItem } from '../../rooms/pages/rooms.js';
+import { Wrapper, Header, Table, Pagination } from '../../common/style/CommonStyles.js';
+import { ButtonModelsHeader, ButtonStyled, ButtonItem } from "../../common/style/buttons.js"
 import { TabContainer, Tab } from '../../booking/pages/booking.js';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { FaRegEdit } from "react-icons/fa";
@@ -66,7 +67,7 @@ export const Users = () => {
                     <Tab selected={filter === 'inactive'} onClick={() => setFilter('inactive')}>Inactive</Tab>
                 </TabContainer>
 
-                <button onClick={() => navigate("/users/create")}>+ New Employee</button>
+                <ButtonModelsHeader onClick={() => navigate("/users/create")}>+ New Employee</ButtonModelsHeader>
             </Header>
 
             <DragDropContext>

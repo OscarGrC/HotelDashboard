@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Wrapper, Header, Table, Pagination, ButtonStyled, ButtonItem } from './rooms.js';
+import { ButtonModelsHeader, ButtonStyled, ButtonItem } from "../../common/style/buttons.js"
+import { Wrapper, Header, Table, Pagination } from '../../common/style/CommonStyles.js';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -72,7 +73,7 @@ export const Rooms = () => {
     return (
         <Wrapper>
             <Header>
-                <button onClick={() => navigate("/Rooms/create")}>+ New Room</button>
+                <ButtonModelsHeader onClick={() => navigate("/Rooms/create")}>+ New Room</ButtonModelsHeader>
             </Header>
 
             <DragDropContext onDragEnd={(result) => { }}>

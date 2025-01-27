@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Card2, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, Title, Label, TextArea, ButtonForm } from '../../rooms/pages/roomsCr.js';
+import { Card2, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, Title, Label, TextArea, ButtonForm } from '../../common/style/FormStyles.js';
 import { useSelector } from 'react-redux';
 import employes from '../../users/data/users.json';
 

@@ -36,7 +36,7 @@ export const TitleContainer = styled.div`
 `;
 
 export const Title = styled.h1`
-    font-size: 1rem;
+    font-size: 1.125rem;
     font-weight: 400;
     font-family: 'Poppins', sans-serif;
     color: #222;

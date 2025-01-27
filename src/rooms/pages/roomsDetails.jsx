@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Card, PhotosWrapper, AmenitiesWrapper, Title } from './roomsCr.js';
+import { Card, PhotosWrapper, AmenitiesWrapper, Title } from '../../common/style/FormStyles.js';
 
 const amenitiesMap = {
     1: "Wi-Fi",

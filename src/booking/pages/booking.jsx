@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Wrapper, Header, Table, Pagination, ButtonBooking, ButtonItem } from '../../rooms/pages/rooms.js';
-import { ShearchBo, TabContainer, Tab } from './booking.js'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { FaRegEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { setSelectedBooking } from '../../booking/features/bookingSlice.js';
 import { fetchBookingListThunk, deleteBookingThunk } from "../../booking/features/bookingThunks.js"
+import { FaRegEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { ShearchBo, TabContainer, Tab } from './booking.js'
+import { ButtonModelsHeader, ButtonTable, ButtonItem } from "../../common/style/buttons.js"
+import { Wrapper, Header, Table, Pagination } from '../../common/style/CommonStyles.js';
 export const Bookings = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -110,7 +111,7 @@ export const Bookings = () => {
 
 
 
-                <button onClick={() => navigate("/bookings/create")}>+ New Booking</button>
+                <ButtonModelsHeader onClick={() => navigate("/bookings/create")}>+ New Booking</ButtonModelsHeader>
 
             </Header>
 
@@ -149,9 +150,9 @@ export const Bookings = () => {
                                                 </td>
                                                 <td>{booking.room.type} - {booking.room.number}</td>
                                                 <td>
-                                                    <ButtonBooking status={getStatus(booking.check_in, booking.check_out)}>
+                                                    <ButtonTable status={getStatus(booking.check_in, booking.check_out)}>
                                                         {getStatus(booking.check_in, booking.check_out)}
-                                                    </ButtonBooking>
+                                                    </ButtonTable>
                                                 </td>
                                                 <td className="actions">
                                                     <ButtonItem className="edit" onClick={(e) => {

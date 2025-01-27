@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Title, Card2, InputWrapper, FormColumn, Label } from '../../rooms/pages/roomsCr.js';
+import { Title, Card2, InputWrapper, FormColumn, Label } from '../../common/style/FormStyles.js';
 
 export const BookingDetails = () => {
     const selectedBooking = useSelector((state) => state.bookings.selectedBooking);
