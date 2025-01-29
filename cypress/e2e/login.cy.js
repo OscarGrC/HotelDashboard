@@ -6,11 +6,12 @@ context('Login Tests', () => {
   })
   // Test de nagacion antes de login 
   it('should navigate is not avaible after login ', () => {
-    //Test navegacion a room antes de login 
+    // navegacion a room antes de login 
     cy.visit('http://localhost:5173/rooms')
     // Verifica que un componente del login sea visible
     cy.get('[data-cy=email-input]').should('be.visible')
   })
+
   // Test de login fallido
   it('should stay on /login when credentials are incorrect', () => {
     cy.get('[data-cy=email-input]').type('error@example.com')
@@ -24,7 +25,7 @@ context('Login Tests', () => {
       .and('contain', 'Invalid email or password')
   })
 
-  // Test de login exitoso
+  // Test de login exitoso y navegacion paginas
   it('should redirect to / after successful login', () => {
     cy.get('[data-cy=email-input]').type('admin@example.com')
     cy.get('[data-cy=password-input]').type('123456')
@@ -38,10 +39,5 @@ context('Login Tests', () => {
     // Verifica que un componente del rooms sea visible
     cy.get('[data-cy=create-submit]').should('be.visible')
   })
-
-
-
-
-
 
 })
