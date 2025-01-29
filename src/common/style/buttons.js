@@ -17,7 +17,9 @@ export const ButtonModelsHeader = styled.div`
     }
 `;
 
-export const ButtonTable = styled.button`
+export const ButtonTable = styled.button.attrs(() => ({
+    "data-testid": "ButtonTable",
+}))`
     background-color: ${({ status }) => {
         switch (status) {
             case "Check In":
@@ -36,19 +38,21 @@ export const ButtonTable = styled.button`
     padding: 10px 28px;
     border-radius: 12px;
     width: 10rem;
-    border:none;
-`;
+    border: none;
+  `;
 
-export const ButtonStyled = styled.button`
-    background-color: ${props => props.type === "true" ? "#5Ad07A" : "#E23428"};
+export const ButtonStyled = styled.button.attrs(props => ({
+    "data-testid": "ButtonStyled",
+}))`
+    background-color: ${props => (props.type === "true" ? "#5Ad07A" : "#E23428")};
     color: white;
     font-family: 'Poppins', sans-serif;
     font-weight: 500; 
     padding: 10px 28px;
     border-radius: 12px;
-    width:8rem;
-    border:none;
-`
+    width: 8rem;
+    border: none;
+  `;
 
 export const ButtonItem = styled.button`
     background-color: transparent;

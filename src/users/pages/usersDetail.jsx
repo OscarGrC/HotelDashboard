@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Card2, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, Title, Label, TextArea, ButtonForm } from '../../common/style/FormStyles.js';
+import { Card2, InputWrapper, FormColumn, PhotosWrapper, Title, Label } from '../../common/style/FormStyles.js';
+import { ButtonForm } from "../../common/style/buttons"
 import { useSelector } from 'react-redux';
-import employes from '../../users/data/users.json';
 
 export const UserDetail = () => {
     const emp = useSelector((state) => state.users.selectedUser);

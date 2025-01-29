@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addUserThunk } from '../features/userThunks.js';
-import { Card2, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, AmenitiesWrapper, Title, Label, TextArea, ButtonForm } from '../../common/style/FormStyles.js';
+import { Card2, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, Title, Label } from '../../common/style/FormStyles.js';
+import { ButtonForm } from "../../common/style/buttons"
 import { MdDelete } from "react-icons/md";
 
 export const UserCreate = () => {
