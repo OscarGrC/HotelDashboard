@@ -73,7 +73,7 @@ export const Rooms = () => {
     return (
         <Wrapper>
             <Header>
-                <ButtonModelsHeader onClick={() => navigate("/Rooms/create")}>+ New Room</ButtonModelsHeader>
+                <ButtonModelsHeader data-cy="create-submit" onClick={() => navigate("/Rooms/create")}>+ New Room</ButtonModelsHeader>
             </Header>
 
             <DragDropContext onDragEnd={(result) => { }}>

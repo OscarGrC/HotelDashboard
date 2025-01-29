@@ -63,7 +63,7 @@ const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
 
 
     const handleLogout = () => {
-        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('authState');
         navigate('/login');
     };
 

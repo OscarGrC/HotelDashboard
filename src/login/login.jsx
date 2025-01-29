@@ -4,8 +4,8 @@ import { AuthContext } from "../login/AuthContext.jsx";
 import { LoginWrapper, LoginBox, Title, FormGroup, ErrorMessage, SubmitButton } from './login';
 
 export const Login = () => {
-    const [email, setEmail] = useState('admin@example.com');
-    const [password, setPassword] = useState('123456');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const { dispatch } = useContext(AuthContext);
@@ -46,6 +46,7 @@ export const Login = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            data-cy="email-input"
                         />
                     </FormGroup>
                     <FormGroup>
@@ -55,10 +56,11 @@ export const Login = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
+                            data-cy="password-input"
                         />
                     </FormGroup>
-                    {error && <ErrorMessage>{error}</ErrorMessage>}
-                    <SubmitButton type="submit" onClick={handleLogin}>Login</SubmitButton>
+                    {error && <ErrorMessage data-cy="error-message">{error}</ErrorMessage>}
+                    <SubmitButton type="submit" onClick={handleLogin} data-cy="login-submit">Login</SubmitButton>
                 </form>
             </LoginBox>
         </LoginWrapper>

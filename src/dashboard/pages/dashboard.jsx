@@ -8,9 +8,9 @@ export const Dashboard = () => {
         setMessages(contactData);
     }, []);
     return (
-        <div>
+        <div data-cy="div">
             <Kpi startDate="01/01/2025" endDate="16/01/2026"></Kpi>
-            <ContactCarousel messages={messages}></ContactCarousel>
+            <ContactCarousel messages={messages} ></ContactCarousel>
         </div>
     )
 }
