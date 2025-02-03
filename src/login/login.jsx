@@ -4,8 +4,8 @@ import { AuthContext } from "../login/AuthContext.jsx";
 import { LoginWrapper, LoginBox, Title, FormGroup, ErrorMessage, SubmitButton } from './login';
 
 export const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('admin@example.com');
+    const [password, setPassword] = useState('123456');
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const { dispatch } = useContext(AuthContext);

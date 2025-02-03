@@ -30,14 +30,6 @@ export const UserCreate = () => {
         });
     };
 
-    const handleOfferChange = (e) => {
-        setFormData({
-            ...formData,
-            estado: e.target.checked
-        });
-    };
-
-
     const handlePhotoUpload = (e) => {
         const files = Array.from(e.target.files);
         setFormData({
@@ -59,7 +51,6 @@ export const UserCreate = () => {
         e.preventDefault();
         const originalFormat = format(formData);
         dispatch(addUserThunk(originalFormat));
-        console.log("Form Data Submitted:", originalFormat);
         navigate("/users");
 
     };
@@ -71,7 +62,6 @@ export const UserCreate = () => {
 
     const format = (formData) => {
         const newId = usersData.length > 0 ? Math.max(...usersData.map(user => user.id)) + 1 : 1;
-        console.log(formData)
         return {
             id: newId,
             startDate: formatDate(formData.startDate),

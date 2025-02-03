@@ -2,6 +2,7 @@
 
 context('Login Tests', () => {
   beforeEach(() => {
+    cy.viewport(1280, 1280)
     cy.visit('http://localhost:5173/')
   })
   // Test de nagacion antes de login 
@@ -14,8 +15,8 @@ context('Login Tests', () => {
 
   // Test de login fallido
   it('should stay on /login when credentials are incorrect', () => {
-    cy.get('[data-cy=email-input]').type('error@example.com')
-    cy.get('[data-cy=password-input]').type('contraseñamala')
+    cy.get('[data-cy=email-input]').clear().type('error@example.com')
+    cy.get('[data-cy=password-input]').clear().type('contraseñamala')
     cy.get('[data-cy=login-submit]').click()
 
     // Verifica que un componente del login sea visible
@@ -27,8 +28,8 @@ context('Login Tests', () => {
 
   // Test de login exitoso y navegacion paginas
   it('should redirect to / after successful login', () => {
-    cy.get('[data-cy=email-input]').type('admin@example.com')
-    cy.get('[data-cy=password-input]').type('123456')
+    cy.get('[data-cy=email-input]').clear().type('admin@example.com')
+    cy.get('[data-cy=password-input]').clear().type('123456')
     cy.get('[data-cy=login-submit]').click()
 
     // Verifica que un componente del Dashboard sea visible

@@ -161,6 +161,7 @@ export const UserEdit = () => {
                 <PhotosWrapper>
                     <h2>Foto</h2>
                     <input type="file" onChange={handlePhotoUpload} />
+
                     {formData.photo && (
                         <div>
                             <ul style={{ listStyleType: "none" }}>

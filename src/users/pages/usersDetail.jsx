@@ -22,7 +22,7 @@ export const UserDetail = () => {
         return `${year}-${month}-${day}`;
     };
     useEffect(() => {
-        if (emp) {
+        if (emp != null) {
             setFormData({
                 photo: emp.photo,
                 fullName: emp.fullName || '',
@@ -37,7 +37,6 @@ export const UserDetail = () => {
         }
     }, [emp]);
 
-
     const validate = () => {
         if (!formData.fullName || !formData.email || !formData.id || !formData.puesto) {
             alert("Por favor, completa todos los campos requeridos.");
@@ -46,10 +45,9 @@ export const UserDetail = () => {
         return true;
     };
 
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (validate()) {
+        if (validate() === true) {
             navigate("/users");
         }
     };

@@ -18,7 +18,7 @@ export const Users = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const UsersPerPage = 10;
     const [filter, setFilter] = useState("all");
-
+    // añadir loading con estado de carga 
     useEffect(() => {
         if (status === 'idle') {
             dispatch(fetchUsersListThunk());
@@ -36,7 +36,7 @@ export const Users = () => {
 
         setFilteredUsers(filteredData);
     }, [users, filter]);
-
+    // mover paginacion a componente tabla 
     const indexOfLastUser = currentPage * UsersPerPage;
     const indexOfFirstUser = indexOfLastUser - UsersPerPage;
     const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
