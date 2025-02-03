@@ -7,17 +7,18 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
-import { setSelectedUser } from '../../users/features/userSlice';
-import { fetchUsersListThunk, deleteUserThunk } from "../../users/features/userThunks.js"
+import { setSelectedUser } from '../features/userSlice.js';
+import { fetchUsersListThunk, deleteUserThunk } from "../features/userThunks.js"
+import { IUserApi } from '../interfaces/IUserApi.js';
 export const Users = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const users = useSelector((state) => state.users.usersData);
     const status = useSelector((state) => state.users.fetchStatus);
-    const [filteredUsers, setFilteredUsers] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const UsersPerPage = 10;
-    const [filter, setFilter] = useState("all");
+    const [filteredUsers, setFilteredUsers] = useState<IUserApi[] | []>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const UsersPerPage: number = 10;
+    const [filter, setFilter] = useState<string>("all");
     // añadir loading con estado de carga 
     useEffect(() => {
         if (status === 'idle') {

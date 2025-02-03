@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { Card2, InputWrapper, FormColumn, PhotosWrapper, Title, Label } from '../../common/style/FormStyles.js';
-import { ButtonForm } from "../../common/style/buttons"
 import { useSelector } from 'react-redux';
 
 export const UserDetail = () => {
