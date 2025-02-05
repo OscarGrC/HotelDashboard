@@ -1,11 +1,13 @@
 import React from 'react';
-import { CardContainer, CommentText, Footer, CustomerInfo } from './contactCard.js';
+import { CardContainer, CommentText, Footer, CustomerInfo } from './contactCard.ts';
 import { MdBlock } from "react-icons/md";
-import { archiveContactThunk } from "../../contact/features/contactThunks.js";
+import { archiveContactThunk } from "../features/contactThunks.ts";
 import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../app/store.ts';
+import { ContactApi } from '../interfaces/ContactApi.ts';
 
 export const ContactCard = ({ item }) => {
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
 
     if (!item) {
         return <div>No data available</div>;
@@ -13,14 +15,14 @@ export const ContactCard = ({ item }) => {
 
     const truncatedComment = item.comment.length > 100 ? `${item.comment.substring(0, 100)}...` : item.comment;
 
-    const calculateTimeSince = (dateString) => {
+    const calculateTimeSince = (dateString: string) => {
         const formattedDateString = dateString.replace('TT', ' ');
         const messageDate = new Date(formattedDateString);
         if (isNaN(messageDate.getTime())) {
             return 'Invalid date';
         }
         const now = new Date();
-        const diffInMs = now - messageDate;
+        const diffInMs = now.getTime() - messageDate.getTime();
         const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
         const diffInHours = Math.floor(diffInMinutes / 60);
         const diffInDays = Math.floor(diffInHours / 24);
@@ -34,7 +36,7 @@ export const ContactCard = ({ item }) => {
         }
     };
 
-    const archiveMessage = (msg) => {
+    const archiveMessage = (msg: ContactApi) => {
         dispatch(archiveContactThunk(msg));
     };
 

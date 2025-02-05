@@ -1,31 +1,36 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from "../login/AuthContext.jsx";
-import { LoginWrapper, LoginBox, Title, FormGroup, ErrorMessage, SubmitButton } from './login';
+import { AuthContext } from "./AuthContext.js";
+import { LoginWrapper, LoginBox, Title, FormGroup, ErrorMessage, SubmitButton } from './login.js';
 
 export const Login = () => {
-    const [email, setEmail] = useState('admin@example.com');
-    const [password, setPassword] = useState('123456');
-    const [error, setError] = useState('');
+    const [email, setEmail] = useState("admin@example.com");
+    const [password, setPassword] = useState<string>("123456");
+    const [error, setError] = useState<string>("");
     const navigate = useNavigate();
-    const { dispatch } = useContext(AuthContext);
+
+    const authContext = useContext(AuthContext);
+    if (!authContext) {
+        throw new Error("AuthContext must be used within an AuthProvider");
+    }
+    const { dispatch } = authContext;
 
     const handleLogin = () => {
-        const hardcodedEmail = 'admin@example.com';
-        const hardcodedPassword = '123456';
+        const hardcodedEmail = "admin@example.com";
+        const hardcodedPassword = "123456";
 
         if (email === hardcodedEmail && password === hardcodedPassword) {
             dispatch({
-                type: 'login',
-                payload: { name: 'Oscar Gracia', email: hardcodedEmail },
+                type: "login",
+                payload: { name: "Oscar Gracia", email: hardcodedEmail },
             });
-            navigate('/');
+            navigate("/");
         } else {
-            setError('Invalid email or password');
+            setError("Invalid email or password");
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         handleLogin();
     };
@@ -34,9 +39,9 @@ export const Login = () => {
         <LoginWrapper>
             <LoginBox>
                 <Title>Login</Title>
-                <p style={{ textAlign: 'center' }}>Use this credentials to log in:</p>
-                <p style={{ textAlign: 'center' }}>Email: admin@example.com</p>
-                <p style={{ textAlign: 'center' }}>Password: 123456</p>
+                <p style={{ textAlign: "center" }}>Use this credentials to log in:</p>
+                <p style={{ textAlign: "center" }}>Email: admin@example.com</p>
+                <p style={{ textAlign: "center" }}>Password: 123456</p>
 
                 <form onSubmit={handleSubmit}>
                     <FormGroup>
@@ -59,8 +64,8 @@ export const Login = () => {
                             data-cy="password-input"
                         />
                     </FormGroup>
-                    {error && <ErrorMessage data-cy="error-message">{error}</ErrorMessage>}
-                    <SubmitButton type="submit" onClick={handleLogin} data-cy="login-submit">Login</SubmitButton>
+                    {error ? <ErrorMessage data-cy="error-message">{error}</ErrorMessage> : <></>}
+                    <SubmitButton type="submit" data-cy="login-submit">Login</SubmitButton>
                 </form>
             </LoginBox>
         </LoginWrapper>

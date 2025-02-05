@@ -1,33 +1,35 @@
-import React, { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer, useEffect, ReactNode, Dispatch } from "react";
+import { AuthUser } from "./interfaces/AuthUser";
+import { AuthState } from "./interfaces/AuthState";
 
-const initialState = {
+type AuthAction =
+    | { type: "login"; payload: AuthUser }
+    | { type: "logout" }
+    | { type: "updateUser"; payload: Partial<AuthUser> };
+
+interface AuthContextType {
+    state: AuthState;
+    dispatch: Dispatch<AuthAction>;
+}
+
+const initialState: AuthState = {
     isAuthenticated: false,
-    user: {
-        name: "",
-        email: "",
-    },
+    user: { name: "", email: "" },
 };
 
-
-const ACTIONS = {
-    LOGIN: "login",
-    LOGOUT: "logout",
-    UPDATE_USER: "updateUser",
-};
-
-const authReducer = (state, action) => {
+const authReducer = (state: AuthState, action: AuthAction): AuthState => {
     switch (action.type) {
-        case ACTIONS.LOGIN:
+        case "login":
             return {
                 isAuthenticated: true,
                 user: action.payload,
             };
-        case ACTIONS.LOGOUT:
+        case "logout":
             return {
                 isAuthenticated: false,
                 user: { name: "", email: "" },
             };
-        case ACTIONS.UPDATE_USER:
+        case "updateUser":
             return {
                 ...state,
                 user: {
@@ -40,7 +42,7 @@ const authReducer = (state, action) => {
     }
 };
 
-export const AuthContext = createContext();
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState, (initial) => {

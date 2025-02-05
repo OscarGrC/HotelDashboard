@@ -5,16 +5,18 @@ import { TabContainer, Tab } from '../../booking/pages/booking.js';
 import { ContactCarousel } from '../components/contactCarousel.jsx';
 import { fetchContactListThunk, fetchContactArchivedListThunk, archiveContactThunk } from "../../contact/features/contactThunks.js";
 import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../app/store.js';
+import { ContactApi } from '../interfaces/ContactApi.js';
 
 export const Contact = () => {
-    const [currentTab, setCurrentTab] = useState('all');
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentTab, setCurrentTab] = useState<string>('all');
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const MessagesPerPage = 10;
-    const dispatch = useDispatch();
-    const contacts = useSelector((state) => state.contacts.contactData);
-    const status = useSelector((state) => state.contacts.status);
-    const contactsArchived = useSelector((state) => state.contacts.contactArchivedData);
-    const statusArchived = useSelector((state) => state.contacts.statusArchived);
+    const dispatch: AppDispatch = useDispatch();
+    const contacts = useSelector((state: RootState) => state.contacts.contactData);
+    const status = useSelector((state: RootState) => state.contacts.status);
+    const contactsArchived = useSelector((state: RootState) => state.contacts.contactArchivedData);
+    const statusArchived = useSelector((state: RootState) => state.contacts.statusArchived);
 
     useEffect(() => {
         if (status === 'idle') {
@@ -25,12 +27,12 @@ export const Contact = () => {
         }
     }, [dispatch, status, statusArchived]);
 
-    const archiveMessage = (msg) => {
+    const archiveMessage = (msg: ContactApi) => {
         dispatch(archiveContactThunk(msg));
     };
 
     const currentData = currentTab === 'all' ? contacts : contactsArchived;
-    const sortedData = [...currentData].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const sortedData = [...currentData].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     const indexOfLastMessage = currentPage * MessagesPerPage;
     const indexOfFirstMessage = indexOfLastMessage - MessagesPerPage;
     const currentMessages = sortedData.slice(indexOfFirstMessage, indexOfLastMessage);
@@ -74,7 +76,7 @@ export const Contact = () => {
                             <td>{msg.comment}</td>
                             {currentTab === 'all' && (
                                 <td>
-                                    <ButtonStyled onClick={() => archiveMessage(msg)}>Archived</ButtonStyled>
+                                    <ButtonStyled stade={false} onClick={() => archiveMessage(msg)}>Archived</ButtonStyled>
                                 </td>
                             )}
                         </tr>

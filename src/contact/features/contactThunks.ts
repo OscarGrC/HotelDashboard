@@ -1,16 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import contactData from "../../contact/data/contact.json";
-import archivedData from "../../contact/data/contactArchived.json";
+import contactData from "../data/contact.json";
+import archivedData from "../data/contactArchived.json";
+import { ContactApi } from "../interfaces/ContactApi";
 
-const simulateFetch = (data) =>
+const simulateFetch = <T>(data: T): Promise<T> =>
     new Promise((resolve) => {
         setTimeout(() => {
             resolve(data);
         }, 200);
     });
 
-export const fetchContactListThunk = createAsyncThunk(
-    "users/fetchContactList",
+export const fetchContactListThunk = createAsyncThunk<ContactApi[]>(
+    "contacts/fetchContactList",
     async (_, thunkAPI) => {
         try {
             const data = await simulateFetch(contactData);
@@ -21,8 +22,8 @@ export const fetchContactListThunk = createAsyncThunk(
     }
 );
 
-export const fetchContactArchivedListThunk = createAsyncThunk(
-    "users/fetchContactArchivedList",
+export const fetchContactArchivedListThunk = createAsyncThunk<ContactApi[]>(
+    "contacts/fetchContactArchivedList",
     async (_, thunkAPI) => {
         try {
             const data = await simulateFetch(archivedData);
@@ -32,9 +33,9 @@ export const fetchContactArchivedListThunk = createAsyncThunk(
         }
     }
 );
-export const archiveContactThunk = createAsyncThunk(
-    "users/archiveContact",
-    async (contact, thunkAPI) => {
+export const archiveContactThunk = createAsyncThunk<ContactApi, ContactApi>(
+    "contacts/archiveContact",
+    async (contact: ContactApi, thunkAPI) => {
         try {
             const archivedContact = await simulateFetch(contact);
             return archivedContact;
@@ -43,18 +44,18 @@ export const archiveContactThunk = createAsyncThunk(
         }
     }
 );
-export const fetchContactByIdThunk = createAsyncThunk(
+export const fetchContactByIdThunk = createAsyncThunk<ContactApi, number>(
     "contacts/fetchContactById",
-    async (contactId, thunkAPI) => {
+    async (contactId: number, thunkAPI) => {
         try {
             const data = await simulateFetch(contactData);
             const contact = data.find((c) => c.id === contactId);
             if (!contact) {
-                throw new Error("Contact not found");
+                return thunkAPI.rejectWithValue("Contact not found");
             }
             return contact;
         } catch (error) {
-            return thunkAPI.rejectWithValue(error.message || "Failed to fetch contact by ID");
+            return thunkAPI.rejectWithValue("Failed to fetch contact by ID");
         }
     }
 );

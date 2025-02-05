@@ -4,16 +4,17 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import './swiperStyle.css';
-import { ContactCard } from './contactCard.jsx';
-import { PopupOverlay, PopupContent, CloseButtonContainer } from './contactCard.js';
+import { ContactCard } from './contactCard.tsx';
+import { PopupOverlay, PopupContent, CloseButtonContainer } from './contactCard.ts';
 import { IoMdCloseCircle } from "react-icons/io";
+import { ContactApi } from '../interfaces/ContactApi.ts';
 
 export const ContactCarousel = ({ messages }) => {
 
-    const [showPopup, setShowPopup] = useState(false);
-    const [selectedMessage, setSelectedMessage] = useState(null);
+    const [showPopup, setShowPopup] = useState<boolean>(false);
+    const [selectedMessage, setSelectedMessage] = useState<ContactApi | null>(null);
 
-    const openPopup = (message) => {
+    const openPopup = (message: ContactApi) => {
         setSelectedMessage(message);
         setShowPopup(true);
     };
