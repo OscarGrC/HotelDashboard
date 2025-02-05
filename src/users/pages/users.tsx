@@ -10,11 +10,12 @@ import { useNavigate } from 'react-router-dom';
 import { setSelectedUser } from '../features/userSlice.js';
 import { fetchUsersListThunk, deleteUserThunk } from "../features/userThunks.js"
 import { IUserApi } from '../interfaces/IUserApi.js';
+import { AppDispatch, RootState } from '../../app/store.js';
 export const Users = () => {
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
-    const users = useSelector((state) => state.users.usersData);
-    const status = useSelector((state) => state.users.fetchStatus);
+    const users: IUserApi[] = useSelector((state: RootState) => state.users.usersData);
+    const status: string = useSelector((state: RootState) => state.users.fetchStatus);
     const [filteredUsers, setFilteredUsers] = useState<IUserApi[] | []>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const UsersPerPage: number = 10;
@@ -45,27 +46,27 @@ export const Users = () => {
     const nextPage = () => setCurrentPage((prev) => prev + 1);
     const prevPage = () => setCurrentPage((prev) => prev - 1);
 
-    const handleDelete = (user) => {
-        dispatch(deleteUserThunk(user));
+    const handleDelete = (userId: number) => {
+        dispatch(deleteUserThunk(userId));
     };
 
-    const handleEdit = (user) => {
+    const handleEdit = (user: IUserApi) => {
         dispatch(setSelectedUser(user));
         navigate(`/users/edit/${user.id}`);
     };
 
-    const handleViewDetails = (user) => {
+    const handleViewDetails = (user: IUserApi) => {
         dispatch(setSelectedUser(user));
-        navigate(`/users/details/${user.id}`);
+        navigate(`/users/details/${user}`);
     };
 
     return (
         <Wrapper>
             <Header>
                 <TabContainer>
-                    <Tab selected={filter === 'all'} onClick={() => setFilter('all')}>All Employees</Tab>
-                    <Tab selected={filter === 'active'} onClick={() => setFilter('active')}>Active</Tab>
-                    <Tab selected={filter === 'inactive'} onClick={() => setFilter('inactive')}>Inactive</Tab>
+                    <Tab onClick={() => setFilter('all')}>All Employees</Tab>
+                    <Tab onClick={() => setFilter('active')}>Active</Tab>
+                    <Tab onClick={() => setFilter('inactive')}>Inactive</Tab>
                 </TabContainer>
 
                 <ButtonModelsHeader onClick={() => navigate("/users/create")}>+ New Employee</ButtonModelsHeader>
@@ -99,7 +100,7 @@ export const Users = () => {
                                                 <td>{user.startDate}</td>
                                                 <td>{user.description}</td>
                                                 <td>
-                                                    <ButtonStyled type={user.stade ? "true" : "false"}>
+                                                    <ButtonStyled stade={user.stade}>
                                                         {user.stade ? "Active" : "Inactive"}
                                                     </ButtonStyled>
                                                 </td>
@@ -112,7 +113,7 @@ export const Users = () => {
                                                         className="delete"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleDelete(user);
+                                                            handleDelete(user.id);
                                                         }}
                                                     >
                                                         <MdDelete />

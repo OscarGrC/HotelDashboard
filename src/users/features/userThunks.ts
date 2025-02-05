@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import usersData from "../../users/data/users.json";
+import usersData from "../data/users.json";
+import { IUserApi } from "../interfaces/IUserApi";
 
-const simulateFetch = (data) =>
+const simulateFetch = <T>(data: T): Promise<T> =>
     new Promise((resolve) => {
         setTimeout(() => {
             resolve(data);
         }, 200);
     });
-
 
 export const fetchUsersListThunk = createAsyncThunk(
     "users/fetchUsersList",
@@ -23,7 +23,7 @@ export const fetchUsersListThunk = createAsyncThunk(
 
 export const addUserThunk = createAsyncThunk(
     "users/addUser",
-    async (newUser, thunkAPI) => {
+    async (newUser: IUserApi, thunkAPI) => {
         try {
             const data = await simulateFetch(newUser);
             return data;
@@ -35,7 +35,7 @@ export const addUserThunk = createAsyncThunk(
 
 export const editUserThunk = createAsyncThunk(
     "users/editUser",
-    async (updatedUser, thunkAPI) => {
+    async (updatedUser: IUserApi, thunkAPI) => {
         try {
             const data = await simulateFetch(updatedUser);
             return data;
@@ -47,7 +47,7 @@ export const editUserThunk = createAsyncThunk(
 
 export const deleteUserThunk = createAsyncThunk(
     "users/deleteUser",
-    async (userId, thunkAPI) => {
+    async (userId: number, thunkAPI) => {
         try {
             const data = await simulateFetch(userId);
             return data;
@@ -58,13 +58,14 @@ export const deleteUserThunk = createAsyncThunk(
 );
 export const fetchUserByIdThunk = createAsyncThunk(
     "users/fetchUserById",
-    async (userId, thunkAPI) => {
+    async (userId: number, thunkAPI) => {
         try {
-            const data = await simulateFetch(usersData);
-            const user = data.find((u) => u.id === userId);
+            const data: IUserApi[] = await simulateFetch(usersData);
+            const user: IUserApi | undefined = data.find((u) => u.id === userId);
             if (!user) {
                 throw new Error("User not found");
             }
+
             return user;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message || "Failed to fetch user by ID");

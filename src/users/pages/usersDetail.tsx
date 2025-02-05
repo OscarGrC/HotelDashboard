@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Card2, InputWrapper, FormColumn, PhotosWrapper, Title, Label } from '../../common/style/FormStyles.js';
 import { useSelector } from 'react-redux';
+import { RootState } from '../../app/store.js';
+import { IUserApi } from '../interfaces/IUserApi.js';
+import { useNavigate } from 'react-router-dom';
 
 export const UserDetail = () => {
-    const emp = useSelector((state) => state.users.selectedUser);
-    const [formData, setFormData] = useState({
-        photos: [],
+    const emp = useSelector((state: RootState) => state.users.selectedUser);
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState<IUserApi>({
+        photo: '',
         fullName: '',
-        id: '',
+        id: 0,
         email: '',
         startDate: '',
         description: '',
         puesto: '',
         stade: false,
-        password: ''
+        password: '',
+        phone: ''
     });
     const parseDate = (dateString) => {
         const [day, month, year] = dateString.split('/')
@@ -24,13 +29,14 @@ export const UserDetail = () => {
             setFormData({
                 photo: emp.photo,
                 fullName: emp.fullName || '',
-                id: emp.id || '',
+                id: emp.id || 0,
                 email: emp.email || '',
                 startDate: parseDate(emp.startDate) || '',
                 description: emp.description || '',
                 puesto: emp.puesto || '',
-                stade: `${emp.stade}` || "false",
-                password: emp.password || ''
+                stade: emp.stade || false,
+                password: emp.password || '',
+                phone: emp.phone
             });
         }
     }, [emp]);

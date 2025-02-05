@@ -35,7 +35,7 @@ export const InputWrapper = styled.div`
     margin:1rem;
     
 `;
-export const Label = styled.label`
+export const Label = styled.label  < { mr: string, ml: string } >`
     margin-right:${props => props.mr};
     margin-left:${props => props.ml};
     font-size: 1.2rem;

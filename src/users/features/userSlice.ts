@@ -1,20 +1,24 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchUsersListThunk, addUserThunk, editUserThunk, deleteUserThunk, fetchUserByIdThunk, } from "./userThunks.js";
+import { IUserApi } from "../interfaces/IUserApi.js";
+import { UserState } from "../interfaces/IUserState.js";
+
+const initialState: UserState = {
+    usersData: [],
+    selectedUser: null,
+    fetchStatus: "idle",
+    addStatus: "idle",
+    editStatus: "idle",
+    deleteStatus: "idle",
+    fetchByIdStatus: "idle",
+    error: "Default Error",
+};
 
 export const userSlice = createSlice({
     name: "users",
-    initialState: {
-        usersData: [],
-        selectedUser: null,
-        fetchStatus: "idle",
-        addStatus: "idle",
-        editStatus: "idle",
-        deleteStatus: "idle",
-        fetchByIdStatus: "idle",
-        error: null,
-    },
+    initialState,
     reducers: {
-        setSelectedUser(state, action) {
+        setSelectedUser(state, action: PayloadAction<IUserApi>) {
             state.selectedUser = action.payload;
         },
     },
@@ -23,7 +27,7 @@ export const userSlice = createSlice({
             .addCase(fetchUsersListThunk.pending, (state) => {
                 state.fetchStatus = "pending";
             })
-            .addCase(fetchUsersListThunk.fulfilled, (state, action) => {
+            .addCase(fetchUsersListThunk.fulfilled, (state, action: PayloadAction<IUserApi[]>) => {
                 state.fetchStatus = "fulfilled";
                 state.usersData = action.payload;
             })
@@ -35,7 +39,7 @@ export const userSlice = createSlice({
             .addCase(fetchUserByIdThunk.pending, (state) => {
                 state.fetchByIdStatus = "pending";
             })
-            .addCase(fetchUserByIdThunk.fulfilled, (state, action) => {
+            .addCase(fetchUserByIdThunk.fulfilled, (state, action: PayloadAction<IUserApi>) => {
                 state.fetchByIdStatus = "fulfilled";
                 state.selectedUser = action.payload;
             })
@@ -47,7 +51,7 @@ export const userSlice = createSlice({
             .addCase(addUserThunk.pending, (state) => {
                 state.addStatus = "pending";
             })
-            .addCase(addUserThunk.fulfilled, (state, action) => {
+            .addCase(addUserThunk.fulfilled, (state, action: PayloadAction<IUserApi>) => {
                 state.addStatus = "fulfilled";
                 state.usersData.push(action.payload);
             })
@@ -74,9 +78,9 @@ export const userSlice = createSlice({
             .addCase(deleteUserThunk.pending, (state) => {
                 state.deleteStatus = "pending";
             })
-            .addCase(deleteUserThunk.fulfilled, (state, action) => {
+            .addCase(deleteUserThunk.fulfilled, (state, action: PayloadAction<number>) => {
                 state.deleteStatus = "fulfilled";
-                state.usersData = state.usersData.filter((user) => user.id !== action.payload.id);
+                state.usersData = state.usersData.filter((user) => user.id !== action.payload);
             })
             .addCase(deleteUserThunk.rejected, (state, action) => {
                 state.deleteStatus = "rejected";

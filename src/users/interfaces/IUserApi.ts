@@ -11,7 +11,4 @@ export interface IUserApi {
     description: string;
     stade: boolean;
     password: string;
-
-    parseDate(dateString: string): string;
-    toUser(): IUser;
 }

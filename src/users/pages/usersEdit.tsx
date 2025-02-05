@@ -5,22 +5,24 @@ import { editUserThunk } from '../features/userThunks.js';
 import { Card2, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, Title, Label, TextArea } from '../../common/style/FormStyles.js';
 import { ButtonForm } from "../../common/style/buttons"
 import { MdDelete } from "react-icons/md";
+import { AppDispatch, RootState } from '../../app/store.js';
+import { IUserApi } from '../interfaces/IUserApi.js';
 
 export const UserEdit = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const selectedUser = useSelector((state) => state.users.selectedUser);
-    const [employe, setEmploye] = useState([]);
-    const [formData, setFormData] = useState({
-        photo: [],
+    const dispatch: AppDispatch = useDispatch();
+    const selectedUser = useSelector((state: RootState) => state.users.selectedUser);
+    const [formData, setFormData] = useState<IUserApi>({
+        photo: '',
         fullName: '',
-        id: '',
+        id: 0,
         email: '',
         startDate: '',
         description: '',
         puesto: '',
         stade: false,
-        password: ''
+        password: '',
+        phone: ''
     });
     const parseDate = (dateString) => {
         const [day, month, year] = dateString.split('/')
@@ -35,13 +37,14 @@ export const UserEdit = () => {
             setFormData({
                 photo: selectedUser.photo,
                 fullName: selectedUser.fullName || '',
-                id: selectedUser.id || '',
+                id: selectedUser.id || 0,
                 email: selectedUser.email || '',
                 startDate: parseDate(selectedUser.startDate) || '',
                 description: selectedUser.description || '',
                 puesto: selectedUser.puesto || '',
                 stade: selectedUser.stade || false,
-                password: selectedUser.password || ''
+                password: selectedUser.password || '',
+                phone: selectedUser.phone || ''
             });
         }
     }, [selectedUser]);
@@ -85,7 +88,7 @@ export const UserEdit = () => {
     };
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (validate()) {
             const originalFormat = format(formData);
@@ -93,7 +96,7 @@ export const UserEdit = () => {
             navigate("/users");
         }
     };
-    const format = (formData) => {
+    const format = (formData: IUserApi) => {
         return {
             photo: formData.photo,
             fullName: formData.fullName,
@@ -103,14 +106,15 @@ export const UserEdit = () => {
             description: formData.description,
             puesto: formData.puesto,
             stade: formData.stade,
-            password: formData.password
+            password: formData.password,
+            phone: formData.phone
         };
     };
 
     return (
         <>
             <Title>Edit Employee</Title>
-            <Card2 onSubmit={handleSubmit}>
+            <Card2>
                 <FormColumn>
                     <InputWrapper>
                         <Label mr="0.5rem" ml="0rem">Puesto:</Label>
@@ -175,7 +179,7 @@ export const UserEdit = () => {
                 </PhotosWrapper>
 
                 <SubmitButtonWrapper>
-                    <ButtonForm type="submit" onClick={handleSubmit}>Update Employee</ButtonForm>
+                    <ButtonForm type="button" onClick={handleSubmit}>Update Employee</ButtonForm>
                 </SubmitButtonWrapper>
             </Card2>
         </>

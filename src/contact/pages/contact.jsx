@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Wrapper, Header, Table, Pagination } from '../../common/style/CommonStyles.js';
-import { ButtonStyled } from "../../common/style/buttons.js"
+import { ButtonStyled } from "../../common/style/buttons"
 import { TabContainer, Tab } from '../../booking/pages/booking.js';
 import { ContactCarousel } from '../components/contactCarousel.jsx';
 import { fetchContactListThunk, fetchContactArchivedListThunk, archiveContactThunk } from "../../contact/features/contactThunks.js";

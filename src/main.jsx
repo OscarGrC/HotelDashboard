@@ -12,7 +12,7 @@ import { Bookings } from './booking/pages/booking.jsx'
 import { BookingEdit } from './booking/pages/bookingEdit.jsx';
 import { BookingCreate } from './booking/pages/bookingCreate.jsx';
 import { BookingDetails } from './booking/pages/bookingDetail.jsx';
-import { Users } from './users/pages/users.jsx'
+import { Users } from './users/pages/users.tsx'
 import PrivateRoute from './common/PrivatesRoute';
 import { UserDetail } from './users/pages/usersDetail.jsx';
 import { UserCreate } from './users/pages/usersCreate.jsx';
