@@ -1,20 +1,25 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchBookingListThunk, addBookingThunk, editBookingThunk, deleteBookingThunk, fetchBookingByIdThunk, } from "./bookingThunks.js";
+import { BookingState } from '../interfaces/BookingState.ts'
+import { BookingApiInterface } from "../interfaces/BookingApiInterface.ts";
+import { RootState } from "../../app/store.ts";
+
+const initialState: BookingState = {
+    bookingData: [],
+    selectedBooking: null,
+    fetchStatus: "idle",
+    addStatus: "idle",
+    editStatus: "idle",
+    deleteStatus: "idle",
+    fetchByIdStatus: "idle",
+    error: "Default Error",
+};
 
 export const bookingSlice = createSlice({
-    name: "booking",
-    initialState: {
-        bookingData: [],
-        selectedBooking: null,
-        fetchStatus: "idle",
-        fetchByIdStatus: "idle",
-        addStatus: "idle",
-        editStatus: "idle",
-        deleteStatus: "idle",
-        error: null,
-    },
+    name: "bookings",
+    initialState,
     reducers: {
-        setSelectedBooking(state, action) {
+        setSelectedBooking(state, action: PayloadAction<BookingApiInterface>) {
             state.selectedBooking = action.payload;
         },
     },
@@ -23,7 +28,7 @@ export const bookingSlice = createSlice({
             .addCase(fetchBookingListThunk.pending, (state) => {
                 state.fetchStatus = "pending";
             })
-            .addCase(fetchBookingListThunk.fulfilled, (state, action) => {
+            .addCase(fetchBookingListThunk.fulfilled, (state, action: PayloadAction<BookingApiInterface[]>) => {
                 state.fetchStatus = "fulfilled";
                 state.bookingData = action.payload;
             })
@@ -35,7 +40,7 @@ export const bookingSlice = createSlice({
             .addCase(fetchBookingByIdThunk.pending, (state) => {
                 state.fetchByIdStatus = "pending";
             })
-            .addCase(fetchBookingByIdThunk.fulfilled, (state, action) => {
+            .addCase(fetchBookingByIdThunk.fulfilled, (state, action: PayloadAction<BookingApiInterface>) => {
                 state.fetchByIdStatus = "fulfilled";
                 state.selectedBooking = action.payload;
             })
@@ -47,7 +52,7 @@ export const bookingSlice = createSlice({
             .addCase(addBookingThunk.pending, (state) => {
                 state.addStatus = "pending";
             })
-            .addCase(addBookingThunk.fulfilled, (state, action) => {
+            .addCase(addBookingThunk.fulfilled, (state, action: PayloadAction<BookingApiInterface>) => {
                 state.addStatus = "fulfilled";
                 state.bookingData.push(action.payload);
             })
@@ -59,7 +64,7 @@ export const bookingSlice = createSlice({
             .addCase(editBookingThunk.pending, (state) => {
                 state.editStatus = "pending";
             })
-            .addCase(editBookingThunk.fulfilled, (state, action) => {
+            .addCase(editBookingThunk.fulfilled, (state, action: PayloadAction<BookingApiInterface>) => {
                 state.editStatus = "fulfilled";
                 const index = state.bookingData.findIndex(
                     (booking) => booking.guest.id === action.payload.guest.id
@@ -76,10 +81,10 @@ export const bookingSlice = createSlice({
             .addCase(deleteBookingThunk.pending, (state) => {
                 state.deleteStatus = "pending";
             })
-            .addCase(deleteBookingThunk.fulfilled, (state, action) => {
+            .addCase(deleteBookingThunk.fulfilled, (state, action: PayloadAction<number>) => {
                 state.deleteStatus = "fulfilled";
                 state.bookingData = state.bookingData.filter(
-                    (booking) => booking.guest.id !== action.payload.guest.id
+                    (booking) => booking.guest.id !== action.payload
                 );
             })
             .addCase(deleteBookingThunk.rejected, (state) => {
@@ -90,15 +95,15 @@ export const bookingSlice = createSlice({
 });
 
 
-export const { setSelectedBooking, clearSelectedBooking } = bookingSlice.actions;
+export const { setSelectedBooking } = bookingSlice.actions;
 
-export const getBookingData = (state) => state.booking.bookingData;
-export const getFetchStatus = (state) => state.booking.fetchStatus;
-export const getAddStatus = (state) => state.booking.addStatus;
-export const getEditStatus = (state) => state.booking.editStatus;
-export const getDeleteStatus = (state) => state.booking.deleteStatus;
-export const getBookingError = (state) => state.booking.error;
-export const getSelectedBooking = (state) => state.booking.selectedBooking;
-export const getFetchByIdStatus = (state) => state.booking.fetchByIdStatus;
+export const getBookingData = (state: RootState) => state.bookings.bookingData;
+export const getFetchStatus = (state: RootState) => state.bookings.fetchStatus;
+export const getAddStatus = (state: RootState) => state.bookings.addStatus;
+export const getEditStatus = (state: RootState) => state.bookings.editStatus;
+export const getDeleteStatus = (state: RootState) => state.bookings.deleteStatus;
+export const getBookingError = (state: RootState) => state.bookings.error;
+export const getSelectedBooking = (state: RootState) => state.bookings.selectedBooking;
+export const getFetchByIdStatus = (state: RootState) => state.bookings.fetchByIdStatus;
 
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-import HeaderBar from "./header/Header.jsx";
-import Navbar from "./navbar/Navbar.jsx";
+import HeaderBar from "./header/Header.tsx";
+import Navbar from "./navbar/Navbar.tsx";
 import "./Layout.css";
 
 export const Layout = () => {

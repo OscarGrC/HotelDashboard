@@ -14,10 +14,9 @@ export const UserCreate// :React.FC//
         const dispatch: AppDispatch = useDispatch();
         const usersData = useSelector((state: RootState) => state.users.usersData);
 
-        const [formData, setFormData] = useState<IUserApi>({
+        const [formData, setFormData] = useState<Partial<IUserApi>>({
             photo: "",
             fullName: '',
-            id: 0,
             email: '',
             startDate: '',
             description: '',
@@ -59,11 +58,10 @@ export const UserCreate// :React.FC//
             return `${day}/${month}/${year}`;
         };
 
-        const format = (formData: IUserApi) => {
-            const newId = usersData.length > 0 ? Math.max(...usersData.map(user => user.id)) + 1 : 1;
+        const format = (formData: Partial<IUserApi>) => {
+
             return {
-                id: newId,
-                startDate: formatDate(formData.startDate),
+                startDate: formatDate(formData.startDate!),
                 stade: formData.stade,
                 puesto: formData.puesto,
                 phone: formData.phone,

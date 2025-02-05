@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Title, Card2, InputWrapper, FormColumn, Label } from '../../common/style/FormStyles.js';
+import { RootState } from '../../app/store.js';
+import { BookingApiInterface } from '../interfaces/BookingApiInterface.js';
 
 export const BookingDetails = () => {
-    const selectedBooking = useSelector((state) => state.bookings.selectedBooking);
+    const selectedBooking = useSelector((state: RootState) => state.bookings.selectedBooking);
 
-    const [bookingData, setBookingData] = useState({
+    const [bookingData, setBookingData] = useState<BookingApiInterface>({
         check_in: '',
         check_out: '',
-        guest: { name: '', last_name: '', id: '' },
+        guest: { name: '', last_name: '', id: 0 },
         order_date: '',
         room: { type: '', number: '' },
         special_request: ''

@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { HeaderWrapper, HamburgerIcon, PageTitle, IconsWrapper, NotificationBadge } from './Header.js';
+import { HeaderWrapper, HamburgerIcon, PageTitle, IconsWrapper, NotificationBadge } from './Header.ts';
 import { FaRegBell, FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import { MdOutlineEmail } from "react-icons/md";
 import { FiLogIn } from "react-icons/fi";
-import { fetchContactListThunk } from "../../contact/features/contactThunks.js";
+import { fetchContactListThunk } from "../../contact/features/contactThunks.ts";
 import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../app/store.ts';
 
 const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const contacts = useSelector((state) => state.contacts.contactData);
-    const status = useSelector((state) => state.contacts.status);
+    const dispatch: AppDispatch = useDispatch();
+    const contacts = useSelector((state: RootState) => state.contacts.contactData);
+    const status = useSelector((state: RootState) => state.contacts.status);
     useEffect(() => {
         if (status === 'idle') {
             dispatch(fetchContactListThunk());

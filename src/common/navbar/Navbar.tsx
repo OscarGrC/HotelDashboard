@@ -1,18 +1,18 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { SidebarWrapper, Header, LogoIcon, Title, Subtitle, Nav, NavItem, UserProfile, ContactButton, TitleContainer, Footer } from './Navbar';
+import { SidebarWrapper, Header, LogoIcon, Title, Subtitle, Nav, NavItem, UserProfile, ContactButton, TitleContainer, Footer } from './Navbar.js';
 import { FaHome, FaBed, FaUsers, FaCalendarAlt, FaHeart, FaBook } from 'react-icons/fa';
 import userAvatar from '../../assets/morty.png';
 import logoImage from '../../assets/hotel.png';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { AuthContext } from '../../login/AuthContext';
+import { AuthContext } from '../../login/AuthContext.jsx';
 import { Button, Input, Label, Form, ModalContent, ModalOverlay } from './modalStyle.js'
 
 const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { state, dispatch } = useContext(AuthContext);
-    const [activePath, setActivePath] = useState(location.pathname);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [activePath, setActivePath] = useState<string>(location.pathname);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const [name, setName] = useState(state.user.name);
     const [email, setEmail] = useState(state.user.email);
@@ -99,8 +99,8 @@ const Navbar = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-                            <Button type="save">Guardar Cambios</Button>
-                            <Button type="exit" className="close" onClick={handleCloseModal}>Cerrar</Button>
+                            <Button tipo="save">Guardar Cambios</Button>
+                            <Button tipo="exit" className="close" onClick={handleCloseModal}>Cerrar</Button>
                         </Form>
                     </ModalContent>
                 </ModalOverlay>

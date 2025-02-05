@@ -1,27 +1,27 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './common/Layout';
-import { Dashboard } from './dashboard/pages/dashboard.jsx';
-import { Rooms } from './rooms/pages/rooms.jsx';
-import { RoomCreate } from './rooms/pages/roomsCreate.jsx';
-import { RoomDetails } from './rooms/pages/roomsDetails.jsx';
-import { RoomEdit } from './rooms/pages/roomsEdit.jsx';
-import { Root } from './common/Root.jsx';
-import { Login } from './login/login.jsx';
-import { Bookings } from './booking/pages/booking.jsx'
-import { BookingEdit } from './booking/pages/bookingEdit.jsx';
-import { BookingCreate } from './booking/pages/bookingCreate.jsx';
-import { BookingDetails } from './booking/pages/bookingDetail.jsx';
+import { Dashboard } from './dashboard/pages/dashboard.tsx';
+import { Rooms } from './rooms/pages/rooms.tsx';
+import { RoomCreate } from './rooms/pages/roomsCreate.tsx';
+import { RoomDetails } from './rooms/pages/roomsDetails.tsx';
+import { RoomEdit } from './rooms/pages/roomsEdit.tsx';
+import { Root } from './common/Root.tsx';
+import { Login } from './login/login.tsx';
+import { Bookings } from './booking/pages/booking.tsx'
+import { BookingEdit } from './booking/pages/bookingEdit.tsx';
+import { BookingCreate } from './booking/pages/bookingCreate.tsx';
+import { BookingDetails } from './booking/pages/bookingDetail.tsx';
 import { Users } from './users/pages/users.tsx'
 import PrivateRoute from './common/PrivatesRoute';
-import { UserDetail } from './users/pages/usersDetail.jsx';
-import { UserCreate } from './users/pages/usersCreate.jsx';
-import { UserEdit } from './users/pages/usersEdit.jsx';
-import { Contact } from './contact/pages/contact.jsx';
+import { UserDetail } from './users/pages/usersDetail.tsx';
+import { UserCreate } from './users/pages/usersCreate.tsx';
+import { UserEdit } from './users/pages/usersEdit.tsx';
+import { Contact } from './contact/pages/contact.tsx';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import './index.css';
-import { AuthProvider } from './login/AuthContext.jsx';
+import { AuthProvider } from './login/AuthContext.tsx';
 
 createRoot(document.getElementById('root')).render(
   <AuthProvider>

@@ -2,24 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { setSelectedBooking } from '../../booking/features/bookingSlice.js';
-import { fetchBookingListThunk, deleteBookingThunk } from "../../booking/features/bookingThunks.js"
+import { setSelectedBooking } from '../features/bookingSlice.js';
+import { fetchBookingListThunk, deleteBookingThunk } from "../features/bookingThunks.js"
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { ShearchBo, TabContainer, Tab } from './booking.js'
-import { ButtonModelsHeader, ButtonTable, ButtonItem } from "../../common/style/buttons.js"
+import { ButtonModelsHeader, ButtonTable, ButtonItem } from "../../common/style/buttons.ts"
 import { Wrapper, Header, Table, Pagination } from '../../common/style/CommonStyles.js';
+import { AppDispatch, RootState } from '../../app/store.js';
+import { BookingApiInterface } from '../interfaces/BookingApiInterface.js';
 export const Bookings = () => {
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
-    const bookings = useSelector((state) => state.bookings.bookingData);
-    const status = useSelector((state) => state.bookings.fetchStatus);
+    const bookings = useSelector((state: RootState) => state.bookings.bookingData);
+    const status = useSelector((state: RootState) => state.bookings.fetchStatus);
 
-    const [filteredBookings, setFilteredBookings] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [filteredBookings, setFilteredBookings] = useState<BookingApiInterface[] | []>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const BookingPerPage = 10;
-    const [searchTerm, setSearchTerm] = useState("");
-    const [filter, setFilter] = useState("all");
+    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [filter, setFilter] = useState<string>("all");
 
     useEffect(() => {
         if (status === 'idle') {
@@ -28,7 +30,7 @@ export const Bookings = () => {
     }, [status]);
 
 
-    const parseDate = (dateString) => {
+    const parseDate = (dateString: string) => {
         const [day, month, year] = dateString.split('/').map(Number);
         return new Date(year, month - 1, day);
     };
@@ -36,14 +38,14 @@ export const Bookings = () => {
         let filteredData = [...bookings];
 
         if (filter === "checking_in") {
-            filteredData = filteredData.sort((a, b) => parseDate(b.check_in) - parseDate(a.check_in));
+            filteredData = filteredData.sort((a, b) => parseDate(b.check_in).getTime() - parseDate(a.check_in).getTime());
         } else if (filter === "checking_out") {
-            filteredData = filteredData.sort((a, b) => parseDate(a.check_out) - parseDate(b.check_out));
+            filteredData = filteredData.sort((a, b) => parseDate(a.check_out).getTime() - parseDate(b.check_out).getTime());
         } else if (filter === "in_progress") {
             filteredData = filteredData.filter((booking) => parseDate(booking.check_in) <= new Date() && parseDate(booking.check_out) >= new Date())
-                .sort((a, b) => parseDate(b.order_date) - parseDate(a.order_date));
+                .sort((a, b) => parseDate(b.order_date).getTime() - parseDate(a.order_date).getTime());
         } else {
-            filteredData = filteredData.sort((a, b) => parseDate(b.order_date) - parseDate(a.order_date));
+            filteredData = filteredData.sort((a, b) => parseDate(b.order_date).getTime() - parseDate(a.order_date).getTime());
         }
         if (searchTerm) {
             filteredData = filteredData.filter((booking) =>
@@ -64,11 +66,11 @@ export const Bookings = () => {
     const nextPage = () => setCurrentPage((prev) => prev + 1);
     const prevPage = () => setCurrentPage((prev) => prev - 1);
 
-    const handleSpecialRequest = (specialRequest) => {
+    const handleSpecialRequest = (specialRequest: string) => {
         alert(specialRequest);
     };
 
-    const getStatus = (checkInDate, checkOutDate) => {
+    const getStatus = (checkInDate: string, checkOutDate: string): string => {
         const today = new Date();
         const checkIn = parseDate(checkInDate);
         const checkOut = parseDate(checkOutDate);
@@ -76,15 +78,17 @@ export const Bookings = () => {
         if (today < checkIn) return 'Check In';
         if (today >= checkIn && today <= checkOut) return 'In Progress';
         if (today > checkOut) return 'Check Out';
+
+        return 'Unknown';
     };
-    const handleDelete = (booking) => {
+    const handleDelete = (booking: number) => {
         dispatch(deleteBookingThunk(booking));
     };
-    const handleEdit = (booking) => {
+    const handleEdit = (booking: BookingApiInterface) => {
         dispatch(setSelectedBooking(booking));
         navigate(`/bookings/edit/${booking.guest.id}`);
     };
-    const handleViewDetails = (booking) => {
+    const handleViewDetails = (booking: BookingApiInterface) => {
         dispatch(setSelectedBooking(booking));
         navigate(`/bookings/details/${booking.guest.id}`);
     };
@@ -144,7 +148,7 @@ export const Bookings = () => {
                                                 <td>{booking.check_in}</td>
                                                 <td>{booking.check_out}</td>
                                                 <td>
-                                                    <button onClick={(e) => { e.stopPropagation(); handleSpecialRequest(booking.special_request) }}>
+                                                    <button onClick={(e) => { e.stopPropagation(); handleSpecialRequest(booking.special_request!) }}>
                                                         View Notes
                                                     </button>
                                                 </td>
@@ -163,7 +167,7 @@ export const Bookings = () => {
                                                         className="delete"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleDelete(booking);
+                                                            handleDelete(booking.guest.id);
                                                         }}
                                                     >
                                                         <MdDelete />

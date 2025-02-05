@@ -37,9 +37,9 @@ export const Input = styled.input`
     border-radius: 4px;
 `;
 
-export const Button = styled.button`
+export const Button = styled.button < { tipo: string } > `
     padding: 10px;
-    background-color: ${props => props.type === "save" ? "#4CAF50" : "#f44336"};
+    background-color: ${props => props.tipo === "save" ? "#4CAF50" : "#f44336"};
     color: white;
     border: none;
     border-radius: 4px;

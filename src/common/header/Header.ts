@@ -97,7 +97,7 @@ export const LanguageSelector = styled.select`
     color: #333;
     background-color: #fff;
 `;
-export const NotificationBadge = styled.div`
+export const NotificationBadge = styled.div<{ bgcolor: string }>`
     position: absolute;
         left: 55%;
     bottom: 55%;

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchUsersListThunk, addUserThunk, editUserThunk, deleteUserThunk, fetchUserByIdThunk, } from "./userThunks.js";
 import { IUserApi } from "../interfaces/IUserApi.js";
 import { UserState } from "../interfaces/IUserState.js";
+import { RootState } from "../../app/store.js";
 
 const initialState: UserState = {
     usersData: [],
@@ -91,11 +92,11 @@ export const userSlice = createSlice({
 
 export const { setSelectedUser } = userSlice.actions;
 
-export const getUsersData = (state) => state.users.usersData;
-export const getFetchStatus = (state) => state.users.fetchStatus;
-export const getAddStatus = (state) => state.users.addStatus;
-export const getEditStatus = (state) => state.users.editStatus;
-export const getDeleteStatus = (state) => state.users.deleteStatus;
-export const getUserError = (state) => state.users.error;
-export const getSelectedUser = (state) => state.users.selectedUser;
-export const getFetchByIdStatus = (state) => state.users.fetchByIdStatus;
+export const getUsersData = (state: RootState) => state.users.usersData;
+export const getFetchStatus = (state: RootState) => state.users.fetchStatus;
+export const getAddStatus = (state: RootState) => state.users.addStatus;
+export const getEditStatus = (state: RootState) => state.users.editStatus;
+export const getDeleteStatus = (state: RootState) => state.users.deleteStatus;
+export const getUserError = (state: RootState) => state.users.error;
+export const getSelectedUser = (state: RootState) => state.users.selectedUser;
+export const getFetchByIdStatus = (state: RootState) => state.users.fetchByIdStatus;

@@ -1,15 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import bookingData from "../../booking/data/booking.json";
+import bookingData from "../data/booking.json";
+import { BookingApiInterface } from "../interfaces/BookingApiInterface";
 
-const simulateFetch = (data) =>
+const simulateFetch = <T>(data: T): Promise<T> =>
     new Promise((resolve) => {
         setTimeout(() => {
             resolve(data);
         }, 200);
     });
 
-
-export const fetchBookingListThunk = createAsyncThunk(
+export const fetchBookingListThunk = createAsyncThunk<BookingApiInterface[]>(
     "booking/fetchBookingList",
     async (_, thunkAPI) => {
         try {
@@ -21,9 +21,9 @@ export const fetchBookingListThunk = createAsyncThunk(
     }
 );
 
-export const addBookingThunk = createAsyncThunk(
+export const addBookingThunk = createAsyncThunk<BookingApiInterface, BookingApiInterface>(
     "booking/addBooking",
-    async (newBooking, thunkAPI) => {
+    async (newBooking: BookingApiInterface, thunkAPI) => {
         try {
             const data = await simulateFetch(newBooking);
             return data;
@@ -33,9 +33,9 @@ export const addBookingThunk = createAsyncThunk(
     }
 );
 
-export const editBookingThunk = createAsyncThunk(
+export const editBookingThunk = createAsyncThunk<BookingApiInterface, BookingApiInterface>(
     "booking/editBooking",
-    async (updatedBooking, thunkAPI) => {
+    async (updatedBooking: BookingApiInterface, thunkAPI) => {
         try {
             const data = await simulateFetch(updatedBooking);
             return data;
@@ -45,9 +45,9 @@ export const editBookingThunk = createAsyncThunk(
     }
 );
 
-export const deleteBookingThunk = createAsyncThunk(
+export const deleteBookingThunk = createAsyncThunk<number, number>(
     "booking/deleteBooking",
-    async (bookingId, thunkAPI) => {
+    async (bookingId: number, thunkAPI) => {
         try {
             const data = await simulateFetch(bookingId);
             return data;
@@ -56,18 +56,18 @@ export const deleteBookingThunk = createAsyncThunk(
         }
     }
 );
-export const fetchBookingByIdThunk = createAsyncThunk(
+export const fetchBookingByIdThunk = createAsyncThunk<BookingApiInterface, number, { rejectValue: string }>(
     "booking/fetchBookingById",
-    async (bookingId, thunkAPI) => {
+    async (bookingId: number, thunkAPI) => {
         try {
-            const data = await simulateFetch(bookingsData);
-            const booking = data.find((b) => b.id === bookingId);
+            const data = await simulateFetch(bookingData);
+            const booking = data.find((b) => b.guest.id === bookingId);
             if (!booking) {
-                throw new Error("Booking not found");
+                return thunkAPI.rejectWithValue("Booking not found");
             }
             return booking;
         } catch (error) {
-            return thunkAPI.rejectWithValue(error.message || "Failed to fetch booking by ID");
+            return thunkAPI.rejectWithValue("Failed to fetch booking by ID");
         }
     }
 );

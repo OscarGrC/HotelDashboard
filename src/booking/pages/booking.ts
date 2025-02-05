@@ -11,7 +11,7 @@ export const TabContainer = styled.div`
   padding: 10px;
 `;
 
-export const Tab = styled.p`
+export const Tab = styled.p<{ selected: boolean }>`
   font-family: 'Poppins', sans-serif;
   font-weight: ${(props) => (props.selected ? '600' : '400')}; 
   color: ${(props) => (props.selected ? '#135846' : '#6E6E6E')}; 

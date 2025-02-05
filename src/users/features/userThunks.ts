@@ -9,7 +9,7 @@ const simulateFetch = <T>(data: T): Promise<T> =>
         }, 200);
     });
 
-export const fetchUsersListThunk = createAsyncThunk(
+export const fetchUsersListThunk = createAsyncThunk<IUserApi[]>(
     "users/fetchUsersList",
     async (_, thunkAPI) => {
         try {
@@ -21,11 +21,24 @@ export const fetchUsersListThunk = createAsyncThunk(
     }
 );
 
-export const addUserThunk = createAsyncThunk(
+export const addUserThunk = createAsyncThunk<IUserApi, Partial<IUserApi>>(
     "users/addUser",
-    async (newUser: IUserApi, thunkAPI) => {
+    async (newUser: Partial<IUserApi>, thunkAPI) => {
         try {
-            const data = await simulateFetch(newUser);
+            const newId = usersData.length > 0 ? Math.max(...usersData.map(user => user.id)) + 1 : 1;
+            const userWithId: IUserApi = {
+                id: newId,
+                photo: newUser.photo || "",
+                fullName: newUser.fullName || "",
+                email: newUser.email || "",
+                startDate: newUser.startDate || "",
+                description: newUser.description || "",
+                puesto: newUser.puesto || "",
+                stade: newUser.stade ?? false,
+                password: newUser.password || "",
+                phone: newUser.phone || ""
+            };
+            const data = await simulateFetch(userWithId);
             return data;
         } catch (error) {
             return thunkAPI.rejectWithValue("Failed to add user");
@@ -33,7 +46,7 @@ export const addUserThunk = createAsyncThunk(
     }
 );
 
-export const editUserThunk = createAsyncThunk(
+export const editUserThunk = createAsyncThunk<IUserApi, IUserApi>(
     "users/editUser",
     async (updatedUser: IUserApi, thunkAPI) => {
         try {
@@ -45,7 +58,7 @@ export const editUserThunk = createAsyncThunk(
     }
 );
 
-export const deleteUserThunk = createAsyncThunk(
+export const deleteUserThunk = createAsyncThunk<number, number>(
     "users/deleteUser",
     async (userId: number, thunkAPI) => {
         try {
@@ -56,7 +69,7 @@ export const deleteUserThunk = createAsyncThunk(
         }
     }
 );
-export const fetchUserByIdThunk = createAsyncThunk(
+export const fetchUserByIdThunk = createAsyncThunk<IUserApi, number>(
     "users/fetchUserById",
     async (userId: number, thunkAPI) => {
         try {
