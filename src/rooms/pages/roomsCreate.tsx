@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addRoomThunk } from '../features/roomThunks.js';
 import { Card, Error, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, AmenitiesWrapper, Title, Label, TextArea } from '../../common/style/FormStyles.js';
-import { ButtonForm } from "../../common/style/buttons"
+import { ButtonForm } from "../../common/style/buttons.js"
 import { MdDelete } from "react-icons/md";
+import { AppDispatch, RootState } from '../../app/store.js';
+import { RoomApi } from '../interfaces/RoomApi.js';
+import { RoomFormData } from '../interfaces/RoomFormData.js';
 
 const amenitiesMap = {
     1: "Wi-Fi",
@@ -21,17 +24,17 @@ const amenitiesMap = {
 
 export const RoomCreate = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const roomsData = useSelector((state) => state.rooms.roomsData);
+    const dispatch: AppDispatch = useDispatch();
+    const roomsData = useSelector((state: RootState) => state.rooms.roomsData);
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<RoomFormData>({
         photos: [],
-        roomType: '',
-        roomNumber: '',
+        room_type: '',
+        room_number: '',
         description: '',
-        offer: false,
-        price: '',
-        discount: '',
+        offert: false,
+        price: 0,
+        discount: 0,
         cancellation: '',
         floor: '',
         amenities: [],
@@ -39,7 +42,7 @@ export const RoomCreate = () => {
 
     const [errors, setErrors] = useState({});
 
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: any) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
@@ -47,14 +50,14 @@ export const RoomCreate = () => {
         });
     };
 
-    const handleOfferChange = (e) => {
+    const handleOfferChange = (e: any) => {
         setFormData({
             ...formData,
             offer: e.target.checked
         });
     };
 
-    const handleAmenitiesChange = (e) => {
+    const handleAmenitiesChange = (e: any) => {
         const value = parseInt(e.target.value);
         const newAmenities = formData.amenities.includes(value)
             ? formData.amenities.filter((amenity) => amenity !== value)
@@ -65,7 +68,7 @@ export const RoomCreate = () => {
         });
     };
 
-    const handlePhotoUpload = (e) => {
+    const handlePhotoUpload = (e: any) => {
         const files = Array.from(e.target.files);
         setFormData({
             ...formData,
@@ -73,7 +76,7 @@ export const RoomCreate = () => {
         });
     };
 
-    const handlePhotoDelete = (index) => {
+    const handlePhotoDelete = (index: number) => {
         const newPhotos = formData.photos.filter((_, i) => i !== index);
         setFormData({
             ...formData,
@@ -83,8 +86,8 @@ export const RoomCreate = () => {
 
     const validate = () => {
         const newErrors = {};
-        if (!formData.roomType) newErrors.roomType = "El tipo de habitación es obligatorio.";
-        if (!formData.roomNumber) newErrors.roomNumber = "El número de habitación es obligatorio.";
+        if (!formData.room_type) newErrors.roomType = "El tipo de habitación es obligatorio.";
+        if (!formData.room_number) newErrors.roomNumber = "El número de habitación es obligatorio.";
         if (!formData.description) newErrors.description = "La descripción es obligatoria.";
         if (!formData.price || isNaN(formData.price) || parseFloat(formData.price) <= 0) {
             newErrors.price = "El precio debe ser un número mayor a 0.";
@@ -100,7 +103,7 @@ export const RoomCreate = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: any) => {
         e.preventDefault();
         if (validate()) {
             const originalFormat = format(formData);
@@ -109,7 +112,7 @@ export const RoomCreate = () => {
         }
     };
 
-    const format = (formData) => {
+    const format = (formData): RoomApi => {
         const room_number = `R${formData.floor}${formData.roomNumber}`;
         const newId = roomsData.length > 0 ? Math.max(...roomsData.map(room => room.id)) + 1 : 1;
         return {

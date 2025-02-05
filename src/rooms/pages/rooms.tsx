@@ -8,14 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedRoom } from '../features/roomSlice.js';
 import { fetchRoomsListThunk, deleteRoomThunk } from "../features/roomThunks.js"
+import { AppDispatch, RootState } from '../../app/store.js';
+import { RoomApi } from '../interfaces/RoomApi.js';
 
 export const Rooms = () => {
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
-    const rooms = useSelector((state) => state.rooms.roomsData);
-    const status = useSelector((state) => state.rooms.fetchStatus);
+    const rooms = useSelector((state: RootState) => state.rooms.roomsData);
+    const status = useSelector((state: RootState) => state.rooms.fetchStatus);
 
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const roomsPerPage = 10;
 
     useEffect(() => {
@@ -31,21 +33,21 @@ export const Rooms = () => {
     const nextPage = () => setCurrentPage((prev) => prev + 1);
     const prevPage = () => setCurrentPage((prev) => prev - 1);
 
-    const handleDelete = (room) => {
-        dispatch(deleteRoomThunk(room));
+    const handleDelete = (roomId: number) => {
+        dispatch(deleteRoomThunk(roomId));
     };
 
-    const handleEdit = (room) => {
-        dispatch(setSelectedRoom(room));
-        navigate(`/rooms/edit/${room.id}`);
+    const handleEdit = (roomId: number) => {
+        dispatch(setSelectedRoom(roomId));
+        navigate(`/rooms/edit/${roomId}`);
     };
 
-    const handleViewDetails = (room) => {
+    const handleViewDetails = (room: RoomApi) => {
         dispatch(setSelectedRoom(room));
         navigate(`/rooms/details/${room.id}`);
     };
 
-    const calculateDiscountedPrice = (price, discountPercent) => {
+    const calculateDiscountedPrice = (price: number, discountPercent: number): number => {
         const discountedPrice = price - (price * discountPercent / 100);
         return parseFloat(discountedPrice.toFixed(2));
     };
@@ -63,7 +65,7 @@ export const Rooms = () => {
         10: "Terraza privada",
     };
 
-    const getAmenities = (amenities) => {
+    const getAmenities = (amenities: number[]) => {
         return amenities
             .map((number) => amenitiesMap[number])
             .filter((service) => service)
@@ -110,13 +112,13 @@ export const Rooms = () => {
                                                 <td>{getAmenities(room.amenities)}</td>
                                                 <td>${room.price}</td>
                                                 <td>${calculateDiscountedPrice(room.price, room.offert_price)}</td>
-                                                <td><ButtonStyled type={room.status.toString()}>{room.status ? 'Available' : 'Booked'}</ButtonStyled></td>
+                                                <td><ButtonStyled stade={room.status}>{room.status ? 'Available' : 'Booked'}</ButtonStyled></td>
                                                 <td className="actions">
                                                     <ButtonItem
                                                         className="edit"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleEdit(room);
+                                                            handleEdit(room.id);
                                                         }}
                                                     >
                                                         <FaRegEdit />
@@ -125,7 +127,7 @@ export const Rooms = () => {
                                                         className="delete"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleDelete(room);
+                                                            handleDelete(room.id);
                                                         }}
                                                     >
                                                         <MdDelete />

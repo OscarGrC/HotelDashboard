@@ -1,14 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import roomsData from "../../rooms/data/rooms.json";
+import roomsData from "../data/rooms.json";
+import { RoomApi } from "../interfaces/RoomApi";
 
-const simulateFetch = (data) =>
+const simulateFetch = <T>(data: T): Promise<T> =>
     new Promise((resolve) => {
         setTimeout(() => {
             resolve(data);
         }, 200);
     });
 
-export const fetchRoomsListThunk = createAsyncThunk(
+export const fetchRoomsListThunk = createAsyncThunk<RoomApi[]>(
     "rooms/fetchRoomsList",
     async (_, thunkAPI) => {
         try {
@@ -20,9 +21,9 @@ export const fetchRoomsListThunk = createAsyncThunk(
     }
 );
 
-export const addRoomThunk = createAsyncThunk(
+export const addRoomThunk = createAsyncThunk<RoomApi, RoomApi>(
     "rooms/addRoom",
-    async (newRoom, thunkAPI) => {
+    async (newRoom: RoomApi, thunkAPI) => {
         try {
             const data = await simulateFetch(newRoom);
             return data;
@@ -32,9 +33,9 @@ export const addRoomThunk = createAsyncThunk(
     }
 );
 
-export const editRoomThunk = createAsyncThunk(
+export const editRoomThunk = createAsyncThunk<RoomApi, RoomApi>(
     "rooms/editRoom",
-    async (updatedRoom, thunkAPI) => {
+    async (updatedRoom: RoomApi, thunkAPI) => {
         try {
             const data = await simulateFetch(updatedRoom);
             return data;
@@ -43,21 +44,21 @@ export const editRoomThunk = createAsyncThunk(
         }
     }
 );
-
-export const deleteRoomThunk = createAsyncThunk(
+export const deleteRoomThunk = createAsyncThunk<number, number>(
     "rooms/deleteRoom",
-    async (roomId, thunkAPI) => {
+    async (roomId: number, thunkAPI) => {
         try {
-            const data = await simulateFetch(roomId);
+            const data: number = await simulateFetch(roomId);
             return data;
         } catch (error) {
             return thunkAPI.rejectWithValue("Failed to delete room");
         }
     }
 );
-export const fetchRoomByIdThunk = createAsyncThunk(
+
+export const fetchRoomByIdThunk = createAsyncThunk<RoomApi, number>(
     "rooms/fetchRoomById",
-    async (roomId, thunkAPI) => {
+    async (roomId: number, thunkAPI) => {
         try {
             const data = await simulateFetch(roomsData);
             const room = data.find((r) => r.id === roomId);
