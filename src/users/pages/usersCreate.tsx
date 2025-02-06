@@ -133,12 +133,12 @@ export const UserCreate// :React.FC//
                         <PhotosWrapper>
                             <h2>Foto</h2>
                             <input type="file" accept="image/*" />
-                            {formData.photo && (
+                            {formData.photo ? (
                                 <div>
                                     <img src={formData.photo} alt="Uploaded" width="100" />
                                     <MdDelete type="button" onClick={handlePhotoDelete} />
                                 </div>
-                            )}
+                            ) : <></>}
                         </PhotosWrapper>
                     </div>
 

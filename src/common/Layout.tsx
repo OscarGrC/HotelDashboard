@@ -12,7 +12,7 @@ export const Layout = () => {
     };
     return (
         <div className={`layout ${isSidebarVisible ? "" : "sidebar-hidden"}`}>
-            {isSidebarVisible && <Navbar />}
+            {isSidebarVisible ? <Navbar /> : <></>}
             <div className="main">
                 <HeaderBar onToggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible} />
                 <div className="content">

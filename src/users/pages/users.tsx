@@ -12,6 +12,9 @@ import { fetchUsersListThunk, deleteUserThunk } from "../features/userThunks.js"
 import { IUserApi } from '../interfaces/IUserApi.js';
 import { AppDispatch, RootState } from '../../app/store.js';
 import ReactLoading from 'react-loading';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export const Users = () => {
     const dispatch: AppDispatch = useDispatch();
@@ -53,8 +56,31 @@ export const Users = () => {
     const prevPage = () => setCurrentPage((prev) => prev - 1);
 
     const handleDelete = (userId: number) => {
-        dispatch(deleteUserThunk(userId));
+        dispatch(deleteUserThunk(userId))
+            .then(() => {
+                toast.success('Eliminado con éxito', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+            .catch((error) => {
+                toast.error('Hubo un error al eliminar', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            });
     };
+
 
     const handleEdit = (user: IUserApi) => {
         dispatch(setSelectedUser(user));
@@ -71,7 +97,9 @@ export const Users = () => {
             <ReactLoading type="spinningBubbles" color="#12aac5" height={300} width={300} />
         </DivCenter>
     ) : (
+
         <Wrapper>
+            <ToastContainer />
             <Header>
                 <TabContainer>
                     <Tab selected={filter === 'all'} onClick={() => setFilter('all')}>All Employees</Tab>

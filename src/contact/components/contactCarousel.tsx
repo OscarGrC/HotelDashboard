@@ -48,7 +48,7 @@ export const ContactCarousel = ({ messages }) => {
                         </CloseButtonContainer>
                     </PopupContent>
                 </PopupOverlay>
-            ) : null}
+            ) : <></>}
         </div>
     );
 };

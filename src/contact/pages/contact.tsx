@@ -66,7 +66,7 @@ export const Contact = () => {
                         <th>Customer</th>
                         <th>Subject</th>
                         <th>Comment</th>
-                        {currentTab === 'all' && <th>Actions</th>}
+                        {currentTab === 'all' ? <th>Actions</th> : <></>}
                     </tr>
                 </thead>
                 <tbody>
@@ -83,11 +83,11 @@ export const Contact = () => {
                             </td>
                             <td>{msg.asunto}</td>
                             <td>{msg.comment}</td>
-                            {currentTab === 'all' && (
+                            {currentTab === 'all' ? (
                                 <td>
                                     <ButtonStyled stade={false} onClick={() => archiveMessage(msg)}>Archived</ButtonStyled>
                                 </td>
-                            )}
+                            ) : <></>}
                         </tr>
                     ))}
                 </tbody>

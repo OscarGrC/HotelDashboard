@@ -83,7 +83,7 @@ export const RoomDetails = () => {
 
                 <PhotosWrapper>
                     <h2>Photos</h2>
-                    {formData.photos.length > 0 && (
+                    {formData.photos.length > 0 ? (
                         <ul style={{ listStyleType: "none" }}>
                             {formData.photos.map((photo, index) => (
                                 <li key={index}>
@@ -91,7 +91,7 @@ export const RoomDetails = () => {
                                 </li>
                             ))}
                         </ul>
-                    )}
+                    ) : <></>}
                 </PhotosWrapper>
 
                 <AmenitiesWrapper>
