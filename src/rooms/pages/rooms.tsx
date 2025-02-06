@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ButtonModelsHeader, ButtonStyled, ButtonItem } from "../../common/style/buttons.js"
-import { Wrapper, Header, Table, Pagination } from '../../common/style/CommonStyles.js';
+import { Wrapper, Header, Table, Pagination, DivCenter } from '../../common/style/CommonStyles.js';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -10,19 +10,23 @@ import { setSelectedRoom } from '../features/roomSlice.js';
 import { fetchRoomsListThunk, deleteRoomThunk } from "../features/roomThunks.js"
 import { AppDispatch, RootState } from '../../app/store.js';
 import { RoomApi } from '../interfaces/RoomApi.js';
+import ReactLoading from 'react-loading';
 
 export const Rooms = () => {
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
     const rooms = useSelector((state: RootState) => state.rooms.roomsData);
     const status = useSelector((state: RootState) => state.rooms.fetchStatus);
-
+    const [loading, setLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const roomsPerPage = 10;
 
     useEffect(() => {
         if (status === 'idle') {
             dispatch(fetchRoomsListThunk());
+        }
+        if (status === "fulfilled") {
+            setLoading(false)
         }
     }, [status]);
 
@@ -72,10 +76,14 @@ export const Rooms = () => {
             .join(', ');
     };
 
-    return (
+    return loading ? (
+        <DivCenter>
+            <ReactLoading type="spinningBubbles" color="#12aac5" height={300} width={300} />
+        </DivCenter>
+    ) : (
         <Wrapper>
             <Header>
-                <ButtonModelsHeader data-cy="create-submit" onClick={() => navigate("/Rooms/create")}>+ New Room</ButtonModelsHeader>
+                <ButtonModelsHeader data-cy="create-submit" onClick={() => navigate("/rooms/create")}>+ New Room</ButtonModelsHeader>
             </Header>
 
             <DragDropContext onDragEnd={(result) => { }}>
@@ -113,6 +121,7 @@ export const Rooms = () => {
                                                 <td>${room.price}</td>
                                                 <td>${calculateDiscountedPrice(room.price, room.offert_price)}</td>
                                                 <td><ButtonStyled stade={room.status}>{room.status ? 'Available' : 'Booked'}</ButtonStyled></td>
+
                                                 <td className="actions">
                                                     <ButtonItem
                                                         className="edit"

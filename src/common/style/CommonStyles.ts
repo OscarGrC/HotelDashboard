@@ -3,6 +3,14 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
   padding: 0rem;
 `;
+export const DivCenter = styled.div`
+  padding: 0rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+`;
+
 
 export const Header = styled.div`
   display: flex;

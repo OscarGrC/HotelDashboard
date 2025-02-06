@@ -22,7 +22,7 @@ const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
     const pageTitles = {
         '/': 'Dashboard',
         '/bookings': 'Bookings',
-        '/rooms': 'Room List',
+        '/rooms/': 'Room List',
         '/rooms/create': 'Room Create',
         '/rooms/edit': 'Room edit',
         '/rooms/detail': 'Room detail',

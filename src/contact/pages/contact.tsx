@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Wrapper, Header, Table, Pagination } from '../../common/style/CommonStyles.js';
+import { Wrapper, Header, Table, Pagination, DivCenter } from '../../common/style/CommonStyles.js';
 import { ButtonStyled } from "../../common/style/buttons"
 import { TabContainer, Tab } from '../../booking/pages/booking.js';
 import { ContactCarousel } from '../components/contactCarousel.jsx';
@@ -7,12 +7,14 @@ import { fetchContactListThunk, fetchContactArchivedListThunk, archiveContactThu
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../app/store.js';
 import { ContactApi } from '../interfaces/ContactApi.js';
+import ReactLoading from 'react-loading';
 
 export const Contact = () => {
     const [currentTab, setCurrentTab] = useState<string>('all');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const MessagesPerPage = 10;
     const dispatch: AppDispatch = useDispatch();
+    const [loading, setLoading] = useState<boolean>(true);
     const contacts = useSelector((state: RootState) => state.contacts.contactData);
     const status = useSelector((state: RootState) => state.contacts.status);
     const contactsArchived = useSelector((state: RootState) => state.contacts.contactArchivedData);
@@ -24,6 +26,9 @@ export const Contact = () => {
         }
         if (statusArchived === 'idle') {
             dispatch(fetchContactArchivedListThunk());
+        }
+        if (status === "fulfilled") {
+            setLoading(false)
         }
     }, [dispatch, status, statusArchived]);
 
@@ -40,7 +45,11 @@ export const Contact = () => {
     const nextPage = () => setCurrentPage((prev) => prev + 1);
     const prevPage = () => setCurrentPage((prev) => prev - 1);
 
-    return (
+    return loading ? (
+        <DivCenter>
+            <ReactLoading type="spinningBubbles" color="#12aac5" height={300} width={300} />
+        </DivCenter>
+    ) : (
         <Wrapper>
             <ContactCarousel messages={contacts}></ContactCarousel>
             <Header>

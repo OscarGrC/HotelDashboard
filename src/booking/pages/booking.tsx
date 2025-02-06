@@ -8,15 +8,17 @@ import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { ShearchBo, TabContainer, Tab } from './booking.js'
 import { ButtonModelsHeader, ButtonTable, ButtonItem } from "../../common/style/buttons.ts"
-import { Wrapper, Header, Table, Pagination } from '../../common/style/CommonStyles.js';
+import { Wrapper, Header, Table, Pagination, DivCenter } from '../../common/style/CommonStyles.js';
 import { AppDispatch, RootState } from '../../app/store.js';
 import { BookingApiInterface } from '../interfaces/BookingApiInterface.js';
+import ReactLoading from 'react-loading';
+
 export const Bookings = () => {
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
     const bookings = useSelector((state: RootState) => state.bookings.bookingData);
     const status = useSelector((state: RootState) => state.bookings.fetchStatus);
-
+    const [loading, setLoading] = useState<boolean>(true);
     const [filteredBookings, setFilteredBookings] = useState<BookingApiInterface[] | []>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const BookingPerPage = 10;
@@ -26,6 +28,9 @@ export const Bookings = () => {
     useEffect(() => {
         if (status === 'idle') {
             dispatch(fetchBookingListThunk());
+        }
+        if (status === "fulfilled") {
+            setLoading(false)
         }
     }, [status]);
 
@@ -94,7 +99,11 @@ export const Bookings = () => {
     };
 
 
-    return (
+    return loading ? (
+        <DivCenter>
+            <ReactLoading type="spinningBubbles" color="#12aac5" height={300} width={300} />
+        </DivCenter>
+    ) : (
         <Wrapper>
 
             <Header>

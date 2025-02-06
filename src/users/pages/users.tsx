@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Wrapper, Header, Table, Pagination } from '../../common/style/CommonStyles.js';
+import { Wrapper, Header, Table, Pagination, DivCenter } from '../../common/style/CommonStyles.js';
 import { ButtonModelsHeader, ButtonStyled, ButtonItem } from "../../common/style/buttons.js"
 import { TabContainer, Tab } from '../../booking/pages/booking.js';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -11,12 +11,15 @@ import { setSelectedUser } from '../features/userSlice.js';
 import { fetchUsersListThunk, deleteUserThunk } from "../features/userThunks.js"
 import { IUserApi } from '../interfaces/IUserApi.js';
 import { AppDispatch, RootState } from '../../app/store.js';
+import ReactLoading from 'react-loading';
+
 export const Users = () => {
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
     const users: IUserApi[] = useSelector((state: RootState) => state.users.usersData);
     const status: string = useSelector((state: RootState) => state.users.fetchStatus);
     const [filteredUsers, setFilteredUsers] = useState<IUserApi[] | []>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const UsersPerPage: number = 10;
     const [filter, setFilter] = useState<string>("all");
@@ -24,6 +27,9 @@ export const Users = () => {
     useEffect(() => {
         if (status === 'idle') {
             dispatch(fetchUsersListThunk());
+        }
+        if (status === "fulfilled") {
+            setLoading(false)
         }
     }, [status]);
 
@@ -60,13 +66,17 @@ export const Users = () => {
         navigate(`/users/details/${user}`);
     };
 
-    return (
+    return loading ? (
+        <DivCenter>
+            <ReactLoading type="spinningBubbles" color="#12aac5" height={300} width={300} />
+        </DivCenter>
+    ) : (
         <Wrapper>
             <Header>
                 <TabContainer>
-                    <Tab onClick={() => setFilter('all')}>All Employees</Tab>
-                    <Tab onClick={() => setFilter('active')}>Active</Tab>
-                    <Tab onClick={() => setFilter('inactive')}>Inactive</Tab>
+                    <Tab selected={filter === 'all'} onClick={() => setFilter('all')}>All Employees</Tab>
+                    <Tab selected={filter === 'active'} onClick={() => setFilter('active')}>Active</Tab>
+                    <Tab selected={filter === 'inactive'} onClick={() => setFilter('inactive')}>Inactive</Tab>
                 </TabContainer>
 
                 <ButtonModelsHeader onClick={() => navigate("/users/create")}>+ New Employee</ButtonModelsHeader>
