@@ -38,9 +38,19 @@ export const RoomCreate = () => {
         cancellation: '',
         floor: '',
         amenities: [],
+        id: 0
     });
 
-    const [errors, setErrors] = useState({});
+    const defaultErrors: {
+        roomType?: string;
+        roomNumber?: string;
+        description?: string;
+        price?: string;
+        discount?: string;
+        cancellation?: string;
+        photos?: string;
+    } = {}
+    const [errors, setErrors] = useState(defaultErrors);
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
@@ -53,7 +63,7 @@ export const RoomCreate = () => {
     const handleOfferChange = (e: any) => {
         setFormData({
             ...formData,
-            offer: e.target.checked
+            offert: e.target.checked
         });
     };
 
@@ -69,12 +79,15 @@ export const RoomCreate = () => {
     };
 
     const handlePhotoUpload = (e: any) => {
-        const files = Array.from(e.target.files);
+        const files = Array.from(e.target.files) as File[];
+        const newPhotoURLs = files.map(file => URL.createObjectURL(file));
+
         setFormData({
             ...formData,
-            photos: [...formData.photos, ...files],
+            photos: [...formData.photos, ...newPhotoURLs],
         });
     };
+
 
     const handlePhotoDelete = (index: number) => {
         const newPhotos = formData.photos.filter((_, i) => i !== index);
@@ -85,14 +98,21 @@ export const RoomCreate = () => {
     };
 
     const validate = () => {
-        const newErrors = {};
+        const newErrors: {
+            roomType?: string;
+            roomNumber?: string;
+            description?: string;
+            price?: string;
+            discount?: string;
+            cancellation?: string;
+        } = {};
         if (!formData.room_type) newErrors.roomType = "El tipo de habitación es obligatorio.";
         if (!formData.room_number) newErrors.roomNumber = "El número de habitación es obligatorio.";
         if (!formData.description) newErrors.description = "La descripción es obligatoria.";
-        if (!formData.price || isNaN(formData.price) || parseFloat(formData.price) <= 0) {
+        if (!formData.price || isNaN(formData.price) || formData.price <= 0) {
             newErrors.price = "El precio debe ser un número mayor a 0.";
         }
-        if (!formData.discount || isNaN(formData.discount) || parseFloat(formData.discount) < 0 || parseFloat(formData.discount) > 100) {
+        if (!formData.discount || isNaN(formData.discount) || formData.discount < 0 || formData.discount > 100) {
             newErrors.discount = "El descuento debe estar entre 0 y 100.";
         }
         if (!formData.cancellation) newErrors.cancellation = "La política de cancelación es obligatoria.";
@@ -112,17 +132,18 @@ export const RoomCreate = () => {
         }
     };
 
-    const format = (formData): RoomApi => {
-        const room_number = `R${formData.floor}${formData.roomNumber}`;
+    const format = (formData: RoomFormData): RoomApi => {
+        const room_number = `R${formData.floor}${formData.room_number}`;
         const newId = roomsData.length > 0 ? Math.max(...roomsData.map(room => room.id)) + 1 : 1;
         return {
             id: newId,
             room_number,
-            room_type: formData.roomType,
+            room_type: formData.room_type,
             amenities: formData.amenities,
             price: formData.price,
             offert_price: formData.discount,
-            status: formData.offer,
+            offert: Boolean(formData.offert),
+            status: formData.offert,
             cancelation: formData.cancellation,
             description: formData.description,
             /*  photos: formData.photos,*/
@@ -140,20 +161,20 @@ export const RoomCreate = () => {
                 <FormColumn>
                     <InputWrapper>
                         <Label mr="0.5rem" ml="4.8rem">Room Type:</Label>
-                        <select name="roomType" value={formData.roomType} onChange={handleInputChange}>
+                        <select name="roomType" value={formData.room_type} onChange={handleInputChange}>
                             <option value="">Selecciona el tipo de habitación</option>
                             <option value="Single Bed">Single Bed</option>
                             <option value="Double Bed">Double Bed</option>
                             <option value="Double Superior">Double Superior</option>
                             <option value="Suite">Suite</option>
                         </select>
-                        {errors.roomType && <Error>{errors.roomType}</Error>}
+                        {errors.roomType ? <Error>{errors.roomType}</Error> : <></>}
                     </InputWrapper>
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="2.8rem">Room Number:</Label>
-                        <input type="number" name="roomNumber" value={formData.roomNumber} onChange={handleInputChange} />
-                        {errors.roomNumber && <Error>{errors.roomNumber}</Error>}
+                        <input type="number" name="roomNumber" value={formData.room_number} onChange={handleInputChange} />
+                        {errors.roomNumber ? <Error>{errors.roomNumber}</Error> : <></>}
                     </InputWrapper>
                     <InputWrapper>
                         <Label mr="0.5rem" ml="8.7rem">Floor:</Label>
@@ -163,30 +184,30 @@ export const RoomCreate = () => {
                     <InputWrapper>
                         <Label mr="0.5rem" ml="4.7rem">Description:</Label>
                         <TextArea name="description" value={formData.description} onChange={handleInputChange}></TextArea>
-                        {errors.description && <Error>{errors.description}</Error>}
+                        {errors.description ? <Error>{errors.description}</Error> : <></>}
                     </InputWrapper>
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="8.7rem">Offer:</Label>
-                        <input type="checkbox" checked={formData.offer} onChange={handleOfferChange} />
+                        <input type="checkbox" checked={formData.offert} onChange={handleOfferChange} />
                     </InputWrapper>
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="8.7rem">Price:</Label>
                         <input type="number" name="price" value={formData.price} onChange={handleInputChange} />
-                        {errors.price && <Error>{errors.price}</Error>}
+                        {errors.price ? <Error>{errors.price}</Error> : <></>}
                     </InputWrapper>
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="6.3rem">Discount:</Label>
                         <input type="number" name="discount" value={formData.discount} onChange={handleInputChange} />
-                        {errors.discount && <Error>{errors.discount}</Error>}
+                        {errors.discount ? <Error>{errors.discount}</Error> : <></>}
                     </InputWrapper>
 
                     <InputWrapper>
                         <Label mr="0.6rem" ml="0rem">Cancellation Policy:</Label>
                         <TextArea name="cancellation" value={formData.cancellation} onChange={handleInputChange}></TextArea>
-                        {errors.cancellation && <Error>{errors.cancellation}</Error>}
+                        {errors.cancellation ? <Error>{errors.cancellation}</Error> : <></>}
                     </InputWrapper>
 
                 </FormColumn>
@@ -195,21 +216,20 @@ export const RoomCreate = () => {
                     <PhotosWrapper>
                         <h2>Fotos</h2>
                         <input type="file" multiple onChange={handlePhotoUpload} />
-                        {formData.photos.length > 0 && (
+                        {formData.photos.length > 0 ? (
                             <div>
                                 <ul style={{ listStyleType: "none" }}>
                                     {formData.photos.map((photo, index) => (
                                         <li key={index}>
-                                            <img src={URL.createObjectURL(photo)} alt="Uploaded" width="100" />
+                                            <img src={photo} alt="Uploaded" width="100" />
                                             <MdDelete type="button" onClick={() => handlePhotoDelete(index)}></MdDelete>
                                         </li>
                                     ))}
                                 </ul>
                             </div>
-                        )}
-                        {errors.photos && <Error>{errors.photos}</Error>}
+                        ) : <></>}
+                        {errors.photos ? <Error>{errors.photos}</Error> : <></>}
                     </PhotosWrapper>
-
                     <AmenitiesWrapper>
                         <h2>Amenities</h2>
                         {Object.keys(amenitiesMap).map((key) => (

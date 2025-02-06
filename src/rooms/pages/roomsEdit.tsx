@@ -3,8 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { editRoomThunk } from '../features/roomThunks.js';
 import { Card, Error, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, AmenitiesWrapper, Title, Label, TextArea } from '../../common/style/FormStyles.js';
-import { ButtonForm } from "../../common/style/buttons"
+import { ButtonForm } from "../../common/style/buttons.js"
 import { MdDelete } from "react-icons/md";
+import { AppDispatch, RootState } from '../../app/store.js';
+import { RoomFormData } from '../interfaces/RoomFormData.js';
 
 const amenitiesMap = {
     1: "Wi-Fi",
@@ -21,35 +23,43 @@ const amenitiesMap = {
 
 export const RoomEdit = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const selectedRoom = useSelector((state) => state.rooms.selectedRoom);
-    const [formData, setFormData] = useState({
+    const dispatch: AppDispatch = useDispatch();
+    const selectedRoom = useSelector((state: RootState) => state.rooms.selectedRoom);
+    const [formData, setFormData] = useState<RoomFormData>({
         photos: [],
-        roomType: '',
-        roomNumber: '',
+        room_type: '',
+        room_number: '',
         description: '',
-        offer: false,
-        price: '',
-        discount: '',
+        offert: false,
+        price: 0,
+        discount: 0,
         cancellation: '',
         floor: '',
         amenities: [],
-        id: '',
+        id: 0
     });
-
-    const [errors, setErrors] = useState({});
+    const defaultErrors: {
+        roomType?: string;
+        roomNumber?: string;
+        description?: string;
+        price?: string;
+        discount?: string;
+        cancellation?: string;
+        photos?: string;
+    } = {}
+    const [errors, setErrors] = useState(defaultErrors);
 
     useEffect(() => {
-        if (selectedRoom) {
+        if (selectedRoom != null) {
             const { floor, number } = parseRoomNumber(selectedRoom.room_number);
             setFormData({
                 photos: selectedRoom.photos || [],
-                roomType: selectedRoom.room_type || '',
-                roomNumber: number || '',
+                room_type: selectedRoom.room_type || '',
+                room_number: number || '',
                 description: selectedRoom.description || '',
-                offer: selectedRoom.offer || false,
-                price: selectedRoom.price || '',
-                discount: selectedRoom.offert_price || '',
+                offert: selectedRoom.offert || false,
+                price: selectedRoom.price || 0,
+                discount: selectedRoom.offert_price || 0,
                 cancellation: selectedRoom.cancelation || '',
                 floor: floor || '',
                 amenities: selectedRoom.amenities || [],
@@ -69,7 +79,7 @@ export const RoomEdit = () => {
         return { floor, number };
     };
 
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: any) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
@@ -77,14 +87,14 @@ export const RoomEdit = () => {
         });
     };
 
-    const handleOfferChange = (e) => {
+    const handleOfferChange = (e: any) => {
         setFormData({
             ...formData,
-            offer: e.target.checked
+            offert: e.target.checked
         });
     };
 
-    const handleAmenitiesChange = (e) => {
+    const handleAmenitiesChange = (e: any) => {
         const value = parseInt(e.target.value);
         const newAmenities = formData.amenities.includes(value)
             ? formData.amenities.filter((amenity) => amenity !== value)
@@ -95,15 +105,18 @@ export const RoomEdit = () => {
         });
     };
 
-    const handlePhotoUpload = (e) => {
-        const files = Array.from(e.target.files);
+    const handlePhotoUpload = (e: any) => {
+        const files = Array.from(e.target.files) as File[];
+        const newPhotoURLs = files.map(file => URL.createObjectURL(file));
+
         setFormData({
             ...formData,
-            photos: [...formData.photos, ...files],
+            photos: [...formData.photos, ...newPhotoURLs],
         });
     };
 
-    const handlePhotoDelete = (index) => {
+
+    const handlePhotoDelete = (index: number) => {
         const newPhotos = formData.photos.filter((_, i) => i !== index);
         setFormData({
             ...formData,
@@ -112,14 +125,21 @@ export const RoomEdit = () => {
     };
 
     const validate = () => {
-        const newErrors = {};
-        if (!formData.roomType) newErrors.roomType = "El tipo de habitación es obligatorio.";
-        if (!formData.roomNumber) newErrors.roomNumber = "El número de habitación es obligatorio.";
+        const newErrors: {
+            roomType?: string;
+            roomNumber?: string;
+            description?: string;
+            price?: string;
+            discount?: string;
+            cancellation?: string;
+        } = {};
+        if (!formData.room_type) newErrors.roomType = "El tipo de habitación es obligatorio.";
+        if (!formData.room_number) newErrors.roomNumber = "El número de habitación es obligatorio.";
         if (!formData.description) newErrors.description = "La descripción es obligatoria.";
-        if (!formData.price || isNaN(formData.price) || parseFloat(formData.price) <= 0) {
+        if (!formData.price || isNaN(formData.price) || formData.price <= 0) {
             newErrors.price = "El precio debe ser un número mayor a 0.";
         }
-        if (!formData.discount || isNaN(formData.discount) || parseFloat(formData.discount) < 0 || parseFloat(formData.discount) > 100) {
+        if (!formData.discount || isNaN(formData.discount) || formData.discount < 0 || formData.discount > 100) {
             newErrors.discount = "El descuento debe estar entre 0 y 100.";
         }
         if (!formData.cancellation) newErrors.cancellation = "La política de cancelación es obligatoria.";
@@ -130,7 +150,7 @@ export const RoomEdit = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: any) => {
         e.preventDefault();
         if (validate()) {
             const originalFormat = format(formData);
@@ -139,20 +159,21 @@ export const RoomEdit = () => {
         }
     };
 
-    const format = (formData) => {
-        const room_number = `R${formData.floor}${formData.roomNumber}`;
+    const format = (formData: RoomFormData) => {
+        const room_number = `R${formData.floor}${formData.room_number}`;
 
         return {
-            id: formData.id,
             room_number,
-            room_type: formData.roomType,
+            room_type: formData.room_type,
             amenities: formData.amenities,
             price: formData.price,
             offert_price: formData.discount,
-            status: formData.offer,
+            offert: Boolean(formData.offert),
+            status: formData.offert,
             cancelation: formData.cancellation,
             description: formData.description,
             photos: formData.photos,
+            id: formData.id
         };
     };
 
@@ -164,21 +185,22 @@ export const RoomEdit = () => {
                 <FormColumn>
                     <InputWrapper>
                         <Label mr="0.5rem" ml="4.8rem">Room Type:</Label>
-                        <select name="roomType" value={formData.roomType} onChange={handleInputChange}>
+                        <select name="roomType" value={formData.room_type} onChange={handleInputChange}>
                             <option value="">Selecciona el tipo de habitación</option>
                             <option value="Single Bed">Single Bed</option>
                             <option value="Double Bed">Double Bed</option>
                             <option value="Double Superior">Double Superior</option>
                             <option value="Suite">Suite</option>
                         </select>
-                        {errors.roomType && <Error>{errors.roomType}</Error>}
+                        {errors.roomType ? <Error>{errors.roomType}</Error> : <></>}
                     </InputWrapper>
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="2.8rem">Room Number:</Label>
-                        <input type="number" name="roomNumber" value={formData.roomNumber} onChange={handleInputChange} />
-                        {errors.roomNumber && <Error>{errors.roomNumber}</Error>}
+                        <input type="number" name="roomNumber" value={formData.room_number} onChange={handleInputChange} />
+                        {errors.roomNumber ? <Error>{errors.roomNumber}</Error> : <></>}
                     </InputWrapper>
+
                     <InputWrapper>
                         <Label mr="0.5rem" ml="8.7rem">Floor:</Label>
                         <input type="number" name="floor" value={formData.floor} onChange={handleInputChange} />
@@ -187,39 +209,38 @@ export const RoomEdit = () => {
                     <InputWrapper>
                         <Label mr="0.5rem" ml="4.7rem">Description:</Label>
                         <TextArea name="description" value={formData.description} onChange={handleInputChange}></TextArea>
-                        {errors.description && <Error>{errors.description}</Error>}
+                        {errors.description ? <Error>{errors.description}</Error> : <></>}
                     </InputWrapper>
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="8.7rem">Offer:</Label>
-                        <input type="checkbox" checked={formData.offer} onChange={handleOfferChange} />
+                        <input type="checkbox" checked={formData.offert} onChange={handleOfferChange} />
                     </InputWrapper>
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="8.7rem">Price:</Label>
                         <input type="number" name="price" value={formData.price} onChange={handleInputChange} />
-                        {errors.price && <Error>{errors.price}</Error>}
+                        {errors.price ? <Error>{errors.price}</Error> : <></>}
                     </InputWrapper>
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="6.3rem">Discount:</Label>
                         <input type="number" name="discount" value={formData.discount} onChange={handleInputChange} />
-                        {errors.discount && <Error>{errors.discount}</Error>}
+                        {errors.discount ? <Error>{errors.discount}</Error> : <></>}
                     </InputWrapper>
 
                     <InputWrapper>
                         <Label mr="0.6rem" ml="0rem">Cancellation Policy:</Label>
                         <TextArea name="cancellation" value={formData.cancellation} onChange={handleInputChange}></TextArea>
-                        {errors.cancellation && <Error>{errors.cancellation}</Error>}
+                        {errors.cancellation ? <Error>{errors.cancellation}</Error> : <></>}
                     </InputWrapper>
-
                 </FormColumn>
 
                 <div>
                     <PhotosWrapper>
                         <h2>Fotos</h2>
                         <input type="file" multiple onChange={handlePhotoUpload} />
-                        {formData.photos.length > 0 && (
+                        {formData.photos.length > 0 ? (
                             <div>
                                 <ul style={{ listStyleType: "none" }}>
                                     {formData.photos.map((photo, index) => (
@@ -230,8 +251,8 @@ export const RoomEdit = () => {
                                     ))}
                                 </ul>
                             </div>
-                        )}
-                        {errors.photos && <Error>{errors.photos}</Error>}
+                        ) : <></>}
+                        {errors.photos ? <Error>{errors.photos}</Error> : <></>}
                     </PhotosWrapper>
 
                     <AmenitiesWrapper>
@@ -256,4 +277,5 @@ export const RoomEdit = () => {
             </Card>
         </>
     );
+
 };

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Card, PhotosWrapper, AmenitiesWrapper, Title } from '../../common/style/FormStyles.js';
+import { RootState } from '../../app/store.js';
+import { RoomFormData } from '../interfaces/RoomFormData.js';
 
 const amenitiesMap = {
     1: "Wi-Fi",
@@ -16,42 +18,44 @@ const amenitiesMap = {
 };
 
 export const RoomDetails = () => {
-    const room = useSelector((state) => state.rooms.selectedRoom);
-    const [formData, setFormData] = useState({
+    const room = useSelector((state: RootState) => state.rooms.selectedRoom);
+    const [formData, setFormData] = useState<RoomFormData>({
         photos: [],
-        roomType: '',
-        roomNumber: '',
+        room_type: '',
+        room_number: '',
         description: '',
-        offer: false,
-        price: '',
-        discount: '',
+        offert: false,
+        price: 0,
+        discount: 0,
         cancellation: '',
         floor: '',
         amenities: [],
+        id: 0
     });
 
 
     useEffect(() => {
-        if (room) {
+        if (room != null) {
             const { floor, number } = parseRoomNumber(room.room_number);
             setFormData({
                 photos: room.photos || [],
-                roomType: room.room_type || '',
-                roomNumber: number || '',
+                room_type: room.room_type || '',
+                room_number: number || '',
                 description: room.description || '',
-                offer: room.offer || false,
-                price: room.price || '',
-                discount: room.offert_price || '',
+                offert: room.offert || false,
+                price: room.price || 0,
+                discount: room.offert_price || 0,
                 cancellation: room.cancelation || '',
                 floor: floor || '',
                 amenities: room.amenities || [],
+                id: 0
             });
         } else {
             console.error("Room not found");
         }
     }, [room]);
 
-    const parseRoomNumber = (roomNumber) => {
+    const parseRoomNumber = (roomNumber: string) => {
         const match = roomNumber.match(/^R(\d)(\d{2})$/);
         if (!match) {
             console.error("Formato inválido para room_number:", roomNumber);
@@ -67,11 +71,11 @@ export const RoomDetails = () => {
             <Title>Room Details</Title>
             <Card>
                 <div>
-                    <p><strong>Room Type:</strong> {formData.roomType}</p>
-                    <p><strong>Room Number:</strong> {formData.roomNumber}</p>
+                    <p><strong>Room Type:</strong> {formData.room_type}</p>
+                    <p><strong>Room Number:</strong> {formData.room_number}</p>
                     <p><strong>Floor:</strong> {formData.floor}</p>
                     <p><strong>Description:</strong> {formData.description}</p>
-                    <p><strong>Offer:</strong> {formData.offer ? "Yes" : "No"}</p>
+                    <p><strong>Offer:</strong> {formData.offert ? "Yes" : "No"}</p>
                     <p><strong>Price:</strong> {formData.price}</p>
                     <p><strong>Discount:</strong> {formData.discount}</p>
                     <p><strong>Cancellation Policy:</strong> {formData.cancellation}</p>

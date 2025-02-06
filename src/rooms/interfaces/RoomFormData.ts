@@ -1,5 +1,5 @@
 export interface RoomFormData {
-    photos: File[];
+    photos: string[];
     room_type: string;
     room_number: string;
     description: string;
@@ -9,4 +9,5 @@ export interface RoomFormData {
     cancellation: string;
     floor: string;
     amenities: number[];
+    id: number;
 }
