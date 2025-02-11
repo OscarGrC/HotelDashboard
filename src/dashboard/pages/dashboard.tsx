@@ -32,9 +32,7 @@ export const Dashboard = () => {
     ) : (
         <div data-cy="div">
             <Kpi startDate="01/01/2025" endDate="16/01/2026"></Kpi>
-            <p>wololo</p>
             <ContactCarousel messages={contacts} ></ContactCarousel>
-            <p>wololo</p>
         </div>
     )
 }
