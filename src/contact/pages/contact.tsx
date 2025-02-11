@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../app/store.js';
 import { ContactApi } from '../interfaces/ContactApi.js';
 import ReactLoading from 'react-loading';
+import { toast } from 'react-toastify';
 
 export const Contact = () => {
     const [currentTab, setCurrentTab] = useState<string>('all');
@@ -33,7 +34,28 @@ export const Contact = () => {
     }, [dispatch, status, statusArchived]);
 
     const archiveMessage = (msg: ContactApi) => {
-        dispatch(archiveContactThunk(msg));
+        dispatch(archiveContactThunk(msg)).then(() => {
+            toast.success('Archivado con éxito', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        })
+            .catch((error) => {
+                toast.error('Hubo un error al Archivar', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            });
     };
 
     const currentData = currentTab === 'all' ? contacts : contactsArchived;

@@ -12,6 +12,7 @@ import { Wrapper, Header, Table, Pagination, DivCenter } from '../../common/styl
 import { AppDispatch, RootState } from '../../app/store.js';
 import { BookingApiInterface } from '../interfaces/BookingApiInterface.js';
 import ReactLoading from 'react-loading';
+import { toast } from 'react-toastify';
 
 export const Bookings = () => {
     const dispatch: AppDispatch = useDispatch();
@@ -87,7 +88,28 @@ export const Bookings = () => {
         return 'Unknown';
     };
     const handleDelete = (booking: number) => {
-        dispatch(deleteBookingThunk(booking));
+        dispatch(deleteBookingThunk(booking)).then(() => {
+            toast.success('Eliminado con éxito', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        })
+            .catch((error) => {
+                toast.error('Hubo un error al Eliminar', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            });
     };
     const handleEdit = (booking: BookingApiInterface) => {
         dispatch(setSelectedBooking(booking));

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../app/store';
 import { BookingApiInterface } from '../interfaces/BookingApiInterface';
 import { RoomType } from '../../rooms/interfaces/RoomTypeEnum';
+import { toast } from 'react-toastify';
 
 export const BookingCreate = () => {
     const navigate = useNavigate();
@@ -43,8 +44,29 @@ export const BookingCreate = () => {
     const handleSubmit = (e: any) => {
         e.preventDefault();
         const originalFormat = format(formData);
-        dispatch(addBookingThunk(originalFormat));
-        navigate("/bookings");
+        dispatch(addBookingThunk(originalFormat)).then(() => {
+            toast.success('Creado con éxito', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        })
+            .catch((error) => {
+                toast.error('Hubo un error al crear', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            });
+        navigate("/bookings/");
     };
 
     const format = (formData: Partial<BookingApiInterface>): BookingApiInterface => {

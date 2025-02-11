@@ -36,7 +36,6 @@ export const Users = () => {
     }, [status]);
 
     useEffect(() => {
-        console.log(users)
         let filteredData = [...users];
 
         if (filter === "active") {
@@ -99,7 +98,6 @@ export const Users = () => {
     ) : (
 
         <Wrapper>
-            <ToastContainer />
             <Header>
                 <TabContainer>
                     <Tab selected={filter === 'all'} onClick={() => setFilter('all')}>All Employees</Tab>

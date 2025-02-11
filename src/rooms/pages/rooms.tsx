@@ -11,6 +11,7 @@ import { fetchRoomsListThunk, deleteRoomThunk } from "../features/roomThunks.js"
 import { AppDispatch, RootState } from '../../app/store.js';
 import { RoomApi } from '../interfaces/RoomApi.js';
 import ReactLoading from 'react-loading';
+import { toast } from 'react-toastify';
 
 export const Rooms = () => {
     const dispatch: AppDispatch = useDispatch();
@@ -38,7 +39,28 @@ export const Rooms = () => {
     const prevPage = () => setCurrentPage((prev) => prev - 1);
 
     const handleDelete = (roomId: number) => {
-        dispatch(deleteRoomThunk(roomId));
+        dispatch(deleteRoomThunk(roomId)).then(() => {
+            toast.success('Eliminado con éxito', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        })
+            .catch((error) => {
+                toast.error('Hubo un error al Eliminar', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            });;
     };
 
     const handleEdit = (room: RoomApi) => {

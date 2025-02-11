@@ -6,6 +6,7 @@ import { ButtonForm } from "../../common/style/buttons"
 import { useNavigate } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../app/store';
 import { BookingApiInterface } from '../interfaces/BookingApiInterface';
+import { toast } from 'react-toastify';
 
 export const BookingEdit = () => {
     const navigate = useNavigate();
@@ -52,8 +53,29 @@ export const BookingEdit = () => {
     const handleSubmit = (e: any) => {
         e.preventDefault();
         const originalFormat = format(formData);
-        dispatch(editBookingThunk(originalFormat));
-        navigate("/bookings");
+        dispatch(editBookingThunk(originalFormat)).then(() => {
+            toast.success('Editado con éxito', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        })
+            .catch((error) => {
+                toast.error('Hubo un error al editar', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            });;;
+        navigate("/bookings/");
 
     };
     const format = (formData: Partial<BookingApiInterface>) => {

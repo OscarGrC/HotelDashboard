@@ -7,6 +7,7 @@ import { ButtonForm } from "../../common/style/buttons"
 import { MdDelete } from "react-icons/md";
 import { AppDispatch, RootState } from '../../app/store.js';
 import { IUserApi } from '../interfaces/IUserApi.js';
+import { toast } from 'react-toastify';
 
 export const UserEdit = () => {
     const navigate = useNavigate();
@@ -95,8 +96,51 @@ export const UserEdit = () => {
             if (originalFormat.id != selectedUser!.id) {
                 dispatch(deleteUserThunk(selectedUser!.id));
                 dispatch(addUserThunk(originalFormat))
+                    .then(() => {
+                        toast.success('Modificado con éxito', {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    })
+                    .catch((error) => {
+                        toast.error('Hubo un error al modificar', {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    });
             } else {
-                dispatch(editUserThunk(originalFormat));
+                dispatch(editUserThunk(originalFormat)).then(() => {
+                    toast.success('Modificado con éxito', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                })
+                    .catch((error) => {
+                        toast.error('Hubo un error al modificar', {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    });;
             }
             navigate("/users/");
         }

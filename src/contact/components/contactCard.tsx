@@ -5,6 +5,7 @@ import { archiveContactThunk } from "../features/contactThunks.ts";
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../app/store.ts';
 import { ContactApi } from '../interfaces/ContactApi.ts';
+import { toast } from 'react-toastify';
 
 export const ContactCard = ({ item }) => {
     const dispatch: AppDispatch = useDispatch();
@@ -37,7 +38,28 @@ export const ContactCard = ({ item }) => {
     };
 
     const archiveMessage = (msg: ContactApi) => {
-        dispatch(archiveContactThunk(msg));
+        dispatch(archiveContactThunk(msg)).then(() => {
+            toast.success('Archivado con éxito', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        })
+            .catch((error) => {
+                toast.error('Hubo un error al Archivar', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            });;
     };
 
     return (

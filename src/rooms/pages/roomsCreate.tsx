@@ -8,6 +8,7 @@ import { MdDelete } from "react-icons/md";
 import { AppDispatch, RootState } from '../../app/store.js';
 import { RoomApi } from '../interfaces/RoomApi.js';
 import { RoomFormData } from '../interfaces/RoomFormData.js';
+import { toast } from 'react-toastify';
 
 const amenitiesMap = {
     1: "Wi-Fi",
@@ -127,7 +128,28 @@ export const RoomCreate = () => {
         e.preventDefault();
         if (validate()) {
             const originalFormat = format(formData);
-            dispatch(addRoomThunk(originalFormat));
+            dispatch(addRoomThunk(originalFormat)).then(() => {
+                toast.success('Creado con éxito', {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+                .catch((error) => {
+                    toast.error('Hubo un error al crear', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                });;
             navigate("/rooms");
         }
     };
