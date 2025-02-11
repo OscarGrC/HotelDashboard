@@ -3,15 +3,16 @@ import { fetchUsersListThunk, addUserThunk, editUserThunk, deleteUserThunk, fetc
 import { IUserApi } from "../interfaces/IUserApi.js";
 import { UserState } from "../interfaces/IUserState.js";
 import { RootState } from "../../app/store.js";
+import { StatusEnum } from "../../common/interfaces/statusEnum.js";
 
 const initialState: UserState = {
     usersData: [],
     selectedUser: null,
-    fetchStatus: "idle",
-    addStatus: "idle",
-    editStatus: "idle",
-    deleteStatus: "idle",
-    fetchByIdStatus: "idle",
+    fetchStatus: StatusEnum.IDLE,
+    addStatus: StatusEnum.IDLE,
+    editStatus: StatusEnum.IDLE,
+    deleteStatus: StatusEnum.IDLE,
+    fetchByIdStatus: StatusEnum.IDLE,
     error: "Default Error",
 };
 
@@ -26,65 +27,65 @@ export const userSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchUsersListThunk.pending, (state) => {
-                state.fetchStatus = "pending";
+                state.fetchStatus = StatusEnum.PENDING;
             })
             .addCase(fetchUsersListThunk.fulfilled, (state, action: PayloadAction<IUserApi[]>) => {
-                state.fetchStatus = "fulfilled";
+                state.fetchStatus = StatusEnum.FULFILLED;
                 state.usersData = action.payload;
             })
             .addCase(fetchUsersListThunk.rejected, (state, action) => {
-                state.fetchStatus = "rejected";
+                state.fetchStatus = StatusEnum.REJECTED;
                 state.error = action.error.message;
             })
 
             .addCase(fetchUserByIdThunk.pending, (state) => {
-                state.fetchByIdStatus = "pending";
+                state.fetchByIdStatus = StatusEnum.PENDING;
             })
             .addCase(fetchUserByIdThunk.fulfilled, (state, action: PayloadAction<IUserApi>) => {
-                state.fetchByIdStatus = "fulfilled";
+                state.fetchByIdStatus = StatusEnum.FULFILLED;
                 state.selectedUser = action.payload;
             })
             .addCase(fetchUserByIdThunk.rejected, (state, action) => {
-                state.fetchByIdStatus = "rejected";
+                state.fetchByIdStatus = StatusEnum.REJECTED;
                 state.error = action.error.message;
             })
 
             .addCase(addUserThunk.pending, (state) => {
-                state.addStatus = "pending";
+                state.addStatus = StatusEnum.PENDING;
             })
             .addCase(addUserThunk.fulfilled, (state, action: PayloadAction<IUserApi>) => {
-                state.addStatus = "fulfilled";
+                state.addStatus = StatusEnum.FULFILLED;
                 state.usersData.push(action.payload);
             })
             .addCase(addUserThunk.rejected, (state, action) => {
-                state.addStatus = "rejected";
+                state.addStatus = StatusEnum.REJECTED;
                 state.error = action.error.message;
             })
 
             .addCase(editUserThunk.pending, (state) => {
-                state.editStatus = "pending";
+                state.editStatus = StatusEnum.PENDING
             })
             .addCase(editUserThunk.fulfilled, (state, action) => {
-                state.editStatus = "fulfilled";
+                state.editStatus = StatusEnum.FULFILLED;
                 const index = state.usersData.findIndex((user) => user.id === action.payload.id);
                 if (index !== -1) {
                     state.usersData[index] = action.payload;
                 }
             })
             .addCase(editUserThunk.rejected, (state, action) => {
-                state.editStatus = "rejected";
+                state.editStatus = StatusEnum.REJECTED
                 state.error = action.error.message;
             })
 
             .addCase(deleteUserThunk.pending, (state) => {
-                state.deleteStatus = "pending";
+                state.deleteStatus = StatusEnum.PENDING
             })
             .addCase(deleteUserThunk.fulfilled, (state, action: PayloadAction<number>) => {
-                state.deleteStatus = "fulfilled";
+                state.deleteStatus = StatusEnum.FULFILLED;
                 state.usersData = state.usersData.filter((user) => user.id !== action.payload);
             })
             .addCase(deleteUserThunk.rejected, (state, action) => {
-                state.deleteStatus = "rejected";
+                state.deleteStatus = StatusEnum.REJECTED;
                 state.error = action.error.message;
             });
     },

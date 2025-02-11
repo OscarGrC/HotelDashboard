@@ -161,7 +161,8 @@ export const RoomCreate = () => {
                 <FormColumn>
                     <InputWrapper>
                         <Label mr="0.5rem" ml="4.8rem">Room Type:</Label>
-                        <select name="roomType" value={formData.room_type} onChange={handleInputChange}>
+                        <select name="room_type" value={formData.room_type}
+                            onChange={handleInputChange}>
                             <option value="">Selecciona el tipo de habitación</option>
                             <option value="Single Bed">Single Bed</option>
                             <option value="Double Bed">Double Bed</option>
@@ -173,7 +174,7 @@ export const RoomCreate = () => {
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="2.8rem">Room Number:</Label>
-                        <input type="number" name="roomNumber" value={formData.room_number} onChange={handleInputChange} />
+                        <input type="number" name="room_number" value={formData.room_number} onChange={handleInputChange} />
                         {errors.roomNumber ? <Error>{errors.roomNumber}</Error> : <></>}
                     </InputWrapper>
                     <InputWrapper>

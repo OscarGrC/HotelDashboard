@@ -94,11 +94,6 @@ export const UserCreate// :React.FC//
                         </InputWrapper>
 
                         <InputWrapper>
-                            <Label mr="0.5rem" ml="5.8rem">ID:</Label>
-                            <input type="number" name="id" value={formData.id} onChange={handleInputChange} />
-                        </InputWrapper>
-
-                        <InputWrapper>
                             <Label mr="0.5rem" ml="3.6rem">Email:</Label>
                             <input type="email" value={formData.email} name="email" onChange={handleInputChange} />
                         </InputWrapper>

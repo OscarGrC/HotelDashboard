@@ -3,16 +3,17 @@ import { fetchRoomsListThunk, addRoomThunk, editRoomThunk, deleteRoomThunk, fetc
 import { RoomApi } from "../interfaces/RoomApi.js";
 import { RoomState } from "../interfaces/RoomState.js";
 import { RootState } from "../../app/store.js";
+import { StatusEnum } from "../../common/interfaces/statusEnum.js";
 
 
 const initialState: RoomState = {
     roomsData: [],
     selectedRoom: null,
-    fetchStatus: "idle",
-    addStatus: "idle",
-    editStatus: "idle",
-    deleteStatus: "idle",
-    fetchByIdStatus: "idle",
+    fetchStatus: StatusEnum.IDLE,
+    addStatus: StatusEnum.IDLE,
+    editStatus: StatusEnum.IDLE,
+    deleteStatus: StatusEnum.IDLE,
+    fetchByIdStatus: StatusEnum.IDLE,
     error: "Default error",
 
 }
@@ -28,63 +29,63 @@ export const roomSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchRoomsListThunk.pending, (state) => {
-                state.fetchStatus = "pending";
+                state.fetchStatus = StatusEnum.PENDING
             })
             .addCase(fetchRoomsListThunk.fulfilled, (state, action: PayloadAction<RoomApi[]>) => {
-                state.fetchStatus = "fulfilled";
+                state.fetchStatus = StatusEnum.FULFILLED;
                 state.roomsData = action.payload;
             })
             .addCase(fetchRoomsListThunk.rejected, (state) => {
-                state.fetchStatus = "rejected";
+                state.fetchStatus = StatusEnum.REJECTED;
                 state.error = "Error to load Room list";
             })
             .addCase(fetchRoomByIdThunk.pending, (state) => {
-                state.fetchByIdStatus = "pending";
+                state.fetchByIdStatus = StatusEnum.PENDING;
             })
             .addCase(fetchRoomByIdThunk.fulfilled, (state, action: PayloadAction<RoomApi>) => {
-                state.fetchByIdStatus = "fulfilled";
+                state.fetchByIdStatus = StatusEnum.FULFILLED;
                 state.selectedRoom = action.payload;
             })
             .addCase(fetchRoomByIdThunk.rejected, (state, action) => {
-                state.fetchByIdStatus = "rejected";
+                state.fetchByIdStatus = StatusEnum.REJECTED;
                 state.error = "Error to load room by Id";
             })
             .addCase(addRoomThunk.pending, (state) => {
-                state.addStatus = "pending";
+                state.addStatus = StatusEnum.PENDING;
             })
             .addCase(addRoomThunk.fulfilled, (state, action: PayloadAction<RoomApi>) => {
-                state.addStatus = "fulfilled";
+                state.addStatus = StatusEnum.FULFILLED;
                 state.roomsData.push(action.payload);
             })
             .addCase(addRoomThunk.rejected, (state) => {
-                state.addStatus = "rejected";
+                state.addStatus = StatusEnum.REJECTED;
                 state.error = "Error to add new Room";
             })
 
             .addCase(editRoomThunk.pending, (state) => {
-                state.editStatus = "pending";
+                state.editStatus = StatusEnum.PENDING;
             })
             .addCase(editRoomThunk.fulfilled, (state, action) => {
-                state.editStatus = "fulfilled";
+                state.editStatus = StatusEnum.FULFILLED;
                 const index = state.roomsData.findIndex((room) => room.id === action.payload.id);
                 if (index !== -1) {
                     state.roomsData[index] = action.payload;
                 }
             })
             .addCase(editRoomThunk.rejected, (state) => {
-                state.editStatus = "rejected";
+                state.editStatus = StatusEnum.REJECTED;
                 state.error = "Error to edit Room";
             })
 
             .addCase(deleteRoomThunk.pending, (state) => {
-                state.deleteStatus = "pending";
+                state.deleteStatus = StatusEnum.PENDING;
             })
             .addCase(deleteRoomThunk.fulfilled, (state, action: PayloadAction<number>) => {
-                state.deleteStatus = "fulfilled";
+                state.deleteStatus = StatusEnum.FULFILLED;
                 state.roomsData = state.roomsData.filter((room) => room.id !== action.payload);
             })
             .addCase(deleteRoomThunk.rejected, (state) => {
-                state.deleteStatus = "rejected";
+                state.deleteStatus = StatusEnum.REJECTED;
                 state.error = "Error to Delete Room";
             });
     },

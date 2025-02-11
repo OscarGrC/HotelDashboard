@@ -3,15 +3,16 @@ import { fetchBookingListThunk, addBookingThunk, editBookingThunk, deleteBooking
 import { BookingState } from '../interfaces/BookingState.ts'
 import { BookingApiInterface } from "../interfaces/BookingApiInterface.ts";
 import { RootState } from "../../app/store.ts";
+import { StatusEnum } from "../../common/interfaces/statusEnum.ts";
 
 const initialState: BookingState = {
     bookingData: [],
     selectedBooking: null,
-    fetchStatus: "idle",
-    addStatus: "idle",
-    editStatus: "idle",
-    deleteStatus: "idle",
-    fetchByIdStatus: "idle",
+    fetchStatus: StatusEnum.IDLE,
+    addStatus: StatusEnum.IDLE,
+    editStatus: StatusEnum.IDLE,
+    deleteStatus: StatusEnum.IDLE,
+    fetchByIdStatus: StatusEnum.IDLE,
     error: "Default Error",
 };
 
@@ -26,46 +27,57 @@ export const bookingSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchBookingListThunk.pending, (state) => {
-                state.fetchStatus = "pending";
+                state.fetchStatus = StatusEnum.PENDING;
             })
             .addCase(fetchBookingListThunk.fulfilled, (state, action: PayloadAction<BookingApiInterface[]>) => {
-                state.fetchStatus = "fulfilled";
+                state.fetchStatus = StatusEnum.FULFILLED;
                 state.bookingData = action.payload;
             })
             .addCase(fetchBookingListThunk.rejected, (state) => {
-                state.fetchStatus = "rejected";
+                state.fetchStatus = StatusEnum.REJECTED;
                 state.error = "Failed to fetch bookings";
             })
 
             .addCase(fetchBookingByIdThunk.pending, (state) => {
-                state.fetchByIdStatus = "pending";
+                state.fetchByIdStatus = StatusEnum.PENDING;
             })
             .addCase(fetchBookingByIdThunk.fulfilled, (state, action: PayloadAction<BookingApiInterface>) => {
-                state.fetchByIdStatus = "fulfilled";
+                state.fetchByIdStatus = StatusEnum.FULFILLED;
                 state.selectedBooking = action.payload;
             })
             .addCase(fetchBookingByIdThunk.rejected, (state, action) => {
-                state.fetchByIdStatus = "rejected";
+                state.fetchByIdStatus = StatusEnum.REJECTED;
                 state.error = action.payload || "Failed to fetch booking by ID";
             })
 
             .addCase(addBookingThunk.pending, (state) => {
-                state.addStatus = "pending";
+                state.addStatus = StatusEnum.PENDING;
             })
             .addCase(addBookingThunk.fulfilled, (state, action: PayloadAction<BookingApiInterface>) => {
-                state.addStatus = "fulfilled";
-                state.bookingData.push(action.payload);
+                state.addStatus = StatusEnum.FULFILLED;
+                const newId = state.bookingData.length > 0
+                    ? Math.max(...state.bookingData.map(booking => booking.guest.id)) + 1
+                    : 1;
+
+                const newBooking = {
+                    ...action.payload,
+                    guest: {
+                        ...action.payload.guest,
+                        id: newId
+                    }
+                };
+                state.bookingData.push(newBooking);
             })
             .addCase(addBookingThunk.rejected, (state) => {
-                state.addStatus = "rejected";
+                state.addStatus = StatusEnum.REJECTED;
                 state.error = "Failed to add booking";
             })
 
             .addCase(editBookingThunk.pending, (state) => {
-                state.editStatus = "pending";
+                state.editStatus = StatusEnum.PENDING;
             })
             .addCase(editBookingThunk.fulfilled, (state, action: PayloadAction<BookingApiInterface>) => {
-                state.editStatus = "fulfilled";
+                state.editStatus = StatusEnum.FULFILLED;
                 const index = state.bookingData.findIndex(
                     (booking) => booking.guest.id === action.payload.guest.id
                 );
@@ -74,21 +86,21 @@ export const bookingSlice = createSlice({
                 }
             })
             .addCase(editBookingThunk.rejected, (state) => {
-                state.editStatus = "rejected";
+                state.editStatus = StatusEnum.REJECTED;
                 state.error = "Failed to edit booking";
             })
 
             .addCase(deleteBookingThunk.pending, (state) => {
-                state.deleteStatus = "pending";
+                state.deleteStatus = StatusEnum.PENDING;
             })
             .addCase(deleteBookingThunk.fulfilled, (state, action: PayloadAction<number>) => {
-                state.deleteStatus = "fulfilled";
+                state.deleteStatus = StatusEnum.FULFILLED;
                 state.bookingData = state.bookingData.filter(
                     (booking) => booking.guest.id !== action.payload
                 );
             })
             .addCase(deleteBookingThunk.rejected, (state) => {
-                state.deleteStatus = "rejected";
+                state.deleteStatus = StatusEnum.REJECTED;
                 state.error = "Failed to delete booking";
             });
     },

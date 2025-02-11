@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { editUserThunk } from '../features/userThunks.js';
+import { addUserThunk, deleteUserThunk, editUserThunk } from '../features/userThunks.js';
 import { Card2, InputWrapper, FormColumn, SubmitButtonWrapper, PhotosWrapper, Title, Label, TextArea } from '../../common/style/FormStyles.js';
 import { ButtonForm } from "../../common/style/buttons"
 import { MdDelete } from "react-icons/md";
@@ -92,8 +92,13 @@ export const UserEdit = () => {
         e.preventDefault();
         if (validate()) {
             const originalFormat = format(formData);
-            dispatch(editUserThunk(originalFormat));
-            navigate("/users");
+            if (originalFormat.id != selectedUser!.id) {
+                dispatch(deleteUserThunk(selectedUser!.id));
+                dispatch(addUserThunk(originalFormat))
+            } else {
+                dispatch(editUserThunk(originalFormat));
+            }
+            navigate("/users/");
         }
     };
     const format = (formData: IUserApi) => {

@@ -26,7 +26,6 @@ export const Users = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const UsersPerPage: number = 10;
     const [filter, setFilter] = useState<string>("all");
-    // añadir loading con estado de carga 
     useEffect(() => {
         if (status === 'idle') {
             dispatch(fetchUsersListThunk());
@@ -37,6 +36,7 @@ export const Users = () => {
     }, [status]);
 
     useEffect(() => {
+        console.log(users)
         let filteredData = [...users];
 
         if (filter === "active") {
@@ -52,8 +52,8 @@ export const Users = () => {
     const indexOfFirstUser = indexOfLastUser - UsersPerPage;
     const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
-    const nextPage = () => setCurrentPage((prev) => prev + 1);
-    const prevPage = () => setCurrentPage((prev) => prev - 1);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
 
     const handleDelete = (userId: number) => {
         dispatch(deleteUserThunk(userId))

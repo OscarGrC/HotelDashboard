@@ -41,9 +41,9 @@ export const Rooms = () => {
         dispatch(deleteRoomThunk(roomId));
     };
 
-    const handleEdit = (roomId: number) => {
-        dispatch(setSelectedRoom(roomId));
-        navigate(`/rooms/edit/${roomId}`);
+    const handleEdit = (room: RoomApi) => {
+        dispatch(setSelectedRoom(room));
+        navigate(`/rooms/edit/${room.id}`);
     };
 
     const handleViewDetails = (room: RoomApi) => {
@@ -127,7 +127,7 @@ export const Rooms = () => {
                                                         className="edit"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleEdit(room.id);
+                                                            handleEdit(room);
                                                         }}
                                                     >
                                                         <FaRegEdit />

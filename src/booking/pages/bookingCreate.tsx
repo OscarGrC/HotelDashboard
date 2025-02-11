@@ -6,19 +6,27 @@ import { ButtonForm } from "../../common/style/buttons"
 import { useNavigate } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../app/store';
 import { BookingApiInterface } from '../interfaces/BookingApiInterface';
+import { RoomType } from '../../rooms/interfaces/RoomTypeEnum';
 
 export const BookingCreate = () => {
     const navigate = useNavigate();
     const dispatch: AppDispatch = useDispatch();
     const rooms = useSelector((state: RootState) => state.rooms.roomsData);
 
+    const DateNow = (): string => {
+        const date = new Date().toISOString().split("T")[0]
+        return date
+    }
+
     const [formData, setFormData] = useState({
         check_in: '',
         check_out: '',
+        order_date: DateNow(),
         guest: { name: '', last_name: '', id: 0 },
         room: { type: '', number: '' },
         special_request: ''
     });
+
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -81,7 +89,7 @@ export const BookingCreate = () => {
 
     return (
         <>
-            <Title>Edit Booking</Title>
+            <Title>Booking Create</Title>
             <Card2 onSubmit={handleSubmit}>
                 <FormColumn>
                     <InputWrapper>
@@ -114,7 +122,23 @@ export const BookingCreate = () => {
                         <Label mr="0.5rem" ml="2rem" style={{ marginTop: '13px' }}>Número:</Label>
                         <input value={formData.room.number} name="room.number" onChange={handleInputChange} style={{ borderRadius: '10px', border: 'none' }} />
                         <Label mr="0.5rem" ml="2rem" style={{ marginTop: '13px' }}>Tipo:</Label>
-                        <input value={formData.room.type} style={{ borderRadius: '10px', border: 'none' }}></input>
+                        <select
+                            value={formData.room.type}
+                            onChange={(e) => setFormData({
+                                ...formData,
+                                room: {
+                                    ...formData.room,
+                                    type: e.target.value
+                                }
+                            })}
+                            style={{ borderRadius: '10px', border: 'none', padding: '5px' }}
+                        >
+                            {Object.values(RoomType).map((type) => (
+                                <option key={type} value={type}>
+                                    {type}
+                                </option>
+                            ))}
+                        </select>
                     </InputWrapper>
 
 

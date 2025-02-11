@@ -7,6 +7,7 @@ import { ButtonForm } from "../../common/style/buttons.js"
 import { MdDelete } from "react-icons/md";
 import { AppDispatch, RootState } from '../../app/store.js';
 import { RoomFormData } from '../interfaces/RoomFormData.js';
+import { stringify } from 'querystring';
 
 const amenitiesMap = {
     1: "Wi-Fi",
@@ -68,7 +69,7 @@ export const RoomEdit = () => {
         }
     }, [selectedRoom]);
 
-    const parseRoomNumber = (roomNumber) => {
+    const parseRoomNumber = (roomNumber: string) => {
         const match = roomNumber.match(/^R(\d)(\d{2})$/);
         if (!match) {
             console.error("Formato inválido para room_number:", roomNumber);
@@ -155,13 +156,12 @@ export const RoomEdit = () => {
         if (validate()) {
             const originalFormat = format(formData);
             dispatch(editRoomThunk(originalFormat));
-            navigate("/rooms");
+            navigate("/rooms/");
         }
     };
 
     const format = (formData: RoomFormData) => {
         const room_number = `R${formData.floor}${formData.room_number}`;
-
         return {
             room_number,
             room_type: formData.room_type,
@@ -197,7 +197,7 @@ export const RoomEdit = () => {
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="2.8rem">Room Number:</Label>
-                        <input type="number" name="roomNumber" value={formData.room_number} onChange={handleInputChange} />
+                        <input type="number" name="room_number" value={formData.room_number} onChange={handleInputChange} />
                         {errors.roomNumber ? <Error>{errors.roomNumber}</Error> : <></>}
                     </InputWrapper>
 

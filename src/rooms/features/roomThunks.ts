@@ -6,7 +6,7 @@ const simulateFetch = <T>(data: T): Promise<T> =>
     new Promise((resolve) => {
         setTimeout(() => {
             resolve(data);
-        }, 2000);
+        }, 200);
     });
 
 export const fetchRoomsListThunk = createAsyncThunk<RoomApi[]>(

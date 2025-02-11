@@ -25,7 +25,11 @@ export const addUserThunk = createAsyncThunk<IUserApi, Partial<IUserApi>>(
     "users/addUser",
     async (newUser: Partial<IUserApi>, thunkAPI) => {
         try {
-            const newId = usersData.length > 0 ? Math.max(...usersData.map(user => user.id)) + 1 : 1;
+
+            let newId = usersData.length > 0 ? Math.max(...usersData.map(user => user.id)) + 1 : 1;
+            if (newUser.id) {
+                newId = newUser.id
+            }
             const userWithId: IUserApi = {
                 id: newId,
                 photo: newUser.photo || "",
