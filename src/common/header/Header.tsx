@@ -78,7 +78,7 @@ const HeaderBar = ({ onToggleSidebar, isSidebarVisible }) => {
             </div>
 
             <IconsWrapper>
-                <div style={{ position: 'relative' }}>
+                <div style={{ position: 'relative' }} onClick={() => navigate('/contact/')}>
                     <MdOutlineEmail />
                     <NotificationBadge bgcolor="red">{contacts.length}</NotificationBadge>
                 </div>
