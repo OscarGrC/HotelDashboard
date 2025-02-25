@@ -1,7 +1,7 @@
 import { Puesto } from "../Models/Puesto";
 
 export interface IUserApi {
-    id: number;
+    _id: string;
     photo: string;
     fullName: string;
     puesto: Puesto | string;

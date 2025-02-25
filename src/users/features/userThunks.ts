@@ -1,90 +1,112 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import usersData from "../data/users.json";
 import { IUserApi } from "../interfaces/IUserApi";
 
-const simulateFetch = <T>(data: T): Promise<T> =>
-    new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(data);
-        }, 200);
-    });
+const API_BASE_URL = import.meta.env.VITE_API_BASE;
+const Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhvbGx5LmNoYW1wbGluQGhvdG1haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkS1kyMDJ6cVN3L0xRWDhXWkpRc3lzZS9pMUl2VlBhWWw3aHZ0VENOY001SjJEdE13Tzg3OS4iLCJpYXQiOjE3NDA0NzM5NjksImV4cCI6MTc0MTA3ODc2OX0._OlVSqpY7SGjn_F7f3BArE2kpyGsdBi8ksmw68JX-Rw"
 
-export const fetchUsersListThunk = createAsyncThunk<IUserApi[]>(
-    "users/fetchUsersList",
+export const fetchUsersListThunk = createAsyncThunk<IUserApi[], void>(
+    "user/fetchUsersList",
     async (_, thunkAPI) => {
         try {
-            const data = await simulateFetch(usersData);
+            const response = await fetch(`${API_BASE_URL}/user`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${Token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            const data: IUserApi[] = await response.json();
             return data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue("Failed to fetch users");
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.message || "Failed to fetch users");
         }
     }
 );
 
 export const addUserThunk = createAsyncThunk<IUserApi, Partial<IUserApi>>(
-    "users/addUser",
-    async (newUser: Partial<IUserApi>, thunkAPI) => {
+    "user/addUser",
+    async (newUser, thunkAPI) => {
         try {
+            const response = await fetch(`${API_BASE_URL}/user`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${Token}`,
+                },
+                body: JSON.stringify(newUser),
+            });
 
-            let newId = usersData.length > 0 ? Math.max(...usersData.map(user => user.id)) + 1 : 1;
-            if (newUser.id) {
-                newId = newUser.id
-            }
-            const userWithId: IUserApi = {
-                id: newId,
-                photo: newUser.photo || "",
-                fullName: newUser.fullName || "",
-                email: newUser.email || "",
-                startDate: newUser.startDate || "",
-                description: newUser.description || "",
-                puesto: newUser.puesto || "",
-                stade: newUser.stade ?? false,
-                password: newUser.password || "",
-                phone: newUser.phone || ""
-            };
-            const data = await simulateFetch(userWithId);
-            return data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue("Failed to add user");
+            if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
+
+            return await response.json();
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.message || "Failed to add user");
         }
     }
 );
 
 export const editUserThunk = createAsyncThunk<IUserApi, IUserApi>(
-    "users/editUser",
-    async (updatedUser: IUserApi, thunkAPI) => {
+    "user/editUser",
+    async (updatedUser, thunkAPI) => {
         try {
-            const data = await simulateFetch(updatedUser);
-            return data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue("Failed to edit user");
+            const response = await fetch(`${API_BASE_URL}/user/${updatedUser._id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${Token}`,
+                },
+                body: JSON.stringify(updatedUser),
+            });
+
+            if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
+
+            return await response.json();
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.message || "Failed to edit user");
         }
     }
 );
 
-export const deleteUserThunk = createAsyncThunk<number, number>(
-    "users/deleteUser",
-    async (userId: number, thunkAPI) => {
+export const deleteUserThunk = createAsyncThunk<string, string>(
+    "user/deleteUser",
+    async (userId, thunkAPI) => {
         try {
-            const data = await simulateFetch(userId);
-            return data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue("Failed to delete user");
+            const response = await fetch(`${API_BASE_URL}/user/${userId}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${Token}`,
+                },
+            });
+
+            if (!response.ok) throw new Error("Failed to delete user");
+
+            return userId;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.message || "Failed to delete user");
         }
     }
 );
-export const fetchUserByIdThunk = createAsyncThunk<IUserApi, number>(
-    "users/fetchUserById",
-    async (userId: number, thunkAPI) => {
-        try {
-            const data: IUserApi[] = await simulateFetch(usersData);
-            const user: IUserApi | undefined = data.find((u) => u.id === userId);
-            if (!user) {
-                throw new Error("User not found");
-            }
 
-            return user;
-        } catch (error) {
+
+export const fetchUserByIdThunk = createAsyncThunk<IUserApi, string>(
+    "user/fetchRoomById",
+    async (userId, thunkAPI) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/user/${userId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${Token}`,
+                },
+            });
+
+            if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
+
+            return await response.json();
+        } catch (error: any) {
             return thunkAPI.rejectWithValue(error.message || "Failed to fetch user by ID");
         }
     }

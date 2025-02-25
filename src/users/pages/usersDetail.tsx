@@ -11,7 +11,7 @@ export const UserDetail = () => {
     const [formData, setFormData] = useState<IUserApi>({
         photo: '',
         fullName: '',
-        id: 0,
+        _id: ' ',
         email: '',
         startDate: '',
         description: '',
@@ -21,17 +21,23 @@ export const UserDetail = () => {
         phone: ''
     });
     const parseDate = (dateString) => {
-        const [day, month, year] = dateString.split('/')
-        return `${year}-${month}-${day}`;
+        const [year, month, day] = dateString.split('-')
+        return `${day}/${month}/${year}`;
+    };
+    const parseStade = (stade: boolean) => {
+        if (stade) {
+            return "Activo"
+        }
+        return "Antiguo";
     };
     useEffect(() => {
         if (emp != null) {
             setFormData({
                 photo: emp.photo,
                 fullName: emp.fullName || '',
-                id: emp.id || 0,
+                _id: emp._id || ' ',
                 email: emp.email || '',
-                startDate: parseDate(emp.startDate) || '',
+                startDate: emp.startDate || '',
                 description: emp.description || '',
                 puesto: emp.puesto || '',
                 stade: emp.stade || false,
@@ -42,7 +48,7 @@ export const UserDetail = () => {
     }, [emp]);
 
     const validate = () => {
-        if (!formData.fullName || !formData.email || !formData.id || !formData.puesto) {
+        if (!formData.fullName || !formData.email || !formData._id || !formData.puesto) {
             alert("Por favor, completa todos los campos requeridos.");
             return false;
         }
@@ -79,7 +85,7 @@ export const UserDetail = () => {
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="5.8rem" style={{ marginTop: '16px' }}>ID:</Label>
-                        <p>{formData.id}</p>
+                        <p>{formData._id}</p>
                     </InputWrapper>
 
                     <InputWrapper>
@@ -89,7 +95,7 @@ export const UserDetail = () => {
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="0.8rem" style={{ marginTop: '16px' }}>Start Date:</Label>
-                        <p>{formData.startDate}</p>
+                        <p>{parseDate(formData.startDate)}</p>
                     </InputWrapper>
 
                     <InputWrapper>
@@ -99,7 +105,7 @@ export const UserDetail = () => {
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="2.8rem" style={{ marginTop: '16px' }}>Estado:</Label>
-                        <p>{formData.stade}</p>
+                        <p>{parseStade(formData.stade)}</p>
                     </InputWrapper>
 
                     <InputWrapper>

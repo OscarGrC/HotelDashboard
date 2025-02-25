@@ -93,10 +93,10 @@ export const Contact = () => {
                 </thead>
                 <tbody>
                     {currentMessages.map((msg) => (
-                        <tr key={msg.id}>
+                        <tr key={msg._id}>
                             <td>
                                 <div>{msg.date.split("T").join(" ")}</div>
-                                <div>ID: {msg.id}</div>
+                                <div>ID: {msg._id}</div>
                             </td>
                             <td>
                                 <div>{`${msg.customer.name} ${msg.customer.last_name}`}</div>

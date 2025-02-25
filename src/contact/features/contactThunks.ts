@@ -1,61 +1,108 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import contactData from "../data/contact.json";
-import archivedData from "../data/contactArchived.json";
 import { ContactApi } from "../interfaces/ContactApi";
 
-const simulateFetch = <T>(data: T): Promise<T> =>
-    new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(data);
-        }, 200);
-    });
+const API_BASE_URL = import.meta.env.VITE_API_BASE;
+const Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhvbGx5LmNoYW1wbGluQGhvdG1haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkS1kyMDJ6cVN3L0xRWDhXWkpRc3lzZS9pMUl2VlBhWWw3aHZ0VENOY001SjJEdE13Tzg3OS4iLCJpYXQiOjE3NDA0NzM5NjksImV4cCI6MTc0MTA3ODc2OX0._OlVSqpY7SGjn_F7f3BArE2kpyGsdBi8ksmw68JX-Rw"
 
-export const fetchContactListThunk = createAsyncThunk<ContactApi[]>(
-    "contacts/fetchContactList",
+export const fetchContactListThunk = createAsyncThunk<ContactApi[], void>(
+    "user/fetchUsersList",
     async (_, thunkAPI) => {
         try {
-            const data = await simulateFetch(contactData);
+            const response = await fetch(`${API_BASE_URL}/contact`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${Token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            const data: ContactApi[] = await response.json();
             return data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue("Failed to fetch contact");
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.message || "Failed to fetch contact");
         }
     }
 );
 
 export const fetchContactArchivedListThunk = createAsyncThunk<ContactApi[]>(
-    "contacts/fetchContactArchivedList",
+    "contact/archived/fetchContactArchivedList",
     async (_, thunkAPI) => {
         try {
-            const data = await simulateFetch(archivedData);
+            const response = await fetch(`${API_BASE_URL}/contact/archived`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${Token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            const data: ContactApi[] = await response.json();
             return data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue("Failed to fetch contact");
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.message || "Failed to fetch Archived contact");
         }
     }
 );
 export const archiveContactThunk = createAsyncThunk<ContactApi, ContactApi>(
-    "contacts/archiveContact",
-    async (contact: ContactApi, thunkAPI) => {
+    "contact/archiveContact",
+    async (contact, thunkAPI) => {
         try {
-            const archivedContact = await simulateFetch(contact);
+
+            //Archivar el contacto con toda su data
+            const archiveResponse = await fetch(`${API_BASE_URL}/contact/archived`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${Token}`,
+                },
+                body: JSON.stringify(contact),
+            });
+
+            if (!archiveResponse.ok) throw new Error(`Error ${archiveResponse.status}: ${archiveResponse.statusText}`);
+
+            const archivedContact: ContactApi = await archiveResponse.json();
+
+            //Eliminar el contacto de la lista activa
+            const deleteResponse = await fetch(`${API_BASE_URL}/contact/${contact._id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${Token}`,
+                },
+            });
+
+            if (!deleteResponse.ok) throw new Error(`Error ${deleteResponse.status}: ${deleteResponse.statusText}`);
+
             return archivedContact;
-        } catch (error) {
-            return thunkAPI.rejectWithValue("Failed to archive contact");
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.message || "Failed to archive and delete contact");
         }
     }
 );
-export const fetchContactByIdThunk = createAsyncThunk<ContactApi, number>(
-    "contacts/fetchContactById",
-    async (contactId: number, thunkAPI) => {
+
+
+
+export const fetchContactByIdThunk = createAsyncThunk<ContactApi, string>(
+    "contact/fetchContactById",
+    async (contactId, thunkAPI) => {
         try {
-            const data = await simulateFetch(contactData);
-            const contact = data.find((c) => c.id === contactId);
-            if (!contact) {
-                return thunkAPI.rejectWithValue("Contact not found");
-            }
-            return contact;
-        } catch (error) {
-            return thunkAPI.rejectWithValue("Failed to fetch contact by ID");
+            const response = await fetch(`${API_BASE_URL}/contact/${contactId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${Token}`,
+                },
+            });
+
+            if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
+
+            return await response.json();
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.message || "Failed to fetch contact by ID");
         }
     }
 );

@@ -2,21 +2,29 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import contactData from "../data/contactArchived.json";
 import { ContactApi } from "../interfaces/ContactApi";
 
-const simulateFetch = <T>(data: T): Promise<T> =>
-    new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(data);
-        }, 200);
-    });
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE;
+const Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhvbGx5LmNoYW1wbGluQGhvdG1haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkS1kyMDJ6cVN3L0xRWDhXWkpRc3lzZS9pMUl2VlBhWWw3aHZ0VENOY001SjJEdE13Tzg3OS4iLCJpYXQiOjE3NDA0NzM5NjksImV4cCI6MTc0MTA3ODc2OX0._OlVSqpY7SGjn_F7f3BArE2kpyGsdBi8ksmw68JX-Rw"
 
 export const fetchContactArchivedListThunk = createAsyncThunk<ContactApi[]>(
-    "contacts/fetchContactArchivedList",
+    "contact/archived/fetchContactArchivedList",
     async (_, thunkAPI) => {
         try {
-            const data = await simulateFetch(contactData);
+            const response = await fetch(`${API_BASE_URL}/contact/archived`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${Token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            const data: ContactApi[] = await response.json();
             return data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue("Failed to fetch contact");
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.message || "Failed to fetch Archived contact");
         }
     }
 );
+

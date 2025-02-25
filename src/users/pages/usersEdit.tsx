@@ -16,7 +16,7 @@ export const UserEdit = () => {
     const [formData, setFormData] = useState<IUserApi>({
         photo: '',
         fullName: '',
-        id: 0,
+        _id: '',
         email: '',
         startDate: '',
         description: '',
@@ -30,6 +30,7 @@ export const UserEdit = () => {
         return `${year}-${month}-${day}`;
     };
     const parseDateBack = (dateString) => {
+        console.log(dateString)
         const [year, month, day] = dateString.split('-')
         return `${day}/${month}/${year}`;
     };
@@ -38,9 +39,9 @@ export const UserEdit = () => {
             setFormData({
                 photo: selectedUser.photo,
                 fullName: selectedUser.fullName || '',
-                id: selectedUser.id || 0,
+                _id: selectedUser._id || '',
                 email: selectedUser.email || '',
-                startDate: parseDate(selectedUser.startDate) || '',
+                startDate: selectedUser.startDate || '',
                 description: selectedUser.description || '',
                 puesto: selectedUser.puesto || '',
                 stade: selectedUser.stade || false,
@@ -81,7 +82,7 @@ export const UserEdit = () => {
         });
     };
     const validate = () => {
-        if (!formData.fullName || !formData.email || !formData.id || !formData.puesto) {
+        if (!formData.fullName || !formData.email || !formData._id || !formData.puesto) {
             alert("Por favor, completa todos los campos requeridos.");
             return false;
         }
@@ -93,8 +94,8 @@ export const UserEdit = () => {
         e.preventDefault();
         if (validate()) {
             const originalFormat = format(formData);
-            if (originalFormat.id != selectedUser!.id) {
-                dispatch(deleteUserThunk(selectedUser!.id));
+            if (originalFormat._id != selectedUser!._id) {
+                dispatch(deleteUserThunk(selectedUser!._id));
                 dispatch(addUserThunk(originalFormat))
                     .then(() => {
                         toast.success('Modificado con éxito', {
@@ -149,9 +150,9 @@ export const UserEdit = () => {
         return {
             photo: formData.photo,
             fullName: formData.fullName,
-            id: formData.id,
+            _id: formData._id,
             email: formData.email,
-            startDate: parseDateBack(formData.startDate),
+            startDate: formData.startDate,
             description: formData.description,
             puesto: formData.puesto,
             stade: formData.stade,
@@ -182,7 +183,7 @@ export const UserEdit = () => {
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="5.8rem">ID:</Label>
-                        <input type="number" name="id" value={formData.id} onChange={handleInputChange} />
+                        <input type="string" name="id" value={formData._id} onChange={handleInputChange} />
                     </InputWrapper>
 
                     <InputWrapper>

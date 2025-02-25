@@ -67,7 +67,7 @@ export const userSlice = createSlice({
             })
             .addCase(editUserThunk.fulfilled, (state, action) => {
                 state.editStatus = StatusEnum.FULFILLED;
-                const index = state.usersData.findIndex((user) => user.id === action.payload.id);
+                const index = state.usersData.findIndex((user) => user._id === action.payload._id);
                 if (index !== -1) {
                     state.usersData[index] = action.payload;
                 }
@@ -80,9 +80,9 @@ export const userSlice = createSlice({
             .addCase(deleteUserThunk.pending, (state) => {
                 state.deleteStatus = StatusEnum.PENDING
             })
-            .addCase(deleteUserThunk.fulfilled, (state, action: PayloadAction<number>) => {
+            .addCase(deleteUserThunk.fulfilled, (state, action: PayloadAction<string>) => {
                 state.deleteStatus = StatusEnum.FULFILLED;
-                state.usersData = state.usersData.filter((user) => user.id !== action.payload);
+                state.usersData = state.usersData.filter((user) => user._id !== action.payload);
             })
             .addCase(deleteUserThunk.rejected, (state, action) => {
                 state.deleteStatus = StatusEnum.REJECTED;

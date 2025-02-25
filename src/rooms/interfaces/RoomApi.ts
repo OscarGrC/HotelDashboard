@@ -1,5 +1,5 @@
 export interface RoomApi {
-    id: number;
+    _id: string;
     room_number: string;
     room_type: string;
     amenities: number[];

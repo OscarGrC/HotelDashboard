@@ -2,7 +2,7 @@ import { ContactCustomer } from "./ContactCustomer";
 
 export interface ContactApi {
     date: string;
-    id: number;
+    _id: string;
     customer: ContactCustomer;
     asunto: string;
     comment: string;

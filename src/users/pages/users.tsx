@@ -54,7 +54,7 @@ export const Users = () => {
     const nextPage = () => setCurrentPage(currentPage + 1);
     const prevPage = () => setCurrentPage(currentPage - 1);
 
-    const handleDelete = (userId: number) => {
+    const handleDelete = (userId: string) => {
         dispatch(deleteUserThunk(userId))
             .then(() => {
                 toast.success('Eliminado con éxito', {
@@ -83,7 +83,7 @@ export const Users = () => {
 
     const handleEdit = (user: IUserApi) => {
         dispatch(setSelectedUser(user));
-        navigate(`/users/edit/${user.id}`);
+        navigate(`/users/edit/${user._id}`);
     };
 
     const handleViewDetails = (user: IUserApi) => {
@@ -149,7 +149,7 @@ export const Users = () => {
                                                         className="delete"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleDelete(user.id);
+                                                            handleDelete(user._id);
                                                         }}
                                                     >
                                                         <MdDelete />
