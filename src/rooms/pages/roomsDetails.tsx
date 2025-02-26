@@ -21,34 +21,34 @@ export const RoomDetails = () => {
     const room = useSelector((state: RootState) => state.rooms.selectedRoom);
     const [formData, setFormData] = useState<RoomFormData>({
         photos: [],
-        room_type: '',
-        room_number: '',
+        type: '',
+        number: '',
         description: '',
         offert: false,
         price: 0,
         discount: 0,
         cancellation: '',
-        floor: '',
+        floor: '1',
         amenities: [],
-        id: 0
+        _id: ''
     });
 
 
     useEffect(() => {
         if (room != null) {
-            const { floor, number } = parseRoomNumber(room.room_number);
+            const { floor, number } = parseRoomNumber(room.number);
             setFormData({
-                photos: room.photos || [],
-                room_type: room.room_type || '',
-                room_number: number || '',
+                photos: room.photos,
+                type: room.type,
+                number: number || '',
                 description: room.description || '',
                 offert: room.offert || false,
-                price: room.price || 0,
-                discount: room.offert_price || 0,
-                cancellation: room.cancelation || '',
-                floor: floor || '',
-                amenities: room.amenities || [],
-                id: 0
+                price: room.price,
+                discount: room.offert_price,
+                cancellation: room.cancelation,
+                floor: floor,
+                amenities: room.amenities,
+                _id: room._id
             });
         } else {
             console.error("Room not found");
@@ -56,6 +56,10 @@ export const RoomDetails = () => {
     }, [room]);
 
     const parseRoomNumber = (roomNumber: string) => {
+        if (roomNumber === undefined || roomNumber === null) {
+            return { floor: '', number: '' };
+        }
+        console.log(roomNumber)
         const match = roomNumber.match(/^R(\d)(\d{2})$/);
         if (!match) {
             console.error("Formato inválido para room_number:", roomNumber);
@@ -71,8 +75,8 @@ export const RoomDetails = () => {
             <Title>Room Details</Title>
             <Card>
                 <div>
-                    <p><strong>Room Type:</strong> {formData.room_type}</p>
-                    <p><strong>Room Number:</strong> {formData.room_number}</p>
+                    <p><strong>Room Type:</strong> {formData.type}</p>
+                    <p><strong>Room Number:</strong> {formData.number}</p>
                     <p><strong>Floor:</strong> {formData.floor}</p>
                     <p><strong>Description:</strong> {formData.description}</p>
                     <p><strong>Offer:</strong> {formData.offert ? "Yes" : "No"}</p>

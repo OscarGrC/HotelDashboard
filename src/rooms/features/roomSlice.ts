@@ -67,7 +67,7 @@ export const roomSlice = createSlice({
             })
             .addCase(editRoomThunk.fulfilled, (state, action) => {
                 state.editStatus = StatusEnum.FULFILLED;
-                const index = state.roomsData.findIndex((room) => room.id === action.payload.id);
+                const index = state.roomsData.findIndex((room) => room._id === action.payload._id);
                 if (index !== -1) {
                     state.roomsData[index] = action.payload;
                 }
@@ -80,9 +80,9 @@ export const roomSlice = createSlice({
             .addCase(deleteRoomThunk.pending, (state) => {
                 state.deleteStatus = StatusEnum.PENDING;
             })
-            .addCase(deleteRoomThunk.fulfilled, (state, action: PayloadAction<number>) => {
+            .addCase(deleteRoomThunk.fulfilled, (state, action: PayloadAction<string>) => {
                 state.deleteStatus = StatusEnum.FULFILLED;
-                state.roomsData = state.roomsData.filter((room) => room.id !== action.payload);
+                state.roomsData = state.roomsData.filter((room) => room._id !== action.payload);
             })
             .addCase(deleteRoomThunk.rejected, (state) => {
                 state.deleteStatus = StatusEnum.REJECTED;

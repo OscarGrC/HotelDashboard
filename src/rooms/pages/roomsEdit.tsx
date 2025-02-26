@@ -29,8 +29,8 @@ export const RoomEdit = () => {
     const selectedRoom = useSelector((state: RootState) => state.rooms.selectedRoom);
     const [formData, setFormData] = useState<RoomFormData>({
         photos: [],
-        room_type: '',
-        room_number: '',
+        type: '',
+        number: '',
         description: '',
         offert: false,
         price: 0,
@@ -38,7 +38,7 @@ export const RoomEdit = () => {
         cancellation: '',
         floor: '',
         amenities: [],
-        id: 0
+        _id: ''
     });
     const defaultErrors: {
         roomType?: string;
@@ -53,11 +53,11 @@ export const RoomEdit = () => {
 
     useEffect(() => {
         if (selectedRoom != null) {
-            const { floor, number } = parseRoomNumber(selectedRoom.room_number);
+            const { floor, number } = parseRoomNumber(selectedRoom.number);
             setFormData({
                 photos: selectedRoom.photos || [],
-                room_type: selectedRoom.room_type || '',
-                room_number: number || '',
+                type: selectedRoom.type || '',
+                number: number || '',
                 description: selectedRoom.description || '',
                 offert: selectedRoom.offert || false,
                 price: selectedRoom.price || 0,
@@ -65,7 +65,7 @@ export const RoomEdit = () => {
                 cancellation: selectedRoom.cancelation || '',
                 floor: floor || '',
                 amenities: selectedRoom.amenities || [],
-                id: selectedRoom.id,
+                _id: selectedRoom._id,
             });
         }
     }, [selectedRoom]);
@@ -135,8 +135,8 @@ export const RoomEdit = () => {
             discount?: string;
             cancellation?: string;
         } = {};
-        if (!formData.room_type) newErrors.roomType = "El tipo de habitación es obligatorio.";
-        if (!formData.room_number) newErrors.roomNumber = "El número de habitación es obligatorio.";
+        if (!formData.type) newErrors.roomType = "El tipo de habitación es obligatorio.";
+        if (!formData.number) newErrors.roomNumber = "El número de habitación es obligatorio.";
         if (!formData.description) newErrors.description = "La descripción es obligatoria.";
         if (!formData.price || isNaN(formData.price) || formData.price <= 0) {
             newErrors.price = "El precio debe ser un número mayor a 0.";
@@ -183,10 +183,10 @@ export const RoomEdit = () => {
     };
 
     const format = (formData: RoomFormData) => {
-        const room_number = `R${formData.floor}${formData.room_number}`;
+        const room_number = `R${formData.floor}${formData.number}`;
         return {
-            room_number,
-            room_type: formData.room_type,
+            number: room_number,
+            type: formData.type,
             amenities: formData.amenities,
             price: formData.price,
             offert_price: formData.discount,
@@ -195,7 +195,7 @@ export const RoomEdit = () => {
             cancelation: formData.cancellation,
             description: formData.description,
             photos: formData.photos,
-            id: formData.id
+            _id: formData._id
         };
     };
 
@@ -207,7 +207,7 @@ export const RoomEdit = () => {
                 <FormColumn>
                     <InputWrapper>
                         <Label mr="0.5rem" ml="4.8rem">Room Type:</Label>
-                        <select name="roomType" value={formData.room_type} onChange={handleInputChange}>
+                        <select name="roomType" value={formData.type} onChange={handleInputChange}>
                             <option value="">Selecciona el tipo de habitación</option>
                             <option value="Single Bed">Single Bed</option>
                             <option value="Double Bed">Double Bed</option>
@@ -219,7 +219,7 @@ export const RoomEdit = () => {
 
                     <InputWrapper>
                         <Label mr="0.5rem" ml="2.8rem">Room Number:</Label>
-                        <input type="number" name="room_number" value={formData.room_number} onChange={handleInputChange} />
+                        <input type="number" name="room_number" value={formData.number} onChange={handleInputChange} />
                         {errors.roomNumber ? <Error>{errors.roomNumber}</Error> : <></>}
                     </InputWrapper>
 

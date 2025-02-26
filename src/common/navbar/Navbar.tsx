@@ -6,11 +6,15 @@ import logoImage from '../../assets/hotel.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../login/AuthContext.jsx';
 import { Button, Input, Label, Form, ModalContent, ModalOverlay } from './modalStyle.js'
+import { AppDispatch } from '../../app/store.js';
+import { useDispatch } from 'react-redux';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { state, dispatch } = useContext(AuthContext);
+    const { state } = useContext(AuthContext);
+
+    const dispatch: AppDispatch = useDispatch();
     const [activePath, setActivePath] = useState<string>(location.pathname);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 

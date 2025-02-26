@@ -32,6 +32,8 @@ export const userSlice = createSlice({
             .addCase(fetchUsersListThunk.fulfilled, (state, action: PayloadAction<IUserApi[]>) => {
                 state.fetchStatus = StatusEnum.FULFILLED;
                 state.usersData = action.payload;
+                console.log(state.usersData)
+                console.log("Data fetched from /user:", action.payload)
             })
             .addCase(fetchUsersListThunk.rejected, (state, action) => {
                 state.fetchStatus = StatusEnum.REJECTED;

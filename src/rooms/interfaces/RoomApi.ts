@@ -1,7 +1,7 @@
 export interface RoomApi {
     _id: string;
-    room_number: string;
-    room_type: string;
+    number: string;
+    type: string;
     amenities: number[];
     price: number;
     offert_price: number;

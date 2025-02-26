@@ -87,7 +87,7 @@ export const Bookings = () => {
 
         return 'Unknown';
     };
-    const handleDelete = (booking: number) => {
+    const handleDelete = (booking: string) => {
         dispatch(deleteBookingThunk(booking)).then(() => {
             toast.success('Eliminado con éxito', {
                 position: "top-right",
@@ -113,11 +113,11 @@ export const Bookings = () => {
     };
     const handleEdit = (booking: BookingApiInterface) => {
         dispatch(setSelectedBooking(booking));
-        navigate(`/bookings/edit/${booking.guest.id}`);
+        navigate(`/bookings/edit/${booking._id}`);
     };
     const handleViewDetails = (booking: BookingApiInterface) => {
         dispatch(setSelectedBooking(booking));
-        navigate(`/bookings/details/${booking.guest.id}`);
+        navigate(`/bookings/details/${booking._id}`);
     };
 
 
@@ -168,12 +168,12 @@ export const Bookings = () => {
                             </thead>
                             <tbody>
                                 {currentBookings.map((booking, index) => (
-                                    <Draggable key={booking.guest.id} draggableId={booking.guest.id.toString()} index={index}>
+                                    <Draggable key={booking._id} draggableId={booking._id} index={index}>
                                         {(provided) => (
                                             <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} onClick={() => handleViewDetails(booking)}>
                                                 <td>
                                                     {booking.guest.name} {booking.guest.last_name} <br />
-                                                    ID: {booking.guest.id}
+                                                    ID: {booking._id}
                                                 </td>
                                                 <td>{booking.order_date}</td>
                                                 <td>{booking.check_in}</td>
@@ -198,7 +198,7 @@ export const Bookings = () => {
                                                         className="delete"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleDelete(booking.guest.id);
+                                                            handleDelete(booking._id);
                                                         }}
                                                     >
                                                         <MdDelete />

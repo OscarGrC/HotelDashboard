@@ -27,11 +27,13 @@ export const Users = () => {
     const UsersPerPage: number = 10;
     const [filter, setFilter] = useState<string>("all");
     useEffect(() => {
+        console.log(status)
         if (status === 'idle') {
             dispatch(fetchUsersListThunk());
         }
         if (status === "fulfilled") {
             setLoading(false)
+            console.log(users)
         }
     }, [status]);
 

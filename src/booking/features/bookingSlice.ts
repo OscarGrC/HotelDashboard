@@ -45,9 +45,9 @@ export const bookingSlice = createSlice({
                 state.fetchByIdStatus = StatusEnum.FULFILLED;
                 state.selectedBooking = action.payload;
             })
-            .addCase(fetchBookingByIdThunk.rejected, (state, action) => {
+            .addCase(fetchBookingByIdThunk.rejected, (state) => {
                 state.fetchByIdStatus = StatusEnum.REJECTED;
-                state.error = action.payload || "Failed to fetch booking by ID";
+                state.error = "Failed to fetch booking by ID";
             })
 
             .addCase(addBookingThunk.pending, (state) => {
@@ -55,15 +55,11 @@ export const bookingSlice = createSlice({
             })
             .addCase(addBookingThunk.fulfilled, (state, action: PayloadAction<BookingApiInterface>) => {
                 state.addStatus = StatusEnum.FULFILLED;
-                const newId = state.bookingData.length > 0
-                    ? Math.max(...state.bookingData.map(booking => booking.guest.id)) + 1
-                    : 1;
-
                 const newBooking = {
                     ...action.payload,
                     guest: {
                         ...action.payload.guest,
-                        id: newId
+                        _id: "1234"
                     }
                 };
                 state.bookingData.push(newBooking);
@@ -79,7 +75,7 @@ export const bookingSlice = createSlice({
             .addCase(editBookingThunk.fulfilled, (state, action: PayloadAction<BookingApiInterface>) => {
                 state.editStatus = StatusEnum.FULFILLED;
                 const index = state.bookingData.findIndex(
-                    (booking) => booking.guest.id === action.payload.guest.id
+                    (booking) => booking._id === action.payload._id
                 );
                 if (index !== -1) {
                     state.bookingData[index] = action.payload;
@@ -93,10 +89,10 @@ export const bookingSlice = createSlice({
             .addCase(deleteBookingThunk.pending, (state) => {
                 state.deleteStatus = StatusEnum.PENDING;
             })
-            .addCase(deleteBookingThunk.fulfilled, (state, action: PayloadAction<number>) => {
+            .addCase(deleteBookingThunk.fulfilled, (state, action: PayloadAction<string>) => {
                 state.deleteStatus = StatusEnum.FULFILLED;
                 state.bookingData = state.bookingData.filter(
-                    (booking) => booking.guest.id !== action.payload
+                    (booking) => booking._id !== action.payload
                 );
             })
             .addCase(deleteBookingThunk.rejected, (state) => {

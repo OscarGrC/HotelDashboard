@@ -18,15 +18,15 @@ export const BookingEdit = () => {
     const [formData, setFormData] = useState<Partial<BookingApiInterface>>({
         check_in: '',
         check_out: '',
-        guest: { name: '', last_name: '', id: 0 },
+        guest: { name: '', last_name: '', _id: "0" },
         room: { type: '', number: '' },
         special_request: ''
     });
 
     useEffect(() => {
         setFormData({
-            check_in: parseDate(selectedBooking!.check_in) || '',
-            check_out: parseDate(selectedBooking!.check_out) || '',
+            check_in: selectedBooking!.check_in,
+            check_out: selectedBooking!.check_out,
             guest: selectedBooking!.guest || { name: '', last_name: '', id: '' },
             room: selectedBooking!.room || { type: '', number: '' },
             special_request: selectedBooking!.special_request || ''
@@ -80,12 +80,13 @@ export const BookingEdit = () => {
     };
     const format = (formData: Partial<BookingApiInterface>) => {
         return {
-            check_in: parseDateBack(formData.check_in!),
-            check_out: parseDateBack(formData.check_out!),
-            guest: { name: formData.guest!.name, last_name: formData.guest!.last_name, id: selectedBooking!.guest.id },
+            check_in: formData.check_in!,
+            check_out: formData.check_out!,
+            guest: { name: formData.guest!.name, last_name: formData.guest!.last_name, _id: selectedBooking!.guest._id },
             room: { type: formData.room!.type, number: formData.room!.number },
             special_request: formData.special_request,
             order_date: selectedBooking!.order_date,
+            _id: selectedBooking!._id
         };
     }
 

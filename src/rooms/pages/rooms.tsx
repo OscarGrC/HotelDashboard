@@ -38,7 +38,7 @@ export const Rooms = () => {
     const nextPage = () => setCurrentPage((prev) => prev + 1);
     const prevPage = () => setCurrentPage((prev) => prev - 1);
 
-    const handleDelete = (roomId: number) => {
+    const handleDelete = (roomId: string) => {
         dispatch(deleteRoomThunk(roomId)).then(() => {
             toast.success('Eliminado con éxito', {
                 position: "top-right",
@@ -65,12 +65,12 @@ export const Rooms = () => {
 
     const handleEdit = (room: RoomApi) => {
         dispatch(setSelectedRoom(room));
-        navigate(`/rooms/edit/${room.id}`);
+        navigate(`/rooms/edit/${room._id}`);
     };
 
     const handleViewDetails = (room: RoomApi) => {
         dispatch(setSelectedRoom(room));
-        navigate(`/rooms/details/${room.id}`);
+        navigate(`/rooms/details/${room._id}`);
     };
 
     const calculateDiscountedPrice = (price: number, discountPercent: number): number => {
@@ -126,7 +126,7 @@ export const Rooms = () => {
                             </thead>
                             <tbody>
                                 {currentRooms.map((room, index) => (
-                                    <Draggable key={room.id} draggableId={room.id.toString()} index={index}>
+                                    <Draggable key={room._id} draggableId={room._id} index={index}>
                                         {(provided) => (
                                             <tr
                                                 ref={provided.innerRef}
@@ -135,10 +135,10 @@ export const Rooms = () => {
                                                 onClick={() => handleViewDetails(room)}
                                             >
                                                 <td>
-                                                    <img src={room.photos[0]} alt={`Room ${room.room_number}`} />
+                                                    <img src={room.photos[0]} alt={`Room ${room.number}`} />
                                                 </td>
-                                                <td>{room.room_number}</td>
-                                                <td>{room.room_type}</td>
+                                                <td>{room.number}</td>
+                                                <td>{room.type}</td>
                                                 <td>{getAmenities(room.amenities)}</td>
                                                 <td>${room.price}</td>
                                                 <td>${calculateDiscountedPrice(room.price, room.offert_price)}</td>
@@ -158,7 +158,7 @@ export const Rooms = () => {
                                                         className="delete"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleDelete(room.id);
+                                                            handleDelete(room._id);
                                                         }}
                                                     >
                                                         <MdDelete />

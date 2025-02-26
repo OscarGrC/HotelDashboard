@@ -1,5 +1,4 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import contactData from "../data/contactArchived.json";
 import { ContactApi } from "../interfaces/ContactApi";
 
 

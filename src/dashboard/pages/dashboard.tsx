@@ -1,7 +1,6 @@
 import { Kpi } from "../components/kpi.tsx"
 import { ContactCarousel } from "../../contact/components/contactCarousel.js";
 import React, { useState, useEffect } from 'react';
-import contactData from '../../contact/data/contact.json';
 import { ContactApi } from "../../contact/interfaces/ContactApi.js";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../app/store.ts";
