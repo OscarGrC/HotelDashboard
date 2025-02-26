@@ -2,31 +2,41 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "./AuthContext.js";
 import { LoginWrapper, LoginBox, Title, FormGroup, ErrorMessage, SubmitButton } from './login.js';
+import { useDispatch, useDispatch as useReduxDispatch } from "react-redux";
+import { loginThunk } from "./features/LoginThunks.js";
+import { toast } from "react-toastify";
+import { AppDispatch } from '../app/store.js';
 
 export const Login = () => {
-    const [email, setEmail] = useState("admin@example.com");
-    const [password, setPassword] = useState<string>("123456");
-    const [error, setError] = useState<string>("");
+    const [email, setEmail] = useState("example@gmail.com");
+    const [password, setPassword] = useState("123456");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const authContext = useContext(AuthContext);
     if (!authContext) {
         throw new Error("AuthContext must be used within an AuthProvider");
     }
-    const { dispatch } = authContext;
+    const { dispatch: authDispatch } = authContext; // Desestructuramos el dispatch del AuthContext
 
-    const handleLogin = () => {
-        const hardcodedEmail = "admin@example.com";
-        const hardcodedPassword = "123456";
+    const dispatch: AppDispatch = useDispatch();
 
-        if (email === hardcodedEmail && password === hardcodedPassword) {
-            dispatch({
-                type: "login",
-                payload: { name: "Oscar Gracia", email: hardcodedEmail },
-            });
-            navigate("/");
-        } else {
-            setError("Invalid email or password");
+    const handleLogin = async () => {
+        try {
+            const resultAction = await dispatch(loginThunk({ email, password }));
+            if (loginThunk.fulfilled.match(resultAction)) {
+                const { token, user } = resultAction.payload;
+                authDispatch({ type: "login", payload: { user, token } });
+                toast.success("Login successful", {
+                    position: "top-right",
+                    autoClose: 2000,
+                });
+                navigate("/");
+            } else {
+                setError("Invalid credentials");
+            }
+        } catch (err: any) {
+            setError(err.message || "Login failed");
         }
     };
 
@@ -39,7 +49,7 @@ export const Login = () => {
         <LoginWrapper>
             <LoginBox>
                 <Title>Login</Title>
-                <p style={{ textAlign: "center" }}>Use this credentials to log in:</p>
+                <p style={{ textAlign: "center" }}>Use these credentials to log in:</p>
                 <p style={{ textAlign: "center" }}>Email: admin@example.com</p>
                 <p style={{ textAlign: "center" }}>Password: 123456</p>
 
@@ -64,8 +74,10 @@ export const Login = () => {
                             data-cy="password-input"
                         />
                     </FormGroup>
-                    {error ? <ErrorMessage data-cy="error-message">{error}</ErrorMessage> : <></>}
-                    <SubmitButton type="submit" data-cy="login-submit">Login</SubmitButton>
+                    {error && <ErrorMessage data-cy="error-message">{error}</ErrorMessage>}
+                    <SubmitButton type="submit" data-cy="login-submit">
+                        Login
+                    </SubmitButton>
                 </form>
             </LoginBox>
         </LoginWrapper>

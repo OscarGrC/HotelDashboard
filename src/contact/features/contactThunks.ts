@@ -1,9 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ContactApi } from "../interfaces/ContactApi";
+import { getAuthToken } from "../../login/features/getAuthToken";
+import { handleAuthError } from "../../login/features/handleAuthError";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE;
-const Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhvbGx5LmNoYW1wbGluQGhvdG1haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkS1kyMDJ6cVN3L0xRWDhXWkpRc3lzZS9pMUl2VlBhWWw3aHZ0VENOY001SjJEdE13Tzg3OS4iLCJpYXQiOjE3NDA0NzM5NjksImV4cCI6MTc0MTA3ODc2OX0._OlVSqpY7SGjn_F7f3BArE2kpyGsdBi8ksmw68JX-Rw"
-
+const Token = getAuthToken()
 export const fetchContactListThunk = createAsyncThunk<ContactApi[], void>(
     "contact/fetchContactList",
     async (_, thunkAPI) => {
@@ -16,6 +17,7 @@ export const fetchContactListThunk = createAsyncThunk<ContactApi[], void>(
                 },
             });
             if (!response.ok) {
+                handleAuthError(response)
                 throw new Error(`Error ${response.status}: ${response.statusText}`);
             }
             const data: ContactApi[] = await response.json();
@@ -38,6 +40,7 @@ export const fetchContactArchivedListThunk = createAsyncThunk<ContactApi[]>(
                 },
             });
             if (!response.ok) {
+                handleAuthError(response)
                 throw new Error(`Error ${response.status}: ${response.statusText}`);
             }
             const data: ContactApi[] = await response.json();
@@ -62,8 +65,10 @@ export const archiveContactThunk = createAsyncThunk<ContactApi, ContactApi>(
                 body: JSON.stringify(contact),
             });
 
-            if (!archiveResponse.ok) throw new Error(`Error ${archiveResponse.status}: ${archiveResponse.statusText}`);
-
+            if (!archiveResponse.ok) {
+                handleAuthError(archiveResponse)
+                throw new Error(`Error ${archiveResponse.status}: ${archiveResponse.statusText}`);
+            }
             const archivedContact: ContactApi = await archiveResponse.json();
 
             //Eliminar el contacto de la lista activa
@@ -97,9 +102,10 @@ export const fetchContactByIdThunk = createAsyncThunk<ContactApi, string>(
                     Authorization: `Bearer ${Token}`,
                 },
             });
-
-            if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
-
+            if (!response.ok) {
+                handleAuthError(response)
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
             return await response.json();
         } catch (error: any) {
             return thunkAPI.rejectWithValue(error.message || "Failed to fetch contact by ID");

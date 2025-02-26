@@ -3,9 +3,10 @@ import { AuthUser } from "./interfaces/AuthUser";
 import { AuthState } from "./interfaces/AuthState";
 
 type AuthAction =
-    | { type: "login"; payload: AuthUser }
+    | { type: "login"; payload: { user: { name: string; email: string }; token: string } }
     | { type: "logout" }
-    | { type: "updateUser"; payload: Partial<AuthUser> };
+    | { type: "updateUser"; payload: Partial<{ name: string; email: string }> };
+
 
 interface AuthContextType {
     state: AuthState;
@@ -15,6 +16,7 @@ interface AuthContextType {
 const initialState: AuthState = {
     isAuthenticated: false,
     user: { name: "", email: "" },
+    token: ""
 };
 
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
@@ -22,20 +24,19 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         case "login":
             return {
                 isAuthenticated: true,
-                user: action.payload,
+                user: action.payload.user,
+                token: action.payload.token,
             };
         case "logout":
             return {
                 isAuthenticated: false,
                 user: { name: "", email: "" },
+                token: "",
             };
         case "updateUser":
             return {
                 ...state,
-                user: {
-                    ...state.user,
-                    ...action.payload,
-                },
+                user: { ...state.user, ...action.payload },
             };
         default:
             return state;
@@ -53,6 +54,15 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         localStorage.setItem("authState", JSON.stringify(state));
     }, [state]);
+
+    useEffect(() => {
+        const handleLogout = () => {
+            dispatch({ type: "logout" });
+        };
+
+        window.addEventListener("logout", handleLogout);
+        return () => window.removeEventListener("logout", handleLogout);
+    }, [dispatch]);
 
     return (
         <AuthContext.Provider value={{ state, dispatch }}>
