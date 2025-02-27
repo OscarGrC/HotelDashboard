@@ -47,7 +47,7 @@ export const Bookings = () => {
 
 
     const parseDate = (dateString: string) => {
-        const [day, month, year] = dateString.split('/').map(Number);
+        const [year, month, day] = dateString.split('-').map(Number);
         return new Date(year, month - 1, day);
     };
     useEffect(() => {
