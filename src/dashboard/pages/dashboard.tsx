@@ -14,8 +14,10 @@ export const Dashboard = () => {
     const dispatch: AppDispatch = useDispatch();
     const contacts = useSelector((state: RootState) => state.contacts.contactData);
     const status = useSelector((state: RootState) => state.contacts.status);
+    const MAX_RETRIES = 3;
+    const RETRY_DELAY = 2000;
+    const [retryCount, setRetryCount] = useState(0);
     useEffect(() => {
-        console.log(status)
         if (status === 'idle') {
             dispatch(fetchContactListThunk())
         }
@@ -23,6 +25,15 @@ export const Dashboard = () => {
             setLoading(false)
 
         }
+        if (status === 'rejected' && retryCount < MAX_RETRIES) {
+            const timeout = setTimeout(() => {
+                setRetryCount(retryCount + 1);
+                dispatch(fetchContactListThunk());
+            }, RETRY_DELAY);
+
+            return () => clearTimeout(timeout);
+        }
+
     }, [status]);
     return loading ? (
         <DivCenter>

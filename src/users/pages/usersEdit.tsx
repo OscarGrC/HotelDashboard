@@ -30,7 +30,6 @@ export const UserEdit = () => {
         return `${year}-${month}-${day}`;
     };
     const parseDateBack = (dateString) => {
-        console.log(dateString)
         const [year, month, day] = dateString.split('-')
         return `${day}/${month}/${year}`;
     };

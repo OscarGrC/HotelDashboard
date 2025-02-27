@@ -4,11 +4,11 @@ import { BookingApiInterface } from "../interfaces/BookingApiInterface";
 import { getAuthToken } from "../../login/features/getAuthToken";
 import { handleAuthError } from "../../login/features/handleAuthError";
 const API_BASE_URL = import.meta.env.VITE_API_BASE;
-const Token = getAuthToken()
 export const fetchBookingListThunk = createAsyncThunk<BookingApiInterface[]>(
     "booking/fetchBookingList",
     async (_, thunkAPI) => {
         try {
+            const Token = getAuthToken()
             const response = await fetch(`${API_BASE_URL}/bookings`, {
                 method: "GET",
                 headers: {
@@ -33,6 +33,7 @@ export const addBookingThunk = createAsyncThunk<BookingApiInterface, BookingApiI
     "booking/addBooking",
     async (newBooking, thunkAPI) => {
         try {
+            const Token = getAuthToken()
             const response = await fetch(`${API_BASE_URL}/bookings`, {
                 method: "POST",
                 headers: {
@@ -58,6 +59,7 @@ export const editBookingThunk = createAsyncThunk<BookingApiInterface, BookingApi
     "booking/editBooking",
     async (updatedBooking, thunkAPI) => {
         try {
+            const Token = getAuthToken()
             const response = await fetch(`${API_BASE_URL}/bookings/${updatedBooking._id}`, {
                 method: "PUT",
                 headers: {
@@ -83,6 +85,7 @@ export const deleteBookingThunk = createAsyncThunk<string, string>(
     "booking/deleteBooking",
     async (bookingId, thunkAPI) => {
         try {
+            const Token = getAuthToken()
             const response = await fetch(`${API_BASE_URL}/bookings/${bookingId}`, {
                 method: "DELETE",
                 headers: {
@@ -105,6 +108,7 @@ export const fetchBookingByIdThunk = createAsyncThunk<BookingApiInterface, numbe
     "booking/fetchBookingById",
     async (bookingId, thunkAPI) => {
         try {
+            const Token = getAuthToken()
             const response = await fetch(`${API_BASE_URL}/bookings/${bookingId}`, {
                 method: "GET",
                 headers: {

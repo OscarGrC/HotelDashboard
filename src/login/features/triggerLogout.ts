@@ -1,3 +1,3 @@
-export const triggerLogout = (navigate: (path: string) => void) => {
+export const triggerLogout = () => {
     window.dispatchEvent(new CustomEvent("logout"));
 };

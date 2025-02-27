@@ -20,20 +20,29 @@ export const Users = () => {
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
     const users: IUserApi[] = useSelector((state: RootState) => state.users.usersData);
-    const status: string = useSelector((state: RootState) => state.users.fetchStatus);
+    let status: string = useSelector((state: RootState) => state.users.fetchStatus);
     const [filteredUsers, setFilteredUsers] = useState<IUserApi[] | []>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const UsersPerPage: number = 10;
     const [filter, setFilter] = useState<string>("all");
+    const MAX_RETRIES = 3;
+    const RETRY_DELAY = 2000;
+    const [retryCount, setRetryCount] = useState(0);
     useEffect(() => {
-        console.log(status)
         if (status === 'idle') {
             dispatch(fetchUsersListThunk());
         }
         if (status === "fulfilled") {
             setLoading(false)
-            console.log(users)
+        }
+        if (status === 'rejected' && retryCount < MAX_RETRIES) {
+            const timeout = setTimeout(() => {
+                setRetryCount(retryCount + 1);
+                dispatch(fetchUsersListThunk());
+            }, RETRY_DELAY);
+
+            return () => clearTimeout(timeout);
         }
     }, [status]);
 

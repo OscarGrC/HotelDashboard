@@ -21,13 +21,23 @@ export const Rooms = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const roomsPerPage = 10;
-
+    const MAX_RETRIES = 3;
+    const RETRY_DELAY = 2000;
+    const [retryCount, setRetryCount] = useState(0);
     useEffect(() => {
         if (status === 'idle') {
             dispatch(fetchRoomsListThunk());
         }
         if (status === "fulfilled") {
             setLoading(false)
+        }
+        if (status === 'rejected' && retryCount < MAX_RETRIES) {
+            const timeout = setTimeout(() => {
+                setRetryCount(retryCount + 1);
+                dispatch(fetchRoomsListThunk());
+            }, RETRY_DELAY);
+
+            return () => clearTimeout(timeout);
         }
     }, [status]);
 

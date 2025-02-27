@@ -59,7 +59,6 @@ export const RoomDetails = () => {
         if (roomNumber === undefined || roomNumber === null) {
             return { floor: '', number: '' };
         }
-        console.log(roomNumber)
         const match = roomNumber.match(/^R(\d)(\d{2})$/);
         if (!match) {
             console.error("Formato inválido para room_number:", roomNumber);

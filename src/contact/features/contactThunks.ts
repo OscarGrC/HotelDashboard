@@ -4,11 +4,11 @@ import { getAuthToken } from "../../login/features/getAuthToken";
 import { handleAuthError } from "../../login/features/handleAuthError";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE;
-const Token = getAuthToken()
 export const fetchContactListThunk = createAsyncThunk<ContactApi[], void>(
     "contact/fetchContactList",
     async (_, thunkAPI) => {
         try {
+            const Token = getAuthToken()
             const response = await fetch(`${API_BASE_URL}/contact`, {
                 method: "GET",
                 headers: {
@@ -32,6 +32,7 @@ export const fetchContactArchivedListThunk = createAsyncThunk<ContactApi[]>(
     "contact/archived/fetchContactArchivedList",
     async (_, thunkAPI) => {
         try {
+            const Token = getAuthToken()
             const response = await fetch(`${API_BASE_URL}/contact/archived`, {
                 method: "GET",
                 headers: {
@@ -54,7 +55,7 @@ export const archiveContactThunk = createAsyncThunk<ContactApi, ContactApi>(
     "contact/archiveContact",
     async (contact, thunkAPI) => {
         try {
-
+            const Token = getAuthToken()
             //Archivar el contacto con toda su data
             const archiveResponse = await fetch(`${API_BASE_URL}/contact/archived`, {
                 method: "POST",
@@ -95,6 +96,7 @@ export const fetchContactByIdThunk = createAsyncThunk<ContactApi, string>(
     "contact/fetchContactById",
     async (contactId, thunkAPI) => {
         try {
+            const Token = getAuthToken()
             const response = await fetch(`${API_BASE_URL}/contact/${contactId}`, {
                 method: "GET",
                 headers: {

@@ -31,7 +31,6 @@ export const contactSlice = createSlice({
             })
             .addCase(fetchContactListThunk.fulfilled, (state, action: PayloadAction<ContactApi[]>) => {
                 state.status = StatusEnum.FULFILLED;
-                console.log(action.payload)
                 state.contactData = action.payload;
             })
             .addCase(fetchContactListThunk.rejected, (state) => {

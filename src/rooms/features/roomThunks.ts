@@ -5,11 +5,11 @@ import { getAuthToken } from "../../login/features/getAuthToken";
 import { handleAuthError } from "../../login/features/handleAuthError";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE;
-const Token = getAuthToken()
 export const fetchRoomsListThunk = createAsyncThunk<RoomApi[]>(
     "rooms/fetchRoomsList",
     async (_, thunkAPI) => {
         try {
+            const Token = getAuthToken()
             const response = await fetch(`${API_BASE_URL}/rooms`, {
                 method: "GET",
                 headers: {
@@ -32,6 +32,7 @@ export const addRoomThunk = createAsyncThunk<RoomApi, RoomApi>(
     "rooms/addRoom",
     async (newRoom, thunkAPI) => {
         try {
+            const Token = getAuthToken()
             const response = await fetch(`${API_BASE_URL}/rooms`, {
                 method: "POST",
                 headers: {
@@ -56,6 +57,7 @@ export const editRoomThunk = createAsyncThunk<RoomApi, RoomApi>(
     "rooms/editRoom",
     async (updatedRoom, thunkAPI) => {
         try {
+            const Token = getAuthToken()
             const response = await fetch(`${API_BASE_URL}/rooms/${updatedRoom._id}`, {
                 method: "PUT",
                 headers: {
@@ -80,6 +82,7 @@ export const deleteRoomThunk = createAsyncThunk<string, string>(
     "rooms/deleteRoom",
     async (roomId, thunkAPI) => {
         try {
+            const Token = getAuthToken()
             const response = await fetch(`${API_BASE_URL}/rooms/${roomId}`, {
                 method: "DELETE",
                 headers: {
@@ -103,6 +106,7 @@ export const fetchRoomByIdThunk = createAsyncThunk<RoomApi, string>(
     "rooms/fetchRoomById",
     async (roomId, thunkAPI) => {
         try {
+            const Token = getAuthToken()
             const response = await fetch(`${API_BASE_URL}/rooms/${roomId}`, {
                 method: "GET",
                 headers: {
