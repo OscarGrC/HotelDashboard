@@ -23,6 +23,7 @@ export const Dashboard = () => {
         }
         if (status === "fulfilled") {
             setLoading(false)
+            console.log(contacts)
 
         }
         if (status === 'rejected' && retryCount < MAX_RETRIES) {

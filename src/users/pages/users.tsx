@@ -14,7 +14,7 @@ import { AppDispatch, RootState } from '../../app/store.js';
 import ReactLoading from 'react-loading';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import morty from "../../assets/morty.png";
 
 export const Users = () => {
     const dispatch: AppDispatch = useDispatch();
@@ -35,6 +35,7 @@ export const Users = () => {
         }
         if (status === "fulfilled") {
             setLoading(false)
+            console.log(users)
         }
         if (status === 'rejected' && retryCount < MAX_RETRIES) {
             const timeout = setTimeout(() => {
@@ -140,7 +141,7 @@ export const Users = () => {
                                         {(provided) => (
                                             <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} onClick={() => handleViewDetails(user)}>
                                                 <td>
-                                                    <img src={user.photo} alt="User" style={{ width: "4.8rem", height: "4.8rem" }} />
+                                                    <img src={morty} alt="User" style={{ width: "4.8rem", height: "4.8rem" }} />
                                                 </td>
                                                 <td>{user.fullName}</td>
                                                 <td>{user.email}</td>
